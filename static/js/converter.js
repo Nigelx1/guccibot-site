@@ -406,6 +406,82 @@
 
   /* Declared but not implemented -- listed so the page is honest about what
    * it does and doesn't do, rather than quietly omitting them. */
+  /* ------------------------------------------------- guessed formats
+   *
+   * Nigel's call: wire up the formats we have NO reference file for, and say
+   * plainly on the page that that's what they are. These are constructed from
+   * the shape 2.1-era replay formats generally take -- an fps value followed
+   * by fixed-size records -- NOT from any spec or sample. They are expected
+   * to be wrong.
+   *
+   * They carry their own 'guess' tier rather than sharing 'experimental',
+   * because the two are not the same claim: experimental means "implemented,
+   * not yet confirmed", guess means "nobody has checked this against
+   * anything". A wrong reader shows visible nonsense; a wrong writer hands
+   * you a file that looks fine and isn't. Hence the separate label.
+   *
+   * Any of these becomes real the moment a sample file turns up.
+   */
+  function guessFixedRecord(opts) {
+    // fps (f32) + optional extra header floats, then records of
+    // { f32 frame, u8 hold, u8 player2 }.
+    var headerFloats = opts.headerFloats || 1;
+    var rec = 6;
+    return {
+      name: opts.name,
+      ext: opts.ext,
+      group: opts.group,
+      confidence: 'guess',
+      note: 'No reference file -- structure is assumed, not known.',
+      detect: function (name) {
+        return !!name && name.toLowerCase().endsWith(opts.ext);
+      },
+      read: function (buf) {
+        var dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+        var pos = 0;
+        var tps = dv.getFloat32(pos, true); pos += 4;
+        for (var h = 1; h < headerFloats; h++) pos += 4;
+        var inputs = [];
+        while (pos + rec <= buf.length) {
+          var frame = dv.getFloat32(pos, true); pos += 4;
+          var hold = dv.getUint8(pos); pos += 1;
+          var p2 = dv.getUint8(pos); pos += 1;
+          inputs.push({
+            frame: Math.round(frame), button: 1, down: !!hold, player2: !!p2
+          });
+        }
+        return { tps: tps > 0 && tps < 100000 ? tps : 240, inputs: inputs };
+      },
+      write: function (rep) {
+        var buf = new Uint8Array(4 * headerFloats + rep.inputs.length * rec);
+        var dv = new DataView(buf.buffer);
+        var pos = 0;
+        dv.setFloat32(pos, rep.tps, true); pos += 4;
+        for (var h = 1; h < headerFloats; h++) { dv.setFloat32(pos, 1, true); pos += 4; }
+        rep.inputs.forEach(function (i) {
+          dv.setFloat32(pos, i.frame, true); pos += 4;
+          dv.setUint8(pos, i.down ? 1 : 0); pos += 1;
+          dv.setUint8(pos, i.player2 ? 1 : 0); pos += 1;
+        });
+        return buf;
+      }
+    };
+  }
+
+  [
+    { key: 'replaybot', name: 'ReplayBot', ext: '.replay', group: 'Legacy (2.1)' },
+    { key: 'zbot', name: 'zBot', ext: '.zbf', group: 'Legacy (2.1)', headerFloats: 2 },
+    { key: 'kdbot', name: 'KD-Bot', ext: '.kd', group: 'Legacy (2.1)' },
+    { key: 'fembot', name: 'Fembot', ext: '.freplay', group: 'Legacy (2.1)' },
+    { key: 'rush', name: 'Rush', ext: '.rush', group: 'Legacy (2.1)' },
+    { key: 'omegabot', name: 'OmegaBot 1 / 2 / 3', ext: '.replay', group: 'Legacy (2.1)' },
+    { key: 'xbot', name: 'xBot', ext: '.xbot', group: 'Legacy (2.1)' },
+    { key: 'mhrbin', name: 'Mega Hack Replay (binary)', ext: '.mhr', group: 'Legacy (2.1)' },
+    { key: 'echobin', name: 'Echo (binary)', ext: '.echo', group: 'Legacy (2.1)' }
+  ].forEach(function (g) {
+    FORMATS[g.key] = guessFixedRecord(g);
+  });
+
   /* Planned. Ones marked hasSample have a real reference file in hand, so
    * they can be implemented and verified properly rather than guessed at --
    * that's the difference between support that works and support that
@@ -420,15 +496,6 @@
     ['yBot (.ybot)', 'Legacy (2.1)', true],
     ['ToastyReplay', 'Current'],
     ['Silicate v1 / v2', 'Current'],
-    ['OmegaBot 1 / 2 / 3', 'Legacy (2.1)'],
-    ['ReplayBot', 'Legacy (2.1)'],
-    ['Mega Hack Replay (binary)', 'Legacy (2.1)'],
-    ['Echo (old / binary)', 'Legacy (2.1)'],
-    ['zBot', 'Legacy (2.1)'],
-    ['xBot', 'Legacy (2.1)'],
-    ['KD-Bot', 'Legacy (2.1)'],
-    ['Fembot', 'Legacy (2.1)'],
-    ['Rush', 'Legacy (2.1)']
   ];
 
   /* ------------------------------------------------------------------- state */
@@ -526,7 +593,11 @@
       $('outtps').value = current.tps;
       refresh();
 
-      if (FORMATS[key].confidence === 'exp') {
+      if (FORMATS[key].confidence === 'guess') {
+        show('err', '<strong>Heads up:</strong> ' + FORMATS[key].name + ' was matched by ' +
+          'file extension only, and its layout is a guess &mdash; no reference file ' +
+          'exists for it. What you see below may be nonsense.');
+      } else if (FORMATS[key].confidence === 'exp') {
         show('err', '<strong>Heads up:</strong> ' + FORMATS[key].name + ' is marked ' +
           'experimental &mdash; it\'s implemented but hasn\'t been confirmed against real ' +
           'macros yet. Check the result in-game before relying on it.');
@@ -554,7 +625,9 @@
       groups[g].forEach(function (pair) {
         var o = document.createElement('option');
         o.value = pair[0];
-        o.textContent = pair[1].name + (pair[1].confidence === 'exp' ? '  (experimental)' : '');
+        o.textContent = pair[1].name +
+          (pair[1].confidence === 'exp' ? '  (experimental)' :
+           pair[1].confidence === 'guess' ? '  (guess -- probably wrong)' : '');
         og.appendChild(o);
       });
       sel.appendChild(og);
@@ -571,7 +644,8 @@
       var d = document.createElement('div');
       d.className = 'fmt-item';
       d.innerHTML = r[0] + '<span class="tag ' + r[1] + '">' +
-        (r[1] === 'ok' ? 'verified' : r[1] === 'exp' ? 'experimental' : 'planned') + '</span>' +
+        (r[1] === 'ok' ? 'verified' : r[1] === 'exp' ? 'experimental'
+          : r[1] === 'guess' ? 'guess &mdash; unverified' : 'planned') + '</span>' +
         (r[3] ? '<span class="tag soon" style="background:#1a2a1a;color:#7aa87a">sample in hand</span>' : '');
       list.appendChild(d);
     });
@@ -689,9 +763,14 @@
       a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
       show(f.confidence === 'ok' ? 'good' : 'err',
-        'Saved as ' + f.name + '. ' + (f.confidence === 'ok' ? '' :
-        '<strong>This format is experimental &mdash; test it in-game before trusting it, ' +
-        'and keep your original.</strong>'));
+        'Saved as ' + f.name + '. ' + (
+          f.confidence === 'ok' ? '' :
+          f.confidence === 'guess' ?
+            '<strong>This format is a guess.</strong> Nobody has a reference file for it, so ' +
+            'the layout was assumed and this file is quite likely not valid at all. Do not ' +
+            'delete your original.' :
+            '<strong>This format is experimental &mdash; test it in-game before trusting it, ' +
+            'and keep your original.</strong>'));
     }
   }
 

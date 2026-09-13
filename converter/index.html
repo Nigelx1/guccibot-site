@@ -103,6 +103,7 @@
   .tag.ok { background: rgba(21,128,61,0.22); color: #4ade80; }
   .tag.exp { background: rgba(234,88,12,0.2); color: #fb923c; }
   .tag.soon { background: #1c1c1c; color: #666; }
+  .tag.guess { background: rgba(185,28,28,0.22); color: #fca5a5; }
 
   .fmt-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: .5rem 1.5rem; }
   .fmt-item { font-size: 0.72rem; color: #999; padding: .3rem 0; border-bottom: 1px solid #171717; }
@@ -153,7 +154,7 @@
       <br><br>
       <strong>Keep your original file.</strong> Convert to a copy, test the result in-game before trusting it, and don&rsquo;t throw the original away because the conversion &ldquo;looked fine&rdquo;.
       <br><br>
-      Formats are labelled with how much they&rsquo;ve actually been verified: <span class="tag ok">verified</span> means it&rsquo;s been checked against real files, <span class="tag exp">experimental</span> means it&rsquo;s implemented but not yet confirmed against real-world macros, and <span class="tag soon">planned</span> isn&rsquo;t wired up yet. Trust the labels.
+      Formats are labelled with how much they&rsquo;ve actually been verified. <span class="tag ok">verified</span> has been checked against real files. <span class="tag exp">experimental</span> is implemented but not yet confirmed against real-world macros. <span class="tag guess">guess</span> means exactly that &mdash; there is <strong>no reference file for that format</strong>, so its layout was assumed rather than known, and it is quite likely wrong in both directions. Those are wired up so the shape is there for when a sample turns up, not because they&rsquo;re expected to work. <span class="tag soon">planned</span> isn&rsquo;t wired up at all. Trust the labels.
       <br><br>
       If something converts wrong, that&rsquo;s worth reporting &mdash; a broken file plus what it should have been is the fastest way to get it fixed: <a href="https://github.com/Nigelx1/GucciBot/issues" style="color:var(--gold)">open an issue</a>.
     </div>
