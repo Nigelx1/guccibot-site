@@ -97,7 +97,16 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">1.7 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">1.7.1 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">Fixes a crash 1.7 introduced.</strong> Someone reported GucciBot simply giving up when entering a level, with no crash log to show for it. The overlay that draws frame-window markers hangs onto references to things inside the level, and it only let go of them on one specific kind of exit &mdash; so leaving a level any other way (finishing it and going straight to the menu, for instance) left it pointing at things that no longer existed. That was survivable before 1.7. The new legend reads one of those references every single frame, so 1.7 turned it into something you would actually hit.
+        <br><br>
+        <strong>Deleting a macro now deletes everything belonging to it.</strong> It used to remove a fixed set of companion files and leave the rest &mdash; backups in particular &mdash; sitting in the folder forever.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">1.7</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">The checkpoint bug is fixed, and it was the big one.</strong> Pathfinder and the frame-window analyzer both depend on saving a checkpoint and replaying from it. Every checkpoint was storing the player&rsquo;s position from one frame earlier than the frame it was filed under, so each time the bot restored one it quietly lost a frame of forward movement &mdash; and the error stacked with every restore. It only ever showed up in the X position, because that&rsquo;s the one value that moves every single frame no matter what the player is doing, which is why it hid for so long. Found by comparing GucciBot&rsquo;s checkpoint code against Silicate&rsquo;s, after anticroom mentioned his Silicate port of the analyzer worked correctly. Both features now do what they always claimed to: Pathfinder solves a level end to end and its result holds up on a clean replay, and frame windows measure against checkpoints that actually match their own timestamps.
         <br><br>
