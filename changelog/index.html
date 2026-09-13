@@ -96,7 +96,26 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">1.6.5 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">1.7 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">The checkpoint bug is fixed, and it was the big one.</strong> Pathfinder and the frame-window analyzer both depend on saving a checkpoint and replaying from it. Every checkpoint was storing the player&rsquo;s position from one frame earlier than the frame it was filed under, so each time the bot restored one it quietly lost a frame of forward movement &mdash; and the error stacked with every restore. It only ever showed up in the X position, because that&rsquo;s the one value that moves every single frame no matter what the player is doing, which is why it hid for so long. Found by comparing GucciBot&rsquo;s checkpoint code against Silicate&rsquo;s, after anticroom mentioned his Silicate port of the analyzer worked correctly. Both features now do what they always claimed to: Pathfinder solves a level end to end and its result holds up on a clean replay, and frame windows measure against checkpoints that actually match their own timestamps.
+        <br><br>
+        <strong>Pathfinder saves its own macros now</strong>, named after the level, instead of finishing silently and leaving you to press Playback and then Save to find out whether it worked.
+        <br><br>
+        <strong>The frame-window sound was late by a third of a second</strong> &mdash; not a timing bug, just 374ms of dead silence sitting at the front of the audio file before the &ldquo;Brrr&rdquo; actually starts. Trimmed. (The file also had seven seconds of silence on the end, so it went from 158KB to 11KB.)
+        <br><br>
+        <strong>A new &ldquo;Default Look&rdquo; toggle</strong> for the overlay, for people who&rsquo;d rather not configure tiers: one plain ring per click, a fixed colour ramp from red for the tightest windows through to blue for the most forgiving, and the number to the left of the ring. Optional bell sounds instead of the Brrr. The legend was rebuilt to match, using Geometry Dash&rsquo;s own font instead of a lookalike.
+        <br><br>
+        <strong>Two additions to a macro&rsquo;s &ldquo;...&rdquo; menu:</strong> convert a macro saved under another theme&rsquo;s extension over to <code>.brrr</code>, and run Calculate straight from there without loading the macro first.
+        <br><br>
+        Also: 1.6.5 shipped an update checker that crashed the game on launch. It&rsquo;s gone, and the reason it broke turned out to point at the real cause of the file-picker crashes people reported in 1.6.4 and 1.6.5 too &mdash; two of Geode&rsquo;s async systems being mixed in a way that doesn&rsquo;t work. And the frame-window &ldquo;strange sound&rdquo; a few people reported was never broken: the default is Gucci Mane saying &ldquo;Brrr&rdquo;, the settings text just wrongly called it a chime.
+        <br><br>
+        <span style="color:#666">GucciBot&rsquo;s code is written by Claude, and Opus is the main model doing that work.</span>
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">1.6.5</div>
       <div class="changelog-body">A follow-up to 1.6.4&rsquo;s file-picker crash fix, plus a new convenience. The fix: that first pass stopped clicking the same Import button twice in a row from crashing the game, but &ldquo;Import Sounds/Images&rdquo; and &ldquo;Import Folder&rdquo; sit right next to each other on the Frame Window settings page, and clicking one, then the other, wasn&rsquo;t covered &mdash; a real sequence if the first click&rsquo;s dialog opened behind the game window with no visible cue. Every file-picker button on that page (and trainer music import) now checks that none of the others are already waiting on a dialog before starting a new one. The new part: GucciBot checks for a newer release on launch now &mdash; nothing shows up if you&rsquo;re current, but a popup with a direct link appears if you're not.</div>
     </div>
 
