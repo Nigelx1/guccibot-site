@@ -8,6 +8,7 @@ const items = [
   'Trainer Tab','Any Macro','Manual Frame Windows','140 BPM','Brrr.',
   'Compact Mode','JuiceBot','ButlerBot','Playoff Jimmy','Brrr.',
   'Click Indicators','Video Mode','RomoBot','GrizzleyBot','BrrrBot','Custom Themes','Brrr.',
+  'Frame Windows','Calculate','Custom Tiers','Pathfinder','No Recording Needed','26 Formats','Brrr.',
 ];
 
 // Shared across every page now that this is a real multi-page site

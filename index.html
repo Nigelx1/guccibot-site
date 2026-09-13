@@ -27,6 +27,8 @@
   <ul class="nav-links">
     <li><a href="#features">Format</a></li>
     <li><a href="#engine">Engine</a></li>
+    <li><a href="#windows">Windows</a></li>
+    <li><a href="#pathfinder">Pathfinder</a></li>
     <li><a href="#themes">Themes</a></li>
     <li><a href="#trainer">Trainer</a></li>
     <li><a href="/changelog/">Changelog</a></li>
@@ -44,7 +46,7 @@
     <h1 class="hero-title">
       <span class="gold">Gucci</span>Bot
     </h1>
-    <p class="hero-subtitle">Frame perfect &nbsp;·&nbsp; GBR6 &nbsp;·&nbsp; Brrr.</p>
+    <p class="hero-subtitle">Frame perfect &nbsp;·&nbsp; Every click measured &nbsp;·&nbsp; Brrr.</p>
     <div class="hero-cta">
       <a href="#download" class="btn btn-primary">↓ &nbsp;Download</a>
       <a href="/changelog/" class="btn btn-secondary">What's new</a>
@@ -54,7 +56,7 @@
     <div><span>5</span>midhooks</div>
     <div><span>2 bytes</span>per input</div>
     <div><span>20</span>themes</div>
-    <div><span>4</span>disciplines</div>
+    <div><span>0</span>macros needed</div>
   </div>
 </div>
 
@@ -205,8 +207,94 @@
   </div>
 </section>
 
+<!-- FRAME WINDOWS -->
+<section id="windows" style="background:var(--near-black)">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Analysis</div>
+      <h2 class="section-title">Every Click.<br>Measured.<br>To The Frame.</h2>
+      <p style="max-width:560px; font-size:0.8rem; color:#888; line-height:1.9; margin-top:1rem;">
+        A macro that works tells you nothing about <em>how close</em> it came. Hit Calculate and GucciBot replays the whole thing against the real engine, shifting every single click one frame at a time to find the exact range where it still survives. Not a guess from the geometry. Not a heuristic. It actually moves the click and watches what the game does. Brrr.
+      </p>
+    </div>
+    <div class="feature-grid reveal">
+      <div class="feature-card" data-num="01">
+        <div class="feature-icon">&#x25CE;</div>
+        <div class="feature-name">Calculate</div>
+        <div class="feature-desc">Every click in the macro gets tested against the live physics engine, earlier and later, until the run stops surviving. What comes back is a real number of frames per input &mdash; that click works in a window this wide, and no wider. Results save next to the macro, so you calculate once and the numbers are there forever.</div>
+        <div class="feature-badge">Real engine. Not a model.</div>
+      </div>
+      <div class="feature-card" data-num="02">
+        <div class="feature-icon">&#x25EF;</div>
+        <div class="feature-name">The Overlay</div>
+        <div class="feature-desc">Rings in the level at every input, sized and coloured by how much room that click actually has. The tight ones are obvious at a glance. Default Look matches the overlay style you already know, or turn it off and drive the whole thing yourself. Toggle it mid-level without leaving the run.</div>
+        <div class="feature-badge">See the tight ones. Instantly.</div>
+      </div>
+      <div class="feature-card" data-num="03">
+        <div class="feature-icon">&#x25A3;</div>
+        <div class="feature-name">Your Tiers</div>
+        <div class="feature-desc">Define the bands yourself. Set the frame ranges, the colours, the marker shape. Give a tier its own image. Give it a pulse on the marker, on the text, with your own fade-in, hold and fade-out timings. The legend builds itself from whatever you defined. Your thresholds. Your look. Drip.</div>
+        <div class="feature-badge">Configured, not hardcoded.</div>
+      </div>
+      <div class="feature-card" data-num="04">
+        <div class="feature-icon">&#x266A;</div>
+        <div class="feature-name">Cues You Can Hear</div>
+        <div class="feature-desc">Each tier can fire its own sound as you pass it, so you hear a one-frame window coming instead of reading for it. Renders keep them: the Render tab&rsquo;s 4-track split puts frame-window cues on their own audio track, separate from music and SFX, so you can mix them in your editor or drop them entirely.</div>
+        <div class="feature-badge">It&rsquo;s Gucci saying brrr.</div>
+      </div>
+    </div>
+    <div class="reveal" style="margin-top:3rem;border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02);max-width:760px">
+      <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.75rem">Where The Algorithm Came From</div>
+      <p style="font-size:0.75rem;color:#888;line-height:1.9">Juice designed the measurement algorithm this runs on, then spent round after round breaking it on purpose until it stopped being wrong. Alignment-independent, so a window is a window no matter where the input sits relative to the physics step. Manual entries for the Trainer started as his idea too. Brrr.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PATHFINDER -->
+<section id="pathfinder">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Pathfinder</div>
+      <h2 class="section-title">No Recording.<br>No Macro.<br>It Finds One.</h2>
+      <p style="max-width:560px; font-size:0.8rem; color:#888; line-height:1.9; margin-top:1rem;">
+        Open a level with nothing. Hit Pathfinder. It plays the level itself, dies, works out what had to be different, and tries again &mdash; thousands of times if that&rsquo;s what it takes &mdash; until it has a run that reaches the end. Then it hands you the macro, named after the level, saved and ready. You recorded nothing.
+      </p>
+    </div>
+    <div class="feature-grid reveal">
+      <div class="feature-card" data-num="01">
+        <div class="feature-icon">&#x2620;</div>
+        <div class="feature-name">Death Is The Signal</div>
+        <div class="feature-desc">It doesn&rsquo;t read the level layout. It runs forward until GD&rsquo;s own collision kills it, and treats that death as proof something earlier had to change. Then it searches backward from there for the input that gets further. No geometry parsing means nothing to get wrong about a 2.2 object nobody accounted for.</div>
+        <div class="feature-badge">The game decides what kills you.</div>
+      </div>
+      <div class="feature-card" data-num="02">
+        <div class="feature-icon">&#x21B6;</div>
+        <div class="feature-name">Real Backtracking</div>
+        <div class="feature-desc">Every input it tries at a decision point is crossed off there permanently. Run out of options and it restores a real checkpoint further back and takes the next branch instead. It never sits there retrying the same failed thing &mdash; the exact behaviour that makes other attempts at this useless.</div>
+        <div class="feature-badge">Never tries the same thing twice.</div>
+      </div>
+      <div class="feature-card" data-num="03">
+        <div class="feature-icon">&#x2713;</div>
+        <div class="feature-name">It Proves Its Own Answer</div>
+        <div class="feature-desc">A solution stitched together from checkpoint restores isn&rsquo;t the same as a macro that plays from frame zero. So before Pathfinder gives you anything, it replays the entire input list from a genuine cold start and requires it to reach the end again on its own. If it can&rsquo;t, it isn&rsquo;t a solution and it keeps looking.</div>
+        <div class="feature-badge">Verified cold. Every time.</div>
+      </div>
+      <div class="feature-card" data-num="04">
+        <div class="feature-icon">&#x25A4;</div>
+        <div class="feature-name">Watch Or Don&rsquo;t</div>
+        <div class="feature-desc">Runs, depth, best frame, best percent &mdash; all live while it works. Leave the cover on and let it surprise you, or turn it off and watch it fail its way forward in real time, which is genuinely fun to sit through. Cancel whenever. It saves what it found.</div>
+        <div class="feature-badge">Let it grind.</div>
+      </div>
+    </div>
+    <div class="reveal" style="margin-top:3rem;border:1px solid rgba(234,88,12,0.3);padding:1.75rem;background:rgba(234,88,12,0.04);max-width:760px">
+      <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--orange);opacity:.75;margin-bottom:.75rem">Straight Up: Where It&rsquo;s At</div>
+      <p style="font-size:0.75rem;color:#888;line-height:1.9">Pathfinder is v1 and we&rsquo;re not going to pretend otherwise. It is genuinely solid on cube &mdash; jumps, spikes, the stuff a level throws at you early. It is <strong style="color:#cfcfcf">not</strong> there yet on ship, wave, robot, spider, or anything where surviving means a whole sequence of inputs instead of one well-placed press. That&rsquo;s a limitation of how v1 searches, not a bug, and the next version is being designed around exactly that. Point it at a cube level and it&rsquo;s real. Point it at a wave and it&rsquo;ll grind. We&rsquo;d rather tell you that than have you find out.</p>
+    </div>
+  </div>
+</section>
+
 <!-- THEMES -->
-<section id="themes">
+<section id="themes" style="background:var(--near-black)">
   <div class="container">
     <div class="reveal">
       <div class="section-label">Themes</div>
