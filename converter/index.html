@@ -110,8 +110,6 @@
     text-transform: uppercase; padding: 2px 7px; margin-left: 8px; vertical-align: middle;
   }
   .tag.ok { background: rgba(21,128,61,0.22); color: #4ade80; }
-  .tag.src { background: rgba(37,99,235,0.18); color: #93c5fd; }
-  .tag.re { background: rgba(234,88,12,0.2); color: #fb923c; }
   .tag.soon { background: #1c1c1c; color: #666; }
 
   .fmt-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: .5rem 1.5rem; }
@@ -166,11 +164,9 @@
       output <strong>can still be wrong in ways that aren&rsquo;t obvious</strong> &mdash; a macro that
       loads fine but desyncs partway through is the failure mode to watch for.
       <br><br>
-      Each format carries a label for where it came from.
-      <span class="tag ok">verified</span> has been checked against real files of that format.
-      <span class="tag src">from source</span> is implemented from the bot&rsquo;s own format code.
-      <span class="tag re">reverse-engineered</span> was worked out from a sample, with no source to
-      check against &mdash; the least certain of the three.
+      A <span class="tag ok">verified</span> tag means that format has been checked against real
+      files of that format. It is the only claim made here, so most formats don&rsquo;t carry a tag
+      at all &mdash; that means untested, not broken.
       <br><br>
       A few conversions lose information no matter how correct the code is. ToastyReplay Lite has no
       player-2 field, so a 2-player macro comes out halved. ToastyReplay stores time in seconds rather

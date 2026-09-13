@@ -13,7 +13,8 @@
  *   down:   true = press, false = release
  *
  * Each format declares a confidence level, surfaced in the UI:
- *   'ok'   checked against real files of that format
+ *   'ok'   checked against real files of that format -- the only tier shown
+ *          on the page, because it is the only one that is a claim
  *   'src'  implemented from the bot's own format code or library
  *   're'   reverse-engineered from a sample, no source to check against
  *   'soon' not wired up
@@ -1756,9 +1757,6 @@
           'backwards, so it is a recording of several attempts rather than one run. Every ' +
           'attempt is loaded here, one after another &mdash; converting it as-is will not ' +
           'give you a playable single run.');
-      } else if (FORMATS[key].confidence === 're') {
-        show('warn', FORMATS[key].name + ' was worked out from a sample rather than from any ' +
-          'published source, so it is the least certain format here. Check the result in-game.');
       } else {
         show('good', 'Loaded ' + current.inputs.length.toLocaleString() + ' inputs as ' +
           FORMATS[key].name + '.');
@@ -1800,10 +1798,9 @@
     rows.forEach(function (r) {
       var d = document.createElement('div');
       d.className = 'fmt-item';
-      d.innerHTML = r[0] + '<span class="tag ' + r[1] + '">' +
-        (r[1] === 'ok' ? 'verified' : r[1] === 'src' ? 'from source'
-          : r[1] === 're' ? 'reverse-engineered' : 'planned') + '</span>' +
-        (r[3] ? '<span class="tag soon" style="background:#1a2a1a;color:#7aa87a">sample in hand</span>' : '');
+      d.innerHTML = r[0] +
+        (r[1] === 'ok' ? '<span class="tag ok">verified</span>' : '') +
+        (r[1] === 'soon' ? '<span class="tag soon">planned</span>' : '');
       list.appendChild(d);
     });
 
