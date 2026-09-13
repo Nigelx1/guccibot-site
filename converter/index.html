@@ -24,17 +24,26 @@
   .conv-wrap { max-width: 980px; margin: 0 auto; padding: 0 1.5rem 5rem; }
 
   .conv-warn {
-    border: 1px solid rgba(234,88,12,0.45);
-    background: rgba(234,88,12,0.07);
-    padding: 1.15rem 1.35rem;
+    border: 1px solid #1f1f1f;
+    background: rgba(255,255,255,0.015);
+    padding: .7rem 1rem;
     margin: 0 0 2rem;
   }
-  .conv-warn-title {
-    font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--orange); font-weight: 700; margin-bottom: .55rem;
+  .conv-warn > summary {
+    font-size: 0.72rem; color: #8a8a8a; cursor: pointer; list-style: none;
+    display: flex; align-items: center; gap: .5rem;
   }
-  .conv-warn-body { font-size: 0.75rem; color: #9a9a9a; line-height: 1.85; }
-  .conv-warn-body strong { color: #cfcfcf; }
+  .conv-warn > summary::-webkit-details-marker { display: none; }
+  .conv-warn > summary::after {
+    content: '+'; margin-left: auto; color: #555; font-family: 'Space Mono', monospace;
+  }
+  .conv-warn[open] > summary::after { content: '3'; }
+  .conv-warn > summary strong { color: #b5b5b5; font-weight: 600; }
+  .conv-warn-body {
+    font-size: 0.73rem; color: #8a8a8a; line-height: 1.85;
+    margin-top: .85rem; padding-top: .85rem; border-top: 1px solid #1a1a1a;
+  }
+  .conv-warn-body strong { color: #bdbdbd; }
 
   .drop {
     border: 1px dashed rgba(212,175,55,0.4);
@@ -101,7 +110,8 @@
     text-transform: uppercase; padding: 2px 7px; margin-left: 8px; vertical-align: middle;
   }
   .tag.ok { background: rgba(21,128,61,0.22); color: #4ade80; }
-  .tag.exp { background: rgba(234,88,12,0.2); color: #fb923c; }
+  .tag.src { background: rgba(37,99,235,0.18); color: #93c5fd; }
+  .tag.re { background: rgba(234,88,12,0.2); color: #fb923c; }
   .tag.soon { background: #1c1c1c; color: #666; }
 
   .fmt-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: .5rem 1.5rem; }
@@ -110,6 +120,7 @@
   .msg { font-size: 0.72rem; line-height: 1.7; padding: .8rem 1rem; margin-top: 1rem; display: none; }
   .msg.err { display: block; background: rgba(185,28,28,0.12); border: 1px solid rgba(185,28,28,0.4); color: #fca5a5; }
   .msg.good { display: block; background: rgba(21,128,61,0.12); border: 1px solid rgba(21,128,61,0.4); color: #86efac; }
+  .msg.warn { display: block; background: rgba(234,88,12,0.1); border: 1px solid rgba(234,88,12,0.35); color: #fdba74; }
 
   .hidden { display: none !important; }
 
@@ -146,18 +157,31 @@
 
 <div class="conv-wrap reveal">
 
-  <div class="conv-warn">
-    <div class="conv-warn-title">&#9888; Read this before converting anything important</div>
+  <details class="conv-warn">
+    <summary><strong>Keep your original file.</strong> Convert to a copy and test in-game.</summary>
     <div class="conv-warn-body">
-Some formats here are ported from peony&rsquo;s nat-converter, some are implemented from a published format library, and some were worked out from real files (see credits below). Either way, output <strong>may be wrong, and may be wrong in ways that aren&rsquo;t obvious</strong> &mdash; a macro that loads fine but desyncs partway through is a very possible failure mode.
+      Most formats here are implemented from the bot&rsquo;s own format code or library rather than
+      guessed at, and every one is checked to survive a full read-write-read cycle with its frames,
+      hold states and player flags intact. That is not the same as a real bot loading the file, so
+      output <strong>can still be wrong in ways that aren&rsquo;t obvious</strong> &mdash; a macro that
+      loads fine but desyncs partway through is the failure mode to watch for.
       <br><br>
-      <strong>Keep your original file.</strong> Convert to a copy, test the result in-game before trusting it, and don&rsquo;t throw the original away because the conversion &ldquo;looked fine&rdquo;.
+      Each format carries a label for where it came from.
+      <span class="tag ok">verified</span> has been checked against real files of that format.
+      <span class="tag src">from source</span> is implemented from the bot&rsquo;s own format code.
+      <span class="tag re">reverse-engineered</span> was worked out from a sample, with no source to
+      check against &mdash; the least certain of the three.
+      <span class="tag soon">planned</span> isn&rsquo;t wired up at all.
       <br><br>
-      Formats are labelled with how much they&rsquo;ve actually been verified. <span class="tag ok">verified</span> has been checked against real files. <span class="tag exp">experimental</span> is implemented &mdash; from a known-good layout, not an assumed one &mdash; but hasn&rsquo;t been confirmed against a real macro of that format yet. <span class="tag soon">planned</span> isn&rsquo;t wired up at all. Trust the labels.
+      A few conversions lose information no matter how correct the code is. ToastyReplay Lite has no
+      player-2 field, so a 2-player macro comes out halved. ToastyReplay stores time in seconds rather
+      than frames, so the output TPS decides where the inputs land. Both say so when it happens.
       <br><br>
-      If something converts wrong, that&rsquo;s worth reporting &mdash; a broken file plus what it should have been is the fastest way to get it fixed: <a href="https://github.com/Nigelx1/GucciBot/issues" style="color:var(--gold)">open an issue</a>.
+      If something converts wrong, that&rsquo;s worth reporting &mdash; a broken file plus what it
+      should have been is the fastest way to get it fixed:
+      <a href="https://github.com/Nigelx1/GucciBot/issues" style="color:var(--gold)">open an issue</a>.
     </div>
-  </div>
+  </details>
 
   <!-- INPUT -->
   <div class="drop" id="drop" role="button" tabindex="0">
@@ -251,6 +275,8 @@ Some formats here are ported from peony&rsquo;s nat-converter, some are implemen
       <br><br>
       <strong style="color:#ccc">GDReplayFormat</strong>, by <strong style="color:#ccc">maxnut</strong> &mdash; GDR and GDR2. Source: <a href="https://github.com/maxnut/GDReplayFormat" style="color:var(--gold)">github.com/maxnut/GDReplayFormat</a>. GucciBot already links this library, and the byte layout here is implemented from its headers rather than copied from it.
       <br><br>
+      <strong style="color:#ccc">ToastyReplay</strong>, by <strong style="color:#ccc">ToastexGD</strong> &mdash; the <code style="color:#999">.ttr3</code> layout, implemented from its own source. Source: <a href="https://github.com/ToastexGD/ToastyReplay" style="color:var(--gold)">github.com/ToastexGD/ToastyReplay</a>. Nigel co-owns ToastyReplay. <code style="color:#999">.ttrl</code> (ToastyReplay Lite) is a separate format and is still the one entry here worked out by hand from a sample.
+      <br><br>
       GucciBot&rsquo;s own <code style="color:#999">.brrr</code> / GBR6 support is written here, from GucciBot&rsquo;s source.
     </div>
   </div>
@@ -260,7 +286,7 @@ Some formats here are ported from peony&rsquo;s nat-converter, some are implemen
     <div class="panel-title">Format support</div>
     <div class="fmt-list" id="fmtlist"></div>
     <div style="font-size:0.68rem;color:#666;line-height:1.75;margin-top:1.2rem">
-      GucciBot&rsquo;s own <code style="color:#999">.brrr</code> (and the theme extensions &mdash; <code style="color:#999">.icebrrr</code>, <code style="color:#999">.toosii</code> and the rest, which are the same data under a different name) is the reason this page exists. What&rsquo;s still planned needs something this project doesn&rsquo;t have yet: Silicate v2/v3 and yBot each sit behind a container library, OmegaBot 3 uses a Rust-specific encoding, and ToastyReplay&rsquo;s format hasn&rsquo;t been pinned down. Support that silently corrupts a macro is worse than no support.
+      GucciBot&rsquo;s own <code style="color:#999">.brrr</code> (and the theme extensions &mdash; <code style="color:#999">.icebrrr</code>, <code style="color:#999">.toosii</code> and the rest, which are the same data under a different name) is the reason this page exists. Two formats are still missing, both for the same reason: nothing readable to implement them from. OmegaBot 3 uses <code style="color:#999">dlhn</code>, a Rust-specific encoding, and Silicate v2/v3 sit behind the <code style="color:#999">slc_oxide</code> container library. Support that silently corrupts a macro is worse than no support.
     </div>
   </div>
 
