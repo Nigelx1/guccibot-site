@@ -1633,10 +1633,7 @@
    * they can be implemented and verified properly rather than guessed at --
    * that's the difference between support that works and support that
    * silently corrupts a macro. The rest still need a sample each. */
-  var PLANNED = [
-    ['OmegaBot 3 (.replay)', 'Legacy (2.1)'],
-    ['Silicate v2 / v3', 'Current', true],
-  ];
+  var PLANNED = [];
 
   /* ------------------------------------------------------------------- state */
 
