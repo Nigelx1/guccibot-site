@@ -27,7 +27,156 @@
 
   /* ---------------------------------------------------------------- formats */
 
+  /* GucciBot's own .brrr (GBR6). Ported directly from this project's own
+   * src/core/gbr6_format.cpp, so this one is actually accurate rather than
+   * inferred -- it's the only binary format here we own the source of truth
+   * for.
+   *
+   * Container: "GBR6" magic, u8 version, u8 flags, f32 tps, i64 timestamp,
+   * u64 rngSeed, u32 p1size, u32 p2size, str name, p1 stream, p2 stream,
+   * then optional level name / death list per flags. All little-endian.
+   * Strings are u16 length + bytes.
+   *
+   * Per-player stream opcodes, read two bytes at a time:
+   *   b0 == 0x00            autoclicker run: b1 = hold<<4|release, then u16
+   *                         cycle count. Expands to cycles x (press, release).
+   *   b1 == 0xFF            delta continuation, adds 255 and carries.
+   *   b0 top bit clear      tap: hold = b0 & 0x7F, gap = b1. One press+release.
+   *   otherwise             single input: p2 = bit4, button = bits1-3,
+   *                         pressed = bit0, delta = b1. b0 == 0x80 is a pure
+   *                         delta marker and emits nothing.
+   */
+  var GBR6_MAGIC = [0x47, 0x42, 0x52, 0x36]; // "GBR6"
+  var GBR6_TWO_PLAYER = 1, GBR6_HAS_LEVELNAME = 16, GBR6_HAS_DEATHS = 32;
+
+  function gbr6DecodeStream(bytes, isP2) {
+    var out = [], frame = 0, i = 0, pending = 0;
+    while (i + 1 < bytes.length) {
+      var b0 = bytes[i], b1 = bytes[i + 1];
+      i += 2;
+
+      if (b0 === 0x00) {
+        if (i + 1 >= bytes.length) break;
+        var cycles = bytes[i] | (bytes[i + 1] << 8);
+        i += 2;
+        var hold = (b1 >> 4) & 0x0F, rel = b1 & 0x0F;
+        if (!hold || !rel || !cycles) continue;
+        frame += pending; pending = 0;
+        for (var c = 0; c < cycles; c++) {
+          out.push({ frame: frame, button: 1, down: true, player2: isP2 });
+          frame += hold;
+          out.push({ frame: frame, button: 1, down: false, player2: isP2 });
+          frame += rel;
+        }
+        continue;
+      }
+
+      if (b1 === 0xFF) {
+        pending += 255;
+        if (b0 === 0x80) continue;
+        if (!(b0 & 0x80)) {
+          var h = b0 & 0x7F;
+          frame += pending; pending = 0;
+          out.push({ frame: frame, button: 1, down: true, player2: isP2 });
+          frame += h;
+          out.push({ frame: frame, button: 1, down: false, player2: isP2 });
+        }
+        continue;
+      }
+
+      if (!(b0 & 0x80)) {
+        var hd = b0 & 0x7F;
+        frame += pending + b1; pending = 0;
+        out.push({ frame: frame, button: 1, down: true, player2: isP2 });
+        frame += hd;
+        out.push({ frame: frame, button: 1, down: false, player2: isP2 });
+        continue;
+      }
+
+      var p2 = ((b0 >> 4) & 0x01) === 1;
+      var btn = (b0 >> 1) & 0x07;
+      var pressed = (b0 & 0x01) === 1;
+      frame += pending + b1; pending = 0;
+      if (b0 === 0x80) continue;
+      out.push({ frame: frame, button: btn === 0 ? 1 : btn, down: pressed, player2: p2 || isP2 });
+    }
+    return out;
+  }
+
+  /* Writes the plain per-input encoding only -- no autoclicker run packing.
+   * That's purely a size optimisation in the original encoder; omitting it
+   * produces a larger but completely valid stream that GucciBot decodes
+   * identically. Correctness over bytes saved. */
+  function gbr6EncodeStream(inputs) {
+    var out = [], prev = 0;
+    inputs.slice().sort(function (a, b) { return a.frame - b.frame; }).forEach(function (inp) {
+      var delta = Math.max(0, inp.frame - prev);
+      var b0 = 0x80 | ((inp.player2 ? 1 : 0) << 4) | ((inp.button & 0x07) << 1) | (inp.down ? 1 : 0);
+      while (delta > 254) { out.push(b0, 0xFF); delta -= 255; }
+      out.push(b0, delta);
+      prev = inp.frame;
+    });
+    return out;
+  }
+
   var FORMATS = {
+    brrr: {
+      name: 'GucciBot (.brrr / GBR6)',
+      ext: '.brrr',
+      group: 'GucciBot',
+      confidence: 'ok',
+      note: 'Ported from GucciBot\'s own source. Reading verified against a real 847-input ' +
+            '.brrr; writing round-trips identically but has not been loaded back into the ' +
+            'game yet.',
+      detect: function (name, text, buf) {
+        return !!(buf && buf.length > 4 && buf[0] === 0x47 && buf[1] === 0x42 &&
+                  buf[2] === 0x52 && buf[3] === 0x36);
+      },
+      read: function (buf) {
+        var dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+        var pos = 4;
+        var version = dv.getUint8(pos); pos += 1;
+        var flags = dv.getUint8(pos); pos += 1;
+        var tps = dv.getFloat32(pos, true); pos += 4;
+        pos += 8;  // timestamp
+        pos += 8;  // rngSeed
+        var p1size = dv.getUint32(pos, true); pos += 4;
+        var p2size = dv.getUint32(pos, true); pos += 4;
+        var nameLen = dv.getUint16(pos, true); pos += 2;
+        pos += nameLen;
+        if (pos + p1size + p2size > buf.length) throw new Error('truncated GBR6 file');
+        var p1 = buf.subarray(pos, pos + p1size); pos += p1size;
+        var p2 = buf.subarray(pos, pos + p2size);
+        var inputs = gbr6DecodeStream(p1, false).concat(gbr6DecodeStream(p2, true));
+        inputs.sort(function (a, b) { return a.frame - b.frame; });
+        void version; void flags;
+        return { tps: tps > 0 ? tps : 240, inputs: inputs };
+      },
+      write: function (rep) {
+        var p1 = gbr6EncodeStream(rep.inputs.filter(function (i) { return !i.player2; }));
+        var p2 = gbr6EncodeStream(rep.inputs.filter(function (i) { return i.player2; }));
+        var nameBytes = new TextEncoder().encode('');
+        var total = 4 + 1 + 1 + 4 + 8 + 8 + 4 + 4 + 2 + nameBytes.length + p1.length + p2.length;
+        var buf = new Uint8Array(total);
+        var dv = new DataView(buf.buffer);
+        var pos = 0;
+        GBR6_MAGIC.forEach(function (b) { buf[pos++] = b; });
+        dv.setUint8(pos, 1); pos += 1;                                    // version
+        dv.setUint8(pos, p2.length ? GBR6_TWO_PLAYER : 0); pos += 1;      // flags
+        dv.setFloat32(pos, rep.tps, true); pos += 4;
+        dv.setBigInt64(pos, BigInt(Math.floor(Date.now() / 1000)), true); pos += 8;
+        dv.setBigUint64(pos, BigInt(0), true); pos += 8;                  // rngSeed
+        dv.setUint32(pos, p1.length, true); pos += 4;
+        dv.setUint32(pos, p2.length, true); pos += 4;
+        dv.setUint16(pos, nameBytes.length, true); pos += 2;
+        buf.set(nameBytes, pos); pos += nameBytes.length;
+        buf.set(p1, pos); pos += p1.length;
+        buf.set(p2, pos);
+        void GBR6_HAS_LEVELNAME; void GBR6_HAS_DEATHS;
+        return buf;
+      }
+    },
+
     plaintext: {
       name: 'Plain Text',
       ext: '.txt',
@@ -258,7 +407,6 @@
   /* Declared but not implemented -- listed so the page is honest about what
    * it does and doesn't do, rather than quietly omitting them. */
   var PLANNED = [
-    ['GucciBot .brrr (GBR6)', 'GucciBot'],
     ['Silicate v1 / v2 / v3', 'Current'],
     ['GDR (binary)', 'Current'],
     ['TcBot', 'Current'],
@@ -278,6 +426,8 @@
 
   var original = null;   // as loaded, never mutated
   var current = null;    // working copy
+  var loadedName = '';   // original filename, for the override gag
+  var loadedKey = null;  // detected input format key
 
   var $ = function (id) { return document.getElementById(id); };
 
@@ -287,9 +437,20 @@
 
   function detect(name, buf, text) {
     for (var k in FORMATS) {
-      try { if (FORMATS[k].detect(name, text)) return k; } catch (e) {}
+      try { if (FORMATS[k].detect(name, text, buf)) return k; } catch (e) {}
     }
     return null;
+  }
+
+  /* GucciBot's own formats -- .brrr plus every theme extension, which are the
+   * same data under a different name. Used by the override gag below. */
+  var GUCCI_EXTS = ['.brrr', '.icebrrr', '.toosii', '.ja', '.giddey', '.bam', '.sexyy',
+    '.juice', '.butler', '.saweetie', '.maybach', '.romo', '.grizzley', '.redkingdom',
+    '.lemonade', '.waka', '.youngsta', '.knockerz'];
+
+  function isGucciFile(name) {
+    name = (name || '').toLowerCase();
+    return GUCCI_EXTS.some(function (e) { return name.endsWith(e); });
   }
 
   function show(kind, html) {
@@ -347,6 +508,8 @@
       }
       current = clone(original);
 
+      loadedName = file.name;
+      loadedKey = key;
       $('loaded').classList.remove('hidden');
       $('s-name').textContent = file.name;
       $('s-fmt').textContent = FORMATS[key].name;
@@ -479,12 +642,24 @@
       }
     });
 
-    // Save.
+    // Save. Converting a GucciBot macro out to a rival format gets
+    // interrupted -- see gucciOverride().
     $('b-save').addEventListener('click', function () {
       if (!current || !current.inputs.length) {
         show('err', 'Nothing to save &mdash; load a macro first.');
         return;
       }
+      var outKey = $('outfmt').value;
+      var cameFromGucci = isGucciFile(loadedName) ||
+        (loadedKey && FORMATS[loadedKey] && FORMATS[loadedKey].group === 'GucciBot');
+      if (cameFromGucci && FORMATS[outKey].group !== 'GucciBot' && !overrideGranted) {
+        gucciOverride(doSave);
+        return;
+      }
+      doSave();
+    });
+
+    function doSave() {
       var key = $('outfmt').value;
       var f = FORMATS[key];
       var out = clone(current);
@@ -507,7 +682,81 @@
         'Saved as ' + f.name + '. ' + (f.confidence === 'ok' ? '' :
         '<strong>This format is experimental &mdash; test it in-game before trusting it, ' +
         'and keep your original.</strong>'));
+    }
+  }
+
+  /* The gag: taking a GucciBot macro out to another bot's format gets the
+   * video, and only proceeds if you actually press the button. Granted once
+   * per page load -- making someone sit through it on every save would stop
+   * being funny immediately. */
+  var overrideGranted = false;
+
+  function gucciOverride(proceed) {
+    if (document.getElementById('gucci-override')) return;
+
+    var overlay = document.createElement('div');
+    overlay.id = 'gucci-override';
+    overlay.style.cssText =
+      'position:fixed;inset:0;z-index:99999;background:#000;display:flex;' +
+      'align-items:center;justify-content:center;';
+
+    var video = document.createElement('video');
+    video.src = (window.GucciDropped && window.GucciDropped.url) || '';
+    video.loop = true;
+    video.playsInline = true;
+    video.style.cssText =
+      'position:fixed;inset:0;width:100vw;height:100vh;object-fit:contain;';
+    overlay.appendChild(video);
+
+    var bar = document.createElement('div');
+    bar.style.cssText =
+      'position:fixed;left:0;right:0;bottom:0;padding:2rem 1.5rem 2.5rem;text-align:center;' +
+      'background:linear-gradient(to top, rgba(0,0,0,.92), rgba(0,0,0,0));z-index:1;';
+
+    var line = document.createElement('div');
+    line.textContent = 'That macro is already home.';
+    line.style.cssText =
+      "font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;" +
+      'color:#D4AF37;margin-bottom:1.1rem;';
+    bar.appendChild(line);
+
+    var go = document.createElement('button');
+    go.textContent = 'GUCCI OVERRIDE';
+    go.style.cssText =
+      "font-family:'Space Mono',monospace;font-size:0.8rem;letter-spacing:3px;" +
+      'background:transparent;border:1px solid #D4AF37;color:#D4AF37;' +
+      'padding:.85rem 2.2rem;cursor:pointer;margin:0 .4rem;';
+    go.onmouseenter = function () { go.style.background = '#D4AF37'; go.style.color = '#0a0a0a'; };
+    go.onmouseleave = function () { go.style.background = 'transparent'; go.style.color = '#D4AF37'; };
+    bar.appendChild(go);
+
+    var nah = document.createElement('button');
+    nah.textContent = 'Never mind';
+    nah.style.cssText =
+      "font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:2px;" +
+      'background:transparent;border:1px solid #333;color:#888;' +
+      'padding:.85rem 1.5rem;cursor:pointer;margin:0 .4rem;';
+    bar.appendChild(nah);
+
+    overlay.appendChild(bar);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    // Same reason as the sitewide gag: play() has to run inside the click
+    // gesture for unmuted audio, especially on iOS.
+    video.play().catch(function () { video.muted = true; video.play(); });
+
+    function close() {
+      video.pause();
+      overlay.remove();
+      document.body.style.overflow = '';
+    }
+    go.addEventListener('click', function () {
+      overrideGranted = true;
+      close();
+      proceed();
     });
+    nah.addEventListener('click', close);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

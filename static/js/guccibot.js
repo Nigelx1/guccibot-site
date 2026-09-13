@@ -87,8 +87,19 @@ function showDropped() {
   });
 }
 
+// Exposed so the converter page can reuse the same video for its own,
+// more targeted gag (converting a .brrr away from GucciBot).
+window.GucciDropped = { url: DROPPED_VIDEO_URL, show: showDropped };
+
 if (!location.pathname.startsWith('/dropped')) {
   document.addEventListener('click', (e) => {
+    // The converter is a tool, not marketing -- a fullscreen video
+    // hijacking the page while someone is mid-conversion is just
+    // annoying, and its working area is full of panels, tables and
+    // labels that aren't <button>s. That page runs its own gag instead
+    // (see converter.js). Page chrome outside the tool still triggers
+    // this one normally.
+    if (e.target.closest('.conv-wrap')) return;
     const real = e.target.closest('a, button, input, textarea, select, label, [role="button"], [onclick]');
     if (!real) {
       showDropped();
