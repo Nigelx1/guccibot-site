@@ -1,8 +1,11 @@
 /* GucciBot macro converter.
  *
- * Everything here is written from scratch against format layouts. No other
- * converter's code is used -- file formats themselves aren't copyrightable,
- * implementations are, and we don't have permission to use anyone else's.
+ * Most of the 2.1-era formats are ported from peony's nat-converter
+ * (https://github.com/peonii/nat-converter), used with her permission on the
+ * condition that the source is linked on the page -- it is, in the credits
+ * panel. See the porting note further down. The rest, GucciBot's own .brrr
+ * included, are written here from the format layouts: formats themselves
+ * aren't copyrightable, implementations are, so nothing else is borrowed.
  *
  * Internal representation, which every format converts to and from:
  *   { tps: number, inputs: [ { frame, button, down, player2 } ] }
@@ -272,7 +275,7 @@
       note: 'Our own layout, documented on this page.',
       detect: function (name, text) {
         if (!text) return false;
-        return /^\s*(#|\d+\s+\d+)/.test(text);
+        return /^[ 	]*(#|\d+[ 	]+\d+)/.test(text);
       },
       read: function (buf, text) {
         var inputs = [];
@@ -316,7 +319,8 @@
         if (!text) return false;
         try {
           var j = JSON.parse(text);
-          return !!(j && j.inputs && (j.framerate !== undefined || j.fps !== undefined));
+          return !!(j && Array.isArray(j.inputs) && (j.framerate !== undefined ||
+                    j.botInfo !== undefined || j.gameVersion !== undefined));
         } catch (e) { return false; }
       },
       read: function (buf, text) {
@@ -418,156 +422,486 @@
       }
     },
 
+    /* Echo shipped two different JSON shapes. The older one spells its keys
+     * out in Title Case With Spaces and offsets every frame by a "Starting
+     * Frame"; the newer one is plain snake_case and omits player_2 entirely
+     * when it's false. Both layouts are per nat-converter. */
     echojson: {
-      name: 'Echo (New JSON)',
+      name: 'Echo (JSON)',
       ext: '.echo',
       group: 'Legacy (2.1)',
       confidence: 'exp',
-      note: 'Implemented from the documented layout; unverified.',
+      note: 'Layout from nat-converter. Reads both the old and new shapes, writes the new one.',
       detect: function (name, text) {
         if (!text) return false;
         try {
           var j = JSON.parse(text);
-          return !!(j && (j.macro || j.inputs) && (j.fps !== undefined || j.FPS !== undefined));
+          return !!(j && (Array.isArray(j.inputs) && j.fps !== undefined));
         } catch (e) { return false; }
       },
       read: function (buf, text) {
         var j = JSON.parse(text);
-        var arr = j.macro || j.inputs || [];
-        var inputs = arr.map(function (e) {
+        if (Array.isArray(j['Echo Replay'])) {
+          var start = num(j['Starting Frame'], 0) | 0;
           return {
-            frame: num(e.frame !== undefined ? e.frame : e.Frame, 0) | 0,
-            button: 1,
-            down: !!(e.hold !== undefined ? e.hold : e.Hold),
-            player2: !!(e.player_2 !== undefined ? e.player_2 : e.Player2)
+            tps: Math.round(num(j.FPS, 240)),
+            inputs: j['Echo Replay'].map(function (e) {
+              return {
+                frame: (num(e.Frame, 0) | 0) + start, button: 1,
+                down: !!e.Hold, player2: !!e['Player 2']
+              };
+            })
           };
-        });
-        return { tps: num(j.fps !== undefined ? j.fps : j.FPS, 240), inputs: inputs };
+        }
+        return {
+          tps: Math.round(num(j.fps, 240)),
+          inputs: (j.inputs || []).map(function (e) {
+            return {
+              frame: num(e.frame, 0) | 0, button: 1,
+              down: !!e.holding, player2: !!e.player_2
+            };
+          })
+        };
       },
       write: function (rep) {
         var j = {
           fps: rep.tps,
-          macro: rep.inputs.filter(function (i) { return i.button === 1; }).map(function (i) {
-            return { frame: i.frame, hold: i.down, player_2: i.player2 };
-          })
+          inputs: rep.inputs.filter(function (i) { return i.button === 1; })
+            .map(function (i) {
+              var o = { holding: i.down, frame: i.frame };
+              if (i.player2) o.player_2 = true;   // omitted when false
+              return o;
+            })
         };
         return new TextEncoder().encode(JSON.stringify(j, null, 2));
       }
     },
 
-    xdbot: {
-      name: 'xdBot',
-      ext: '.json',
-      group: 'Current',
+    echojsonold: {
+      name: 'Echo (old JSON)',
+      ext: '.echo',
+      group: 'Legacy (2.1)',
       confidence: 'exp',
-      note: 'Implemented from the documented layout; unverified.',
+      note: 'Layout from nat-converter.',
       detect: function (name, text) {
         if (!text) return false;
-        try {
-          var j = JSON.parse(text);
-          return !!(j && j.inputs && Array.isArray(j.inputs) && j.inputs.length &&
-                    Array.isArray(j.inputs[0]));
-        } catch (e) { return false; }
+        try { return !!JSON.parse(text)['Echo Replay']; } catch (e) { return false; }
       },
       read: function (buf, text) {
-        var j = JSON.parse(text);
-        var inputs = (j.inputs || []).map(function (a) {
-          return {
-            frame: num(a[0], 0) | 0, button: num(a[1], 1) | 0,
-            down: !!a[2], player2: !!a[3]
-          };
-        });
-        return { tps: num(j.fps || j.framerate, 240), inputs: inputs };
+        return FORMATS.echojson.read(buf, text);
       },
       write: function (rep) {
         var j = {
-          fps: rep.tps,
-          inputs: rep.inputs.map(function (i) {
-            return [i.frame, i.button, i.down, i.player2];
-          })
+          FPS: rep.tps,
+          'Starting Frame': 0,
+          'Echo Replay': rep.inputs.filter(function (i) { return i.button === 1; })
+            .map(function (i) {
+              return {
+                Hold: i.down, 'Player 2': i.player2,
+                Frame: i.frame, 'X Position': 0
+              };
+            })
         };
         return new TextEncoder().encode(JSON.stringify(j, null, 2));
       }
     }
   };
 
-  /* Declared but not implemented -- listed so the page is honest about what
-   * it does and doesn't do, rather than quietly omitting them. */
-  /* ------------------------------------------------- guessed formats
+  /* ---------------------------------------------- ported from nat-converter
    *
-   * Nigel's call: wire up the formats we have NO reference file for, and say
-   * plainly on the page that that's what they are. These are constructed from
-   * the shape 2.1-era replay formats generally take -- an fps value followed
-   * by fixed-size records -- NOT from any spec or sample. They are expected
-   * to be wrong.
+   * The formats below are ported from peony's nat-converter
+   * (https://github.com/peonii/nat-converter), used WITH HER PERMISSION on
+   * the condition that the source stays linked on the site -- it is, in the
+   * "Credits & sources" panel on the converter page. Don't remove that link.
    *
-   * They carry their own 'guess' tier rather than sharing 'experimental',
-   * because the two are not the same claim: experimental means "implemented,
-   * not yet confirmed", guess means "nobody has checked this against
-   * anything". A wrong reader shows visible nonsense; a wrong writer hands
-   * you a file that looks fine and isn't. Hence the separate label.
+   * These replace hand-written guesses that were, predictably, wrong. zBot's
+   * header is a delta + speedhack pair, not an fps float. ReplayBot has an
+   * "RPLY" magic and 5-byte records. Fembot pads every record out to 65
+   * bytes. xdBot is line-based text, not JSON. None of that was guessable
+   * from the outside, which is the whole reason the guess tier existed.
    *
-   * Any of these becomes real the moment a sample file turns up.
+   * nat-converter's model is one row per frame carrying BOTH players (p1/p2
+   * each Click/Release/Skip); ours is one row per input. They convert
+   * cleanly, so the page's own model is left alone.
    */
-  function guessFixedRecord(opts) {
-    // fps (f32) + optional extra header floats, then records of
-    // { f32 frame, u8 hold, u8 player2 }.
-    var headerFloats = opts.headerFloats || 1;
-    var rec = 6;
-    return {
-      name: opts.name,
-      ext: opts.ext,
-      group: opts.group,
-      confidence: 'guess',
-      note: 'No reference file -- structure is assumed, not known.',
-      detect: function (name) {
-        return !!name && name.toLowerCase().endsWith(opts.ext);
-      },
+  function dvOf(buf) { return new DataView(buf.buffer, buf.byteOffset, buf.byteLength); }
+
+  function jumps(rep) {
+    // Every format here carries a jump input plus a player flag, nothing else.
+    return rep.inputs.filter(function (i) { return i.button === 1; })
+      .sort(function (a, b) { return a.frame - b.frame; });
+  }
+
+  function mkInput(frame, hold, p2) {
+    return { frame: frame >>> 0, button: 1, down: !!hold, player2: !!p2 };
+  }
+
+  function hasMagic(buf, bytes) {
+    if (!buf || buf.length < bytes.length) return false;
+    for (var i = 0; i < bytes.length; i++) if (buf[i] !== bytes[i]) return false;
+    return true;
+  }
+
+  var PORTED = {
+    zbot: {
+      name: 'zBot', ext: '.zbf', group: 'Legacy (2.1)', confidence: 'exp',
+      note: 'Ported from nat-converter.',
+      detect: function (n) { return !!n && /\.zbf$/i.test(n); },
       read: function (buf) {
-        var dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
-        var pos = 0;
-        var tps = dv.getFloat32(pos, true); pos += 4;
-        for (var h = 1; h < headerFloats; h++) pos += 4;
-        var inputs = [];
-        while (pos + rec <= buf.length) {
-          var frame = dv.getFloat32(pos, true); pos += 4;
-          var hold = dv.getUint8(pos); pos += 1;
-          var p2 = dv.getUint8(pos); pos += 1;
-          inputs.push({
-            frame: Math.round(frame), button: 1, down: !!hold, player2: !!p2
-          });
+        var dv = dvOf(buf);
+        // Not an fps field: a frame delta and a speedhack multiplier.
+        var delta = dv.getFloat32(0, true), speed = dv.getFloat32(4, true);
+        var fps = Math.round(1 / (delta * speed));
+        var out = [], pos = 8;
+        while (pos + 6 <= buf.length) {
+          var frame = dv.getInt32(pos, true); pos += 4;
+          var hold = buf[pos++] === 0x31;   // ASCII '1' / '0', not 1 / 0
+          var p2 = buf[pos++] === 0x31;
+          out.push(mkInput(frame, hold, p2));
         }
-        return { tps: tps > 0 && tps < 100000 ? tps : 240, inputs: inputs };
+        return { tps: fps > 0 && isFinite(fps) ? fps : 240, inputs: out };
       },
       write: function (rep) {
-        var buf = new Uint8Array(4 * headerFloats + rep.inputs.length * rec);
-        var dv = new DataView(buf.buffer);
-        var pos = 0;
-        dv.setFloat32(pos, rep.tps, true); pos += 4;
-        for (var h = 1; h < headerFloats; h++) { dv.setFloat32(pos, 1, true); pos += 4; }
-        rep.inputs.forEach(function (i) {
-          dv.setFloat32(pos, i.frame, true); pos += 4;
-          dv.setUint8(pos, i.down ? 1 : 0); pos += 1;
-          dv.setUint8(pos, i.player2 ? 1 : 0); pos += 1;
+        var list = jumps(rep);
+        var buf = new Uint8Array(8 + list.length * 6), dv = dvOf(buf), pos = 0;
+        dv.setFloat32(pos, 1 / rep.tps, true); pos += 4;
+        dv.setFloat32(pos, 1, true); pos += 4;
+        list.forEach(function (i) {
+          dv.setInt32(pos, i.frame, true); pos += 4;
+          buf[pos++] = i.down ? 0x31 : 0x30;
+          // nat-converter writes this flag inverted relative to how its own
+          // reader reads it, which flips every player on a round-trip.
+          // Matching the reader instead, so ours round-trips losslessly.
+          buf[pos++] = i.player2 ? 0x31 : 0x30;
         });
         return buf;
       }
-    };
-  }
+    },
 
-  [
-    { key: 'replaybot', name: 'ReplayBot', ext: '.replay', group: 'Legacy (2.1)' },
-    { key: 'zbot', name: 'zBot', ext: '.zbf', group: 'Legacy (2.1)', headerFloats: 2 },
-    { key: 'kdbot', name: 'KD-Bot', ext: '.kd', group: 'Legacy (2.1)' },
-    { key: 'fembot', name: 'Fembot', ext: '.freplay', group: 'Legacy (2.1)' },
-    { key: 'rush', name: 'Rush', ext: '.rush', group: 'Legacy (2.1)' },
-    { key: 'omegabot', name: 'OmegaBot 1 / 2 / 3', ext: '.replay', group: 'Legacy (2.1)' },
-    { key: 'xbot', name: 'xBot', ext: '.xbot', group: 'Legacy (2.1)' },
-    { key: 'mhrbin', name: 'Mega Hack Replay (binary)', ext: '.mhr', group: 'Legacy (2.1)' },
-    { key: 'echobin', name: 'Echo (binary)', ext: '.echo', group: 'Legacy (2.1)' }
-  ].forEach(function (g) {
-    FORMATS[g.key] = guessFixedRecord(g);
-  });
+    replaybot: {
+      name: 'ReplayBot', ext: '.replay', group: 'Legacy (2.1)', confidence: 'exp',
+      note: 'Ported from nat-converter.',
+      detect: function (n, t, buf) { return hasMagic(buf, [0x52, 0x50, 0x4C, 0x59]); },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        if (buf[4] !== 2) throw new Error('ReplayBot: only version 2 is supported.');
+        if (buf[5] !== 1) throw new Error('ReplayBot: this macro is X-position based, not frame based.');
+        var fps = dv.getFloat32(6, true);
+        var out = [], pos = 10;
+        while (pos + 5 <= buf.length) {
+          var frame = dv.getUint32(pos, true); pos += 4;
+          var st = buf[pos++];
+          out.push(mkInput(frame, (st & 1) === 1, (st & 2) === 2));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var buf = new Uint8Array(10 + list.length * 5), dv = dvOf(buf);
+        buf[0] = 0x52; buf[1] = 0x50; buf[2] = 0x4C; buf[3] = 0x59;  // RPLY
+        buf[4] = 2;    // version
+        buf[5] = 1;    // frame based
+        dv.setFloat32(6, rep.tps, true);
+        var pos = 10;
+        list.forEach(function (i) {
+          dv.setUint32(pos, i.frame, true); pos += 4;
+          buf[pos++] = (i.down ? 1 : 0) | (i.player2 ? 2 : 0);
+        });
+        return buf;
+      }
+    },
+
+    kdbot: {
+      name: 'KD-Bot', ext: '.kd', group: 'Legacy (2.1)', confidence: 'exp',
+      note: 'Ported from nat-converter.',
+      detect: function (n) { return !!n && /\.kd$/i.test(n); },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        var fps = dv.getFloat32(0, true);
+        var out = [], pos = 4;
+        while (pos + 6 <= buf.length) {
+          var frame = dv.getUint32(pos, true); pos += 4;
+          var hold = buf[pos++] === 1;
+          var p2 = buf[pos++] === 1;
+          out.push(mkInput(frame, hold, p2));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var buf = new Uint8Array(4 + list.length * 6), dv = dvOf(buf);
+        dv.setFloat32(0, rep.tps, true);
+        var pos = 4;
+        list.forEach(function (i) {
+          dv.setUint32(pos, i.frame, true); pos += 4;
+          buf[pos++] = i.down ? 1 : 0;
+          buf[pos++] = i.player2 ? 1 : 0;
+        });
+        return buf;
+      }
+    },
+
+    rush: {
+      name: 'Rush', ext: '.rush', group: 'Legacy (2.1)', confidence: 'exp',
+      note: 'Ported from nat-converter.',
+      detect: function (n) { return !!n && /\.rush$/i.test(n); },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        var fps = dv.getInt16(0, true);   // 16-bit, not a float
+        var out = [], pos = 2;
+        while (pos + 5 <= buf.length) {
+          var frame = dv.getUint32(pos, true); pos += 4;
+          var st = buf[pos++];
+          out.push(mkInput(frame, (st & 1) === 1, (st & 2) === 2));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var buf = new Uint8Array(2 + list.length * 5), dv = dvOf(buf);
+        dv.setInt16(0, Math.round(rep.tps), true);
+        var pos = 2;
+        list.forEach(function (i) {
+          dv.setUint32(pos, i.frame, true); pos += 4;
+          buf[pos++] = (i.down ? 1 : 0) | (i.player2 ? 2 : 0);
+        });
+        return buf;
+      }
+    },
+
+    fembot: {
+      name: 'Fembot', ext: '.freplay', group: 'Legacy (2.1)', confidence: 'exp',
+      note: 'Ported from nat-converter.',
+      detect: function (n, t, buf) { return hasMagic(buf, [0x46, 0x42, 0x52, 0x50]); },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        var fps = dv.getFloat32(4, true);
+        // 65 bytes per record: a state byte, a frame, then 60 bytes of padding.
+        var out = [], pos = 8;
+        while (pos + 65 <= buf.length) {
+          var st = buf[pos++];
+          var frame = dv.getUint32(pos, true); pos += 4;
+          pos += 60;
+          out.push(mkInput(frame, (st & 1) === 1, (st & 2) === 2));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var buf = new Uint8Array(8 + list.length * 65), dv = dvOf(buf);
+        buf[0] = 0x46; buf[1] = 0x42; buf[2] = 0x52; buf[3] = 0x50;  // FBRP
+        dv.setFloat32(4, rep.tps, true);
+        var pos = 8;
+        list.forEach(function (i) {
+          buf[pos++] = (i.down ? 1 : 0) | (i.player2 ? 2 : 0);
+          dv.setUint32(pos, i.frame, true); pos += 4;
+          pos += 60;   // padding, already zeroed
+        });
+        return buf;
+      }
+    },
+
+    xbot: {
+      name: 'xBot', ext: '.xbot', group: 'Legacy (2.1)', confidence: 'exp',
+      note: 'Ported from nat-converter.',
+      detect: function (n, t) { return !!t && /^fps:\s*[0-9.]+/i.test(t); },
+      read: function (buf, text) {
+        var lines = text.split(/\r?\n/);
+        var fps = parseFloat((lines[0] || '').split(/\s+/)[1]);
+        var out = [];
+        // Line 0 is "fps: N", line 1 is a bare "frames" marker.
+        for (var i = 2; i < lines.length; i++) {
+          var parts = lines[i].trim().split(/\s+/);
+          if (parts.length < 2) continue;
+          var st = parseInt(parts[0], 10);
+          if (!isFinite(st)) continue;
+          out.push(mkInput(parseInt(parts[1], 10) || 0, st % 2 === 1, st > 1));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var lines = ['fps: ' + rep.tps, 'frames'];
+        jumps(rep).forEach(function (i) {
+          lines.push(((i.down ? 1 : 0) | (i.player2 ? 2 : 0)) + ' ' + i.frame);
+        });
+        return new TextEncoder().encode(lines.join('\n') + '\n');
+      }
+    },
+
+    xdbot: {
+      name: 'xdBot', ext: '.xd', group: 'Current', confidence: 'exp',
+      note: 'Ported from nat-converter.',
+      detect: function (n, t) {
+        return !!t && /^[0-9.]+\s*[\r\n]+\d+\|[01]\|/.test(t);
+      },
+      read: function (buf, text) {
+        var lines = text.split(/\r?\n/);
+        var fps = parseFloat(lines[0]);
+        var out = [];
+        for (var i = 1; i < lines.length; i++) {
+          if (!lines[i].trim()) continue;
+          var d = lines[i].split('|');
+          if (d.length < 4) continue;
+          if (d[2] !== '1') continue;   // nat-converter skips non-jump rows
+          out.push(mkInput(parseInt(d[0], 10) || 0, d[1] === '1', d[3] !== '1'));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var lines = ['' + rep.tps];
+        jumps(rep).forEach(function (i) {
+          // Same note as zBot: written to match this reader, not
+          // nat-converter's writer, which inverts the flag.
+          lines.push(i.frame + '|' + (i.down ? 1 : 0) + '|1|' + (i.player2 ? 0 : 1));
+        });
+        return new TextEncoder().encode(lines.join('\n') + '\n');
+      }
+    },
+
+    mhrbin: {
+      name: 'Mega Hack Replay (binary)', ext: '.mhr', group: 'Legacy (2.1)',
+      confidence: 'exp', note: 'Ported from nat-converter.',
+      detect: function (n, t, buf) {
+        return hasMagic(buf, [0x48, 0x41, 0x43, 0x4B, 0x50, 0x52, 0x4F, 0x07]);  // HACKPRO
+      },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        var metaSize = dv.getInt32(8, true);
+        var fps = dv.getInt32(12, true);   // integer fps, not a float
+        // metaSize counts the fps field we just read, hence the -4, then
+        // 8 bytes of reserved space MHR always writes.
+        var pos = 16 + (metaSize - 4) + 8;
+        var eventSize = dv.getUint32(pos, true); pos += 4;
+        var count = dv.getUint32(pos, true); pos += 4;
+        var out = [];
+        for (var i = 0; i < count && pos + eventSize <= buf.length; i++) {
+          pos += 2;
+          var hold = buf[pos++] === 1;
+          var p2 = buf[pos++] === 1;
+          var frame = dv.getInt32(pos, true); pos += 4;
+          pos += eventSize - 8;
+          out.push(mkInput(frame, hold, p2));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var EV = 32;
+        var buf = new Uint8Array(32 + list.length * EV + 16), dv = dvOf(buf);
+        [0x48, 0x41, 0x43, 0x4B, 0x50, 0x52, 0x4F, 0x07]
+          .forEach(function (b, i) { buf[i] = b; });
+        dv.setInt32(8, 4, true);                    // meta size
+        dv.setInt32(12, Math.round(rep.tps), true); // fps
+        // 16..24 reserved, left zero
+        dv.setUint32(24, EV, true);                 // event size
+        dv.setUint32(28, list.length, true);        // event count, at 0x1c
+        var pos = 32;
+        list.forEach(function (i) {
+          dv.setUint16(pos, 1, true); pos += 2;
+          buf[pos++] = i.down ? 1 : 0;
+          buf[pos++] = i.player2 ? 1 : 0;
+          dv.setInt32(pos, i.frame, true); pos += 4;
+          pos += 24;   // pad out to the 32-byte minimum event
+        });
+        [0xFA, 0x67, 0x55, 0x5A, 0x8D, 0x95, 0x94, 0x07,
+         0xC9, 0x8C, 0xBA, 0x7F, 0x75, 0x9C, 0xEF, 0x3C]
+          .forEach(function (b, n) { buf[pos + n] = b; });
+        return buf;
+      }
+    },
+
+    echobin: {
+      name: 'Echo (binary)', ext: '.echo', group: 'Legacy (2.1)',
+      confidence: 'exp', note: 'Ported from nat-converter.',
+      detect: function (n, t, buf) { return hasMagic(buf, [0x4D, 0x45, 0x54, 0x41]); },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        // A "DBG\0" at offset 4 means the fat 34-byte action, otherwise 6.
+        var full = buf[4] === 0x44 && buf[5] === 0x42 && buf[6] === 0x47 && buf[7] === 0x00;
+        var size = full ? 34 : 6;
+        var fps = dv.getFloat32(24, true);
+        var out = [], pos = 48;
+        // nat-converter derives the action count from the whole file length
+        // rather than what's left after the header, which overshoots by 48
+        // bytes' worth. Bounding the loop by the buffer instead.
+        while (pos + size <= buf.length) {
+          var frame = dv.getUint32(pos, true); pos += 4;
+          var down = buf[pos++] === 1;
+          var p2 = buf[pos++] === 1;
+          if (full) pos += 28;
+          out.push(mkInput(frame, down, p2));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var buf = new Uint8Array(48 + list.length * 6), dv = dvOf(buf);
+        buf[0] = 0x4D; buf[1] = 0x45; buf[2] = 0x54; buf[3] = 0x41;  // META
+        dv.setFloat32(24, rep.tps, true);
+        var pos = 48;
+        list.forEach(function (i) {
+          dv.setUint32(pos, i.frame, true); pos += 4;
+          buf[pos++] = i.down ? 1 : 0;
+          buf[pos++] = i.player2 ? 1 : 0;
+        });
+        return buf;
+      }
+    },
+
+    obot2: {
+      name: 'OmegaBot 2', ext: '.replay', group: 'Legacy (2.1)',
+      confidence: 'exp',
+      note: 'Ported from nat-converter. OmegaBot 3 uses a different encoding and is not supported yet.',
+      detect: function (n, t, buf) {
+        if (!buf || buf.length < 24) return false;
+        if (hasMagic(buf, [0x52, 0x50, 0x4C, 0x59])) return false;   // that's ReplayBot
+        var dv = dvOf(buf);
+        var fps = dv.getFloat32(0, true);
+        // replay_type == 1 is the frame-based variant; 0 is X-position.
+        return fps > 0 && fps < 100000 && dv.getUint32(8, true) === 1;
+      },
+      read: function (buf) {
+        // Rust bincode 1.x defaults: little-endian, fixed-width integers,
+        // u64 lengths, enum variants tagged as u32.
+        var dv = dvOf(buf);
+        var fps = dv.getFloat32(0, true);
+        if (dv.getUint32(8, true) !== 1)
+          throw new Error('OmegaBot 2: this macro is X-position based, not frame based.');
+        var count = dv.getUint32(20, true);   // u64 length, low half
+        var out = [], pos = 28;
+        for (var i = 0; i < count && pos + 12 <= buf.length; i++) {
+          var locKind = dv.getUint32(pos, true); pos += 4;
+          var frame = dv.getUint32(pos, true); pos += 4;
+          var kind = dv.getUint32(pos, true); pos += 4;
+          if (kind === 1) { pos += 4; continue; }   // FpsChange(f32), no input
+          if (locKind !== 1 || kind < 2) continue;  // X-position or None
+          // 2 = P1 down, 3 = P1 up, 4 = P2 down, 5 = P2 up
+          out.push(mkInput(frame, kind === 2 || kind === 4, kind >= 4));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var buf = new Uint8Array(28 + list.length * 12), dv = dvOf(buf);
+        dv.setFloat32(0, rep.tps, true);    // initial_fps
+        dv.setFloat32(4, rep.tps, true);    // current_fps
+        dv.setUint32(8, 1, true);           // replay_type = Frame
+        // 12..20: current_click (u64) = 0
+        dv.setUint32(20, list.length, true);
+        var pos = 28;
+        list.forEach(function (i) {
+          dv.setUint32(pos, 1, true); pos += 4;              // Location::Frame
+          dv.setUint32(pos, i.frame, true); pos += 4;
+          var kind = i.player2 ? (i.down ? 4 : 5) : (i.down ? 2 : 3);
+          dv.setUint32(pos, kind, true); pos += 4;
+        });
+        return buf;
+      }
+    }
+  };
+
+  Object.keys(PORTED).forEach(function (k) { FORMATS[k] = PORTED[k]; });
+
 
   /* Planned. Ones marked hasSample have a real reference file in hand, so
    * they can be implemented and verified properly rather than guessed at --
@@ -579,6 +913,7 @@
     ['GDR (binary .gdr)', 'Current', true],
     ['GDR2 (.gdr2)', 'Current', true],
     ['yBot (.ybot)', 'Legacy (2.1)', true],
+    ['OmegaBot 3 (.replay)', 'Legacy (2.1)'],
     ['ToastyReplay', 'Current'],
     ['Silicate v1 / v2', 'Current'],
   ];
@@ -678,11 +1013,7 @@
       $('outtps').value = current.tps;
       refresh();
 
-      if (FORMATS[key].confidence === 'guess') {
-        show('err', '<strong>Heads up:</strong> ' + FORMATS[key].name + ' was matched by ' +
-          'file extension only, and its layout is a guess &mdash; no reference file ' +
-          'exists for it. What you see below may be nonsense.');
-      } else if (FORMATS[key].confidence === 'exp') {
+      if (FORMATS[key].confidence === 'exp') {
         show('err', '<strong>Heads up:</strong> ' + FORMATS[key].name + ' is marked ' +
           'experimental &mdash; it\'s implemented but hasn\'t been confirmed against real ' +
           'macros yet. Check the result in-game before relying on it.');
@@ -711,8 +1042,7 @@
         var o = document.createElement('option');
         o.value = pair[0];
         o.textContent = pair[1].name +
-          (pair[1].confidence === 'exp' ? '  (experimental)' :
-           pair[1].confidence === 'guess' ? '  (guess -- probably wrong)' : '');
+          (pair[1].confidence === 'exp' ? '  (experimental)' : '');
         og.appendChild(o);
       });
       sel.appendChild(og);
@@ -729,8 +1059,7 @@
       var d = document.createElement('div');
       d.className = 'fmt-item';
       d.innerHTML = r[0] + '<span class="tag ' + r[1] + '">' +
-        (r[1] === 'ok' ? 'verified' : r[1] === 'exp' ? 'experimental'
-          : r[1] === 'guess' ? 'guess &mdash; unverified' : 'planned') + '</span>' +
+        (r[1] === 'ok' ? 'verified' : r[1] === 'exp' ? 'experimental' : 'planned') + '</span>' +
         (r[3] ? '<span class="tag soon" style="background:#1a2a1a;color:#7aa87a">sample in hand</span>' : '');
       list.appendChild(d);
     });
@@ -848,14 +1177,9 @@
       a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
       show(f.confidence === 'ok' ? 'good' : 'err',
-        'Saved as ' + f.name + '. ' + (
-          f.confidence === 'ok' ? '' :
-          f.confidence === 'guess' ?
-            '<strong>This format is a guess.</strong> Nobody has a reference file for it, so ' +
-            'the layout was assumed and this file is quite likely not valid at all. Do not ' +
-            'delete your original.' :
-            '<strong>This format is experimental &mdash; test it in-game before trusting it, ' +
-            'and keep your original.</strong>'));
+        'Saved as ' + f.name + '. ' + (f.confidence === 'ok' ? '' :
+          '<strong>This format is experimental &mdash; test it in-game before trusting it, ' +
+          'and keep your original.</strong>'));
     }
   }
 
