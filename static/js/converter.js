@@ -170,6 +170,7 @@
       ext: '.ttrl',
       group: 'Current',
       confidence: 'exp',
+      p1only: true,
       note: 'Reading worked out from a real macro and cross-checked against the level length. ' +
             'Writing reuses header fields that are still unidentified, so it may not load.',
       detect: function (name, text, buf) {
@@ -314,7 +315,7 @@
       ext: '.gdr.json',
       group: 'Current',
       confidence: 'exp',
-      note: 'Structure follows GDReplayFormat. Not yet checked against real files.',
+      note: 'GDR v1 in JSON. Field names taken from nat-converter; "2p", not "p2".',
       detect: function (name, text) {
         if (!text) return false;
         try {
@@ -323,28 +324,9 @@
                     j.botInfo !== undefined || j.gameVersion !== undefined));
         } catch (e) { return false; }
       },
-      read: function (buf, text) {
-        var j = JSON.parse(text);
-        var inputs = (j.inputs || []).map(function (i) {
-          return {
-            frame: num(i.frame, 0) | 0,
-            button: num(i.btn !== undefined ? i.btn : i.button, 1) | 0,
-            down: i.down !== undefined ? !!i.down : !!i.hold,
-            player2: !!(i.p2 !== undefined ? i.p2 : i.player2)
-          };
-        });
-        return { tps: num(j.framerate !== undefined ? j.framerate : j.fps, 240), inputs: inputs };
-      },
+      read: function (buf, text) { return gdr1ToRep(JSON.parse(text)); },
       write: function (rep) {
-        var j = {
-          gameVersion: 2.2, description: 'Converted by GucciBot',
-          version: 1, duration: 0, botInfo: { name: 'GucciBot', version: '1.7' },
-          levelInfo: { id: 0, name: '', }, framerate: rep.tps, seed: 0, coins: 0,
-          ldm: false, inputs: rep.inputs.map(function (i) {
-            return { frame: i.frame, btn: i.button, p2: i.player2, down: i.down };
-          })
-        };
-        return new TextEncoder().encode(JSON.stringify(j, null, 2));
+        return new TextEncoder().encode(JSON.stringify(repToGdr1(rep), null, 2));
       }
     },
 
@@ -902,20 +884,505 @@
 
   Object.keys(PORTED).forEach(function (k) { FORMATS[k] = PORTED[k]; });
 
+  // tcm-rs's 16-byte file magic.
+  var TCM_MAGIC = [0x9f, 0x88, 0x89, 0x84, 0x9f, 0x3b, 0x1d, 0xd8,
+                   0xcc, 0xa1, 0x86, 0x8a, 0x88, 0x99, 0x84, 0x00];
+
+  /* ------------------------------------------------- the modern formats
+   *
+   * These are the ones that needed a real spec rather than a sample, and now
+   * have one:
+   *
+   *   GDR2   -- maxnut's GDReplayFormat, the library GucciBot itself links
+   *             (CMakeLists.txt, libGDR). Layout read straight out of
+   *             gdr.hpp / binarystream.hpp, so this one isn't guesswork.
+   *   GDR    -- the older v1 of the same, which is MessagePack rather than a
+   *             hand-rolled stream. Small msgpack codec below; it only needs
+   *             maps, arrays, strings, numbers and bools.
+   *   TCM    -- TcBot's format, from tcm-rs (MIT, tcbot.pro), which Chagh
+   *             pointed us at. Both v1 and v2.
+   *   URL, Silicate v1 -- ported from nat-converter like the batch above.
+   *
+   * Silicate v2/v3 stay planned: nat-converter reaches for the slc_oxide
+   * crate for those, and a container format is not something to invent.
+   */
+
+  /* -- LEB128 varints, big-endian floats: GDR2's binarystream conventions.
+   * Integers are variable-length, everything else is raw bytes reversed
+   * (i.e. big-endian), and strings are a varint length then the bytes. */
+  function BinReader(buf) {
+    this.b = buf; this.p = 0;
+    this.dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  }
+  BinReader.prototype.varint = function () {
+    var v = 0, shift = 1, byte;
+    do {
+      if (this.p >= this.b.length) throw new Error('Unexpected end of file.');
+      byte = this.b[this.p++];
+      v += (byte & 0x7F) * shift;     // not <<: JS bitwise ops are 32-bit
+      shift *= 128;
+    } while (byte & 0x80);
+    return v;
+  };
+  BinReader.prototype.str = function () {
+    var n = this.varint();
+    if (this.p + n > this.b.length) throw new Error('Bad string length.');
+    var s = new TextDecoder().decode(this.b.subarray(this.p, this.p + n));
+    this.p += n;
+    return s;
+  };
+  BinReader.prototype.f32 = function () { var v = this.dv.getFloat32(this.p, false); this.p += 4; return v; };
+  BinReader.prototype.f64 = function () { var v = this.dv.getFloat64(this.p, false); this.p += 8; return v; };
+  BinReader.prototype.left = function () { return this.b.length - this.p; };
+
+  function BinWriter() { this.out = []; }
+  BinWriter.prototype.raw = function (arr) { for (var i = 0; i < arr.length; i++) this.out.push(arr[i]); };
+  BinWriter.prototype.varint = function (v) {
+    v = Math.max(0, Math.round(v));
+    if (v === 0) { this.out.push(0); return; }
+    while (v > 0) {
+      var byte = v % 128;
+      v = Math.floor(v / 128);
+      this.out.push(v > 0 ? (byte | 0x80) : byte);
+    }
+  };
+  BinWriter.prototype.str = function (s) {
+    var bytes = new TextEncoder().encode(s || '');
+    this.varint(bytes.length);
+    this.raw(bytes);
+  };
+  BinWriter.prototype.f32 = function (v) {
+    var d = new DataView(new ArrayBuffer(4)); d.setFloat32(0, v, false);
+    this.raw(new Uint8Array(d.buffer));
+  };
+  BinWriter.prototype.f64 = function (v) {
+    var d = new DataView(new ArrayBuffer(8)); d.setFloat64(0, v, false);
+    this.raw(new Uint8Array(d.buffer));
+  };
+  BinWriter.prototype.done = function () { return new Uint8Array(this.out); };
+
+  /* -- MessagePack, just the subset GDR v1 uses. */
+  function mpDecode(buf) {
+    var dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength), p = 0;
+    function str(n) {
+      var s = new TextDecoder().decode(buf.subarray(p, p + n)); p += n; return s;
+    }
+    function val() {
+      var b = buf[p++];
+      if (b <= 0x7f) return b;                                  // positive fixint
+      if (b >= 0xe0) return b - 256;                            // negative fixint
+      if (b >= 0x80 && b <= 0x8f) return map(b & 0x0f);         // fixmap
+      if (b >= 0x90 && b <= 0x9f) return arr(b & 0x0f);         // fixarray
+      if (b >= 0xa0 && b <= 0xbf) return str(b & 0x1f);         // fixstr
+      switch (b) {
+        case 0xc0: return null;
+        case 0xc2: return false;
+        case 0xc3: return true;
+        case 0xca: { var f = dv.getFloat32(p, false); p += 4; return f; }
+        case 0xcb: { var d = dv.getFloat64(p, false); p += 8; return d; }
+        case 0xcc: return buf[p++];
+        case 0xcd: { var u = dv.getUint16(p, false); p += 2; return u; }
+        case 0xce: { var u4 = dv.getUint32(p, false); p += 4; return u4; }
+        case 0xcf: { var hi = dv.getUint32(p, false), lo = dv.getUint32(p + 4, false); p += 8; return hi * 4294967296 + lo; }
+        case 0xd0: return dv.getInt8(p++);
+        case 0xd1: { var i2 = dv.getInt16(p, false); p += 2; return i2; }
+        case 0xd2: { var i4 = dv.getInt32(p, false); p += 4; return i4; }
+        case 0xd3: { var ih = dv.getInt32(p, false), il = dv.getUint32(p + 4, false); p += 8; return ih * 4294967296 + il; }
+        case 0xd9: { var n1 = buf[p++]; return str(n1); }
+        case 0xda: { var n2 = dv.getUint16(p, false); p += 2; return str(n2); }
+        case 0xdb: { var n3 = dv.getUint32(p, false); p += 4; return str(n3); }
+        case 0xdc: { var a2 = dv.getUint16(p, false); p += 2; return arr(a2); }
+        case 0xdd: { var a4 = dv.getUint32(p, false); p += 4; return arr(a4); }
+        case 0xde: { var m2 = dv.getUint16(p, false); p += 2; return map(m2); }
+        case 0xdf: { var m4 = dv.getUint32(p, false); p += 4; return map(m4); }
+      }
+      throw new Error('Unsupported MessagePack byte 0x' + b.toString(16));
+    }
+    function arr(n) { var o = []; for (var i = 0; i < n; i++) o.push(val()); return o; }
+    function map(n) { var o = {}; for (var i = 0; i < n; i++) { var k = val(); o[k] = val(); } return o; }
+    return val();
+  }
+
+  function mpEncode(v) {
+    var out = [];
+    function push(b) { out.push(b); }
+    function u16(n) { push((n >> 8) & 0xff); push(n & 0xff); }
+    function u32(n) { push((n >>> 24) & 0xff); push((n >>> 16) & 0xff); push((n >>> 8) & 0xff); push(n & 0xff); }
+    function enc(x) {
+      if (x === null || x === undefined) return push(0xc0);
+      if (typeof x === 'boolean') return push(x ? 0xc3 : 0xc2);
+      if (typeof x === 'number') {
+        if (Number.isInteger(x) && x >= 0 && x <= 0x7f) return push(x);
+        if (Number.isInteger(x) && x < 0 && x >= -32) return push(x + 256);
+        if (Number.isInteger(x) && x >= 0 && x <= 0xffffffff) { push(0xce); return u32(x); }
+        if (Number.isInteger(x) && x < 0 && x >= -2147483648) { push(0xd2); return u32(x >>> 0); }
+        push(0xcb);
+        var d = new DataView(new ArrayBuffer(8)); d.setFloat64(0, x, false);
+        for (var i = 0; i < 8; i++) push(d.getUint8(i));
+        return;
+      }
+      if (typeof x === 'string') {
+        var bytes = new TextEncoder().encode(x);
+        if (bytes.length < 32) push(0xa0 | bytes.length);
+        else if (bytes.length < 256) { push(0xd9); push(bytes.length); }
+        else { push(0xda); u16(bytes.length); }
+        for (var j = 0; j < bytes.length; j++) push(bytes[j]);
+        return;
+      }
+      if (Array.isArray(x)) {
+        if (x.length < 16) push(0x90 | x.length);
+        else if (x.length < 65536) { push(0xdc); u16(x.length); }
+        else { push(0xdd); u32(x.length); }
+        x.forEach(enc);
+        return;
+      }
+      var keys = Object.keys(x);
+      if (keys.length < 16) push(0x80 | keys.length);
+      else if (keys.length < 65536) { push(0xde); u16(keys.length); }
+      else { push(0xdf); u32(keys.length); }
+      keys.forEach(function (k) { enc(k); enc(x[k]); });
+    }
+    enc(v);
+    return new Uint8Array(out);
+  }
+
+  /* GDR v1's own field names -- note "2p", not "p2", and "bot"/"level"
+   * rather than "botInfo"/"levelInfo". Shared by the msgpack and JSON
+   * flavours, which are the same struct in two containers. */
+  function gdr1ToRep(j) {
+    var inputs = (j.inputs || []).map(function (i) {
+      return {
+        frame: num(i.frame, 0) | 0,
+        button: num(i.btn !== undefined ? i.btn : i.button, 1) | 0,
+        down: !!i.down,
+        player2: !!(i['2p'] !== undefined ? i['2p'] : i.p2)
+      };
+    });
+    var fps = j.framerate !== undefined ? j.framerate : j.fps;
+    return { tps: Math.round(num(fps, 240)), inputs: inputs };
+  }
+
+  function repToGdr1(rep) {
+    var list = rep.inputs.slice().sort(function (a, b) { return a.frame - b.frame; });
+    var last = list.length ? list[list.length - 1].frame : 0;
+    return {
+      gameVersion: 2.204,
+      description: 'Converted by GucciBot',
+      version: 1,
+      duration: last / (rep.tps || 240),
+      author: 'CONVERTED MACRO',
+      seed: 0, coins: 0, ldm: false,
+      bot: { name: 'GucciBot', version: '1.7.1' },
+      level: { id: 0, name: 'LEVEL NAME' },
+      inputs: list.map(function (i) {
+        return { frame: i.frame, btn: i.button, '2p': i.player2, down: i.down };
+      }),
+      framerate: rep.tps
+    };
+  }
+
+  var MODERN = {
+    gdr2: {
+      name: 'GDR2 (binary)', ext: '.gdr2', group: 'Current', confidence: 'exp',
+      note: 'Layout read from maxnut\'s GDReplayFormat, the library GucciBot links.',
+      detect: function (n, t, buf) {
+        return !!(buf && buf.length > 8 && buf[0] === 0x47 && buf[1] === 0x44 && buf[2] === 0x52);
+      },
+      read: function (buf) {
+        var r = new BinReader(buf);
+        r.p = 3;                       // "GDR"
+        r.varint();                    // format version
+        var inputTag = r.str();        // input extension tag, "" when absent
+        r.str(); r.str();              // author, description
+        r.f32();                       // duration
+        r.varint();                    // gameVersion
+        var fps = r.f64();             // framerate is a double here
+        r.varint(); r.varint();        // seed, coins
+        r.varint(); var plat = r.varint() !== 0;   // ldm, platformer
+        r.str(); r.varint();           // bot name, bot version
+        r.varint(); r.str();           // level id, level name
+        var extSize = r.varint();      // replay extension blob
+        r.p += extSize;
+        var deaths = r.varint();
+        for (var d = 0; d < deaths; d++) r.varint();
+        r.varint();                    // total inputs (not trusted; we read to EOF)
+        var p1Left = r.varint();
+        var out = [], prev = 0;
+        while (r.left() > 0) {
+          var packed = r.varint();
+          var frame, button, down;
+          if (plat) {
+            // [ ...delta | button(2) | down(1) ]
+            frame = Math.floor(packed / 8) + prev;
+            button = (Math.floor(packed / 2)) & 3;
+            down = (packed & 1) === 1;
+          } else {
+            frame = Math.floor(packed / 2) + prev;
+            button = 1;
+            down = (packed & 1) === 1;
+          }
+          out.push({ frame: frame, button: button || 1, down: down, player2: p1Left === 0 });
+          if (inputTag) { var xs = r.varint(); r.p += xs; }  // per-input extension
+          prev = frame;
+          // P2 inputs follow P1 as a separate delta run, so the base resets.
+          if (p1Left > 0 && --p1Left === 0) prev = 0;
+        }
+        out.sort(function (a, b) { return a.frame - b.frame; });
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = rep.inputs.slice().sort(function (a, b) { return a.frame - b.frame; });
+        var p1 = list.filter(function (i) { return !i.player2; });
+        var p2 = list.filter(function (i) { return i.player2; });
+        var w = new BinWriter();
+        w.raw([0x47, 0x44, 0x52]);          // "GDR"
+        w.varint(2);                        // format version
+        w.str('');                          // no input extension
+        w.str('CONVERTED MACRO');           // author
+        w.str('Converted by GucciBot');     // description
+        w.f32(list.length ? list[list.length - 1].frame / (rep.tps || 240) : 0);
+        w.varint(22074);                    // gameVersion
+        w.f64(rep.tps);
+        w.varint(0); w.varint(0);           // seed, coins
+        w.varint(0); w.varint(0);           // ldm, platformer (non-platformer)
+        w.str('GucciBot'); w.varint(1);
+        w.varint(0); w.str('');             // level id, level name
+        w.varint(0);                        // no replay extension
+        w.varint(0);                        // no deaths
+        w.varint(list.length);
+        w.varint(p1.length);
+        [p1, p2].forEach(function (group) {
+          var prev = 0;
+          group.forEach(function (i) {
+            w.varint((i.frame - prev) * 2 + (i.down ? 1 : 0));
+            prev = i.frame;
+          });
+        });
+        return w.done();
+      }
+    },
+
+    gdrbin: {
+      name: 'GDR (binary)', ext: '.gdr', group: 'Current', confidence: 'exp',
+      note: 'GDR v1 -- the same struct as the JSON flavour, in MessagePack.',
+      detect: function (n, t, buf) {
+        if (!buf || buf.length < 4) return false;
+        if (buf[0] === 0x47 && buf[1] === 0x44 && buf[2] === 0x52) return false;  // that's GDR2
+        var b = buf[0];
+        if (!((b >= 0x80 && b <= 0x8f) || b === 0xde || b === 0xdf)) return false;
+        try { var j = mpDecode(buf); return !!(j && Array.isArray(j.inputs)); }
+        catch (e) { return false; }
+      },
+      read: function (buf) { return gdr1ToRep(mpDecode(buf)); },
+      write: function (rep) { return mpEncode(repToGdr1(rep)); }
+    },
+
+    tcm: {
+      name: 'TcBot (.tcm)', ext: '.tcm', group: 'Current', confidence: 'exp',
+      note: 'Layout from tcm-rs (MIT, tcbot.pro). Reads v1 and v2, writes v2. Reading is checked against sample macros the library ships; writing is not yet confirmed in TcBot.',
+      detect: function (n, t, buf) { return hasMagic(buf, TCM_MAGIC); },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        var version = buf[16];
+        var flags = buf[18];
+        var tpsOrDt = dv.getFloat32(20, true);
+        // v2 can store either tps or its reciprocal; bit 1 says which.
+        var tps = (version === 1 || (flags & 2)) ? tpsOrDt : 1 / tpsOrDt;
+        var p = 80;                 // 16-byte magic + 0x40 meta
+        var out = [];
+
+        function varint() {
+          var v = 0, shift = 1, byte;
+          do {
+            if (p >= buf.length) throw new Error('Unexpected end of file.');
+            byte = buf[p++];
+            v += (byte & 0x7F) * shift;
+            shift *= 128;
+          } while (byte & 0x80);
+          return v;
+        }
+
+        if (version === 1) {
+          var count = varint();
+          for (var i = 0; i < count; i++) {
+            var frame = varint();
+            var b = buf[p++];
+            var kind = b & 7;
+            if (kind > 2) continue;     // 3/4/5 are restart markers, not inputs
+            out.push({
+              frame: frame, button: kind + 1,
+              down: (b & 0x80) !== 0, player2: (b & 0x40) !== 0
+            });
+          }
+        } else if (version === 2) {
+          // A little state machine: an action byte carries the input plus a
+          // descriptor for the frame delta that follows it.
+          var frame2 = varint(), lastDelta = 0, blob = 0, magic = false;
+          var next = 'action';
+          for (;;) {
+            if (next === 'action') {
+              if (p >= buf.length) break;
+              var byte = buf[p++];
+              var dd = (byte >> 5) & 7;
+              blob = (dd >> 1) & 3; magic = (dd & 1) !== 0;
+              var input = byte & 3;
+              if (input > 0) {
+                var push = (byte & 4) !== 0, p2 = (byte & 8) !== 0;
+                var swift = (byte & 16) !== 0;
+                out.push({ frame: frame2, button: input, down: push, player2: p2 });
+                // "swift" means press and release land on the same frame.
+                if (swift) out.push({ frame: frame2, button: input, down: !push, player2: p2 });
+                next = 'delta';
+              } else {
+                var custom = (byte >> 2) & 3, extra = (byte & 16) !== 0;
+                if (custom === 3) { next = extra ? 'delta' : 'tps'; }
+                else { next = extra ? 'seed' : 'delta'; frame2 = 0; }
+              }
+            } else if (next === 'delta') {
+              var v = 0;
+              if (blob === 1) { if (p >= buf.length) break; v = buf[p++]; }
+              else if (blob === 2) { if (p + 2 > buf.length) break; v = dv.getUint16(p, true); p += 2; }
+              else if (blob === 3) { if (p + 4 > buf.length) break; v = dv.getUint32(p, true); p += 4; }
+              var result = (magic ? lastDelta : 0) + v;
+              if (blob !== 0 && result !== 0) lastDelta = result;
+              frame2 += result;
+              next = 'action';
+            } else if (next === 'tps') {
+              if (p + 4 > buf.length) break;
+              p += 4;               // a mid-replay tps change; we keep the header's
+              next = 'delta';
+            } else {                // seed
+              if (p + 8 > buf.length) break;
+              p += 8;
+              next = 'delta';
+            }
+          }
+        } else {
+          throw new Error('TCM: unsupported version ' + version + '.');
+        }
+        return { tps: tps > 0 ? tps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = rep.inputs.slice().sort(function (a, b) { return a.frame - b.frame; });
+        var out = [];
+        TCM_MAGIC.forEach(function (b) { out.push(b); });
+        var meta = new Uint8Array(0x40), mdv = dvOf(meta);
+        meta[0] = 2;            // version
+        meta[2] = 2;            // flags: the tps field really is tps, not dt
+        mdv.setFloat32(4, rep.tps, true);
+        meta.forEach(function (b) { out.push(b); });
+
+        function varint(v) {
+          v = Math.max(0, Math.round(v));
+          if (v === 0) { out.push(0); return; }
+          while (v > 0) { var b = v % 128; v = Math.floor(v / 128); out.push(v > 0 ? (b | 0x80) : b); }
+        }
+
+        varint(list.length ? list[0].frame : 0);
+        list.forEach(function (inp, n) {
+          var delta = n + 1 < list.length ? list[n + 1].frame - inp.frame : 0;
+          var blob = delta === 0 ? 0 : delta <= 0xFF ? 1 : delta <= 0xFFFF ? 2 : 3;
+          var button = inp.button >= 1 && inp.button <= 3 ? inp.button : 1;
+          out.push(button | ((inp.down ? 1 : 0) << 2) | ((inp.player2 ? 1 : 0) << 3) |
+                   ((blob << 1) << 5));
+          if (blob === 1) out.push(delta & 0xFF);
+          else if (blob === 2) { out.push(delta & 0xFF); out.push((delta >> 8) & 0xFF); }
+          else if (blob === 3) {
+            out.push(delta & 0xFF); out.push((delta >> 8) & 0xFF);
+            out.push((delta >> 16) & 0xFF); out.push((delta >>> 24) & 0xFF);
+          }
+        });
+        return new Uint8Array(out);
+      }
+    },
+
+    silicate1: {
+      name: 'Silicate v1 (.slc)', ext: '.slc', group: 'Current', confidence: 'exp',
+      note: 'Ported from nat-converter. v2 and v3 are different containers and aren\'t supported yet.',
+      detect: function (n, t, buf) {
+        if (!n || !/\.slc$/i.test(n) || !buf || buf.length < 12) return false;
+        if (hasMagic(buf, [0x53, 0x4C, 0x43, 0x33])) return false;   // "SLC3" is v3
+        var fps = dvOf(buf).getFloat64(0, true);
+        return fps > 0 && fps < 100000;
+      },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        var fps = dv.getFloat64(0, true);
+        var count = dv.getUint32(8, true);
+        var out = [], p = 12;
+        for (var i = 0; i < count && p + 4 <= buf.length; i++) {
+          var st = dv.getUint32(p, true); p += 4;
+          if (((st & 6) >> 1) !== 1) continue;    // not a jump input
+          out.push({
+            frame: Math.floor(st / 16), button: 1,
+            down: (st & 1) === 1, player2: (st & 8) !== 0
+          });
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var buf = new Uint8Array(12 + list.length * 4), dv = dvOf(buf);
+        dv.setFloat64(0, rep.tps, true);
+        dv.setUint32(8, list.length, true);
+        var p = 12;
+        list.forEach(function (i) {
+          dv.setUint32(p, i.frame * 16 + (i.player2 ? 8 : 0) + 2 + (i.down ? 1 : 0), true);
+          p += 4;
+        });
+        return buf;
+      }
+    },
+
+    urlbot: {
+      name: 'URL', ext: '.url', group: 'Legacy (2.1)', confidence: 'exp',
+      note: 'Ported from nat-converter.',
+      detect: function (n, t, buf) {
+        if (!n || !/\.url$/i.test(n) || !buf || buf.length < 5) return false;
+        var fps = dvOf(buf).getFloat32(0, true);
+        return buf[4] <= 2 && fps > 0 && fps < 100000;
+      },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        var fps = dv.getFloat32(0, true);
+        var kind = buf[4];   // 0 = X-position, 1 = frames, 2 = both
+        if (kind === 0) throw new Error('URL: this macro is X-position based, not frame based.');
+        var size = kind === 2 ? 9 : 5, out = [], p = 5;
+        while (p + size <= buf.length) {
+          var st = buf[p]; p += 1;
+          if (kind === 2) p += 4;      // skip the X position
+          var frame = dv.getUint32(p, true); p += 4;
+          out.push(mkInput(frame, (st & 1) === 1, (st >> 1) === 1));
+        }
+        return { tps: fps > 0 ? fps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = jumps(rep);
+        var buf = new Uint8Array(5 + list.length * 5), dv = dvOf(buf);
+        dv.setFloat32(0, rep.tps, true);
+        buf[4] = 1;                    // frame based
+        var p = 5;
+        list.forEach(function (i) {
+          buf[p++] = (i.down ? 1 : 0) | (i.player2 ? 2 : 0);
+          dv.setUint32(p, i.frame, true); p += 4;
+        });
+        return buf;
+      }
+    }
+  };
+
+  Object.keys(MODERN).forEach(function (k) { FORMATS[k] = MODERN[k]; });
+
 
   /* Planned. Ones marked hasSample have a real reference file in hand, so
    * they can be implemented and verified properly rather than guessed at --
    * that's the difference between support that works and support that
    * silently corrupts a macro. The rest still need a sample each. */
   var PLANNED = [
-    ['Silicate v3 (.slc)', 'Current', true],          // SLC3RPLY magic
-    ['TcBot (.tcm)', 'Current', true],
-    ['GDR (binary .gdr)', 'Current', true],
-    ['GDR2 (.gdr2)', 'Current', true],
     ['yBot (.ybot)', 'Legacy (2.1)', true],
     ['OmegaBot 3 (.replay)', 'Legacy (2.1)'],
+    ['Silicate v2 / v3', 'Current', true],
     ['ToastyReplay', 'Current'],
-    ['Silicate v1 / v2', 'Current'],
   ];
 
   /* ------------------------------------------------------------------- state */
@@ -1002,6 +1469,11 @@
         show('err', '<strong>Failed to read that file.</strong> ' + (e && e.message ? e.message : e));
         return;
       }
+      // Formats that store a frame delta rather than a rate come back as
+      // 239.99998... from float32 rounding. The intent is obviously 240.
+      if (Math.abs(original.tps - Math.round(original.tps)) < 0.002)
+        original.tps = Math.round(original.tps);
+
       current = clone(original);
 
       loadedName = file.name;
@@ -1013,7 +1485,19 @@
       $('outtps').value = current.tps;
       refresh();
 
-      if (FORMATS[key].confidence === 'exp') {
+      // Some formats (TCM especially) record a whole practice session, with a
+      // restart marker resetting the frame counter on each attempt. Flattened
+      // into one input list, that reads as frames jumping backwards.
+      var backwards = current.inputs.some(function (i, n) {
+        return n > 0 && i.frame < current.inputs[n - 1].frame;
+      });
+
+      if (backwards) {
+        show('err', '<strong>This macro contains restarts.</strong> The frame numbers jump ' +
+          'backwards, so it is a recording of several attempts rather than one run. Every ' +
+          'attempt is loaded here, one after another &mdash; converting it as-is will not ' +
+          'give you a playable single run.');
+      } else if (FORMATS[key].confidence === 'exp') {
         show('err', '<strong>Heads up:</strong> ' + FORMATS[key].name + ' is marked ' +
           'experimental &mdash; it\'s implemented but hasn\'t been confirmed against real ' +
           'macros yet. Check the result in-game before relying on it.');
@@ -1176,8 +1660,12 @@
       a.download = base + f.ext;
       a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-      show(f.confidence === 'ok' ? 'good' : 'err',
-        'Saved as ' + f.name + '. ' + (f.confidence === 'ok' ? '' :
+      var droppedP2 = f.p1only && out.inputs.some(function (i) { return i.player2; });
+      show(f.confidence === 'ok' && !droppedP2 ? 'good' : 'err',
+        'Saved as ' + f.name + '. ' + (droppedP2 ?
+          '<strong>Player 2 inputs were dropped.</strong> ' + f.name + ' has no ' +
+          'player field at all, so only player 1 survives the conversion. ' : '') +
+        (f.confidence === 'ok' ? '' :
           '<strong>This format is experimental &mdash; test it in-game before trusting it, ' +
           'and keep your original.</strong>'));
     }

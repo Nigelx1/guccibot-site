@@ -149,7 +149,7 @@
   <div class="conv-warn">
     <div class="conv-warn-title">&#9888; Read this before converting anything important</div>
     <div class="conv-warn-body">
-Some formats here are ported from peony&rsquo;s nat-converter (see credits below); the rest were written from the format layouts. Either way, output <strong>may be wrong, and may be wrong in ways that aren&rsquo;t obvious</strong> &mdash; a macro that loads fine but desyncs partway through is a very possible failure mode.
+Some formats here are ported from peony&rsquo;s nat-converter, some are implemented from a published format library, and some were worked out from real files (see credits below). Either way, output <strong>may be wrong, and may be wrong in ways that aren&rsquo;t obvious</strong> &mdash; a macro that loads fine but desyncs partway through is a very possible failure mode.
       <br><br>
       <strong>Keep your original file.</strong> Convert to a copy, test the result in-game before trusting it, and don&rsquo;t throw the original away because the conversion &ldquo;looked fine&rdquo;.
       <br><br>
@@ -245,9 +245,11 @@ Some formats here are ported from peony&rsquo;s nat-converter (see credits below
   <div class="panel" style="margin-top:2rem">
     <div class="panel-title">Credits &amp; sources</div>
     <div style="font-size:0.75rem;color:#999;line-height:1.9">
-      <strong style="color:#ccc">nat-converter</strong>, by <strong style="color:#ccc">peony</strong> &mdash; zBot, ReplayBot, KD-Bot, Rush, Fembot, xBot, xdBot, OmegaBot 2, both Mega Hack Replay layouts and both Echo layouts are ported from it, used <strong>with her permission</strong>. Source: <a href="https://github.com/peonii/nat-converter" style="color:var(--gold)">github.com/peonii/nat-converter</a>. Linking it here is the condition she asked for, and it is a better piece of work than anything written from scratch here would have been. peony also writes <a href="https://geode-sdk.org/mods/peony.silicate" style="color:var(--gold)">Silicate</a>, the physics engine GucciBot itself is built on.
+      <strong style="color:#ccc">nat-converter</strong>, by <strong style="color:#ccc">peony</strong> &mdash; zBot, ReplayBot, KD-Bot, Rush, Fembot, xBot, xdBot, OmegaBot 2, URL, Silicate v1, both Mega Hack Replay layouts and both Echo layouts are ported from it, used <strong>with her permission</strong>. Source: <a href="https://github.com/peonii/nat-converter" style="color:var(--gold)">github.com/peonii/nat-converter</a>. Linking it here is the condition she asked for, and it is a better piece of work than anything written from scratch here would have been. peony also writes <a href="https://geode-sdk.org/mods/peony.silicate" style="color:var(--gold)">Silicate</a>, the physics engine GucciBot itself is built on.
       <br><br>
-      <strong style="color:#ccc">tcm-rs</strong> &mdash; TcBot&rsquo;s own macro format library, MIT licensed, by tcbot.pro. Source: <a href="https://github.com/tcbot-gd/tcm-rs" style="color:var(--gold)">github.com/tcbot-gd/tcm-rs</a>. Pointed our way by <strong style="color:#ccc">Chagh</strong>, who writes TcBot.
+      <strong style="color:#ccc">tcm-rs</strong> &mdash; TcBot&rsquo;s own macro format library, MIT licensed, by tcbot.pro. Source: <a href="https://github.com/tcbot-gd/tcm-rs" style="color:var(--gold)">github.com/tcbot-gd/tcm-rs</a>. Pointed our way by <strong style="color:#ccc">Chagh</strong>, who writes TcBot. Both TCM v1 and v2 are implemented from it, and reading is checked against the sample macros it ships &mdash; the only formats here tested against files this project didn&rsquo;t create.
+      <br><br>
+      <strong style="color:#ccc">GDReplayFormat</strong>, by <strong style="color:#ccc">maxnut</strong> &mdash; GDR and GDR2. Source: <a href="https://github.com/maxnut/GDReplayFormat" style="color:var(--gold)">github.com/maxnut/GDReplayFormat</a>. GucciBot already links this library, and the byte layout here is implemented from its headers rather than copied from it.
       <br><br>
       GucciBot&rsquo;s own <code style="color:#999">.brrr</code> / GBR6 support is written here, from GucciBot&rsquo;s source.
     </div>
@@ -258,7 +260,7 @@ Some formats here are ported from peony&rsquo;s nat-converter (see credits below
     <div class="panel-title">Format support</div>
     <div class="fmt-list" id="fmtlist"></div>
     <div style="font-size:0.68rem;color:#666;line-height:1.75;margin-top:1.2rem">
-      GucciBot&rsquo;s own <code style="color:#999">.brrr</code> (and the theme extensions &mdash; <code style="color:#999">.icebrrr</code>, <code style="color:#999">.toosii</code> and the rest, which are the same data under a different name) is the reason this page exists. The 2.1-era formats came over from nat-converter in one go. What&rsquo;s left is mostly the modern ones, which need a sample each before they go in &mdash; support that silently corrupts a macro is worse than no support.
+      GucciBot&rsquo;s own <code style="color:#999">.brrr</code> (and the theme extensions &mdash; <code style="color:#999">.icebrrr</code>, <code style="color:#999">.toosii</code> and the rest, which are the same data under a different name) is the reason this page exists. What&rsquo;s still planned needs something this project doesn&rsquo;t have yet: Silicate v2/v3 and yBot each sit behind a container library, OmegaBot 3 uses a Rust-specific encoding, and ToastyReplay&rsquo;s format hasn&rsquo;t been pinned down. Support that silently corrupts a macro is worse than no support.
     </div>
   </div>
 
