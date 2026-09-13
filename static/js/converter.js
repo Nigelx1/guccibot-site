@@ -575,7 +575,6 @@
    * silently corrupts a macro. The rest still need a sample each. */
   var PLANNED = [
     ['Silicate v3 (.slc)', 'Current', true],          // SLC3RPLY magic
-    ['Astral (.ast)', 'Current', true],               // AST2; header solved, sample has 0 inputs
     ['TcBot (.tcm)', 'Current', true],
     ['GDR (binary .gdr)', 'Current', true],
     ['GDR2 (.gdr2)', 'Current', true],
