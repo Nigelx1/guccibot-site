@@ -406,15 +406,24 @@
 
   /* Declared but not implemented -- listed so the page is honest about what
    * it does and doesn't do, rather than quietly omitting them. */
+  /* Planned. Ones marked hasSample have a real reference file in hand, so
+   * they can be implemented and verified properly rather than guessed at --
+   * that's the difference between support that works and support that
+   * silently corrupts a macro. The rest still need a sample each. */
   var PLANNED = [
-    ['Silicate v1 / v2 / v3', 'Current'],
-    ['GDR (binary)', 'Current'],
-    ['TcBot', 'Current'],
+    ['Silicate v3 (.slc)', 'Current', true],
+    ['ToastyReplay Lite (.ttrl)', 'Current', true],
+    ['Astral (.ast)', 'Current', true],
+    ['TcBot (.tcm)', 'Current', true],
+    ['GDR (binary .gdr)', 'Current', true],
+    ['GDR2 (.gdr2)', 'Current', true],
+    ['yBot (.ybot)', 'Legacy (2.1)', true],
+    ['ToastyReplay', 'Current'],
+    ['Silicate v1 / v2', 'Current'],
     ['OmegaBot 1 / 2 / 3', 'Legacy (2.1)'],
     ['ReplayBot', 'Legacy (2.1)'],
     ['Mega Hack Replay (binary)', 'Legacy (2.1)'],
     ['Echo (old / binary)', 'Legacy (2.1)'],
-    ['yBot 1 / yBot 2', 'Legacy (2.1)'],
     ['zBot', 'Legacy (2.1)'],
     ['xBot', 'Legacy (2.1)'],
     ['KD-Bot', 'Legacy (2.1)'],
@@ -557,12 +566,13 @@
     Object.keys(FORMATS).forEach(function (k) {
       rows.push([FORMATS[k].name, FORMATS[k].confidence, FORMATS[k].group]);
     });
-    PLANNED.forEach(function (p) { rows.push([p[0], 'soon', p[1]]); });
+    PLANNED.forEach(function (p) { rows.push([p[0], 'soon', p[1], p[2]]); });
     rows.forEach(function (r) {
       var d = document.createElement('div');
       d.className = 'fmt-item';
       d.innerHTML = r[0] + '<span class="tag ' + r[1] + '">' +
-        (r[1] === 'ok' ? 'verified' : r[1] === 'exp' ? 'experimental' : 'planned') + '</span>';
+        (r[1] === 'ok' ? 'verified' : r[1] === 'exp' ? 'experimental' : 'planned') + '</span>' +
+        (r[3] ? '<span class="tag soon" style="background:#1a2a1a;color:#7aa87a">sample in hand</span>' : '');
       list.appendChild(d);
     });
 
