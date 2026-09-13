@@ -119,7 +119,94 @@
     return out;
   }
 
+  /* LEB128 varints -- used by ToastyReplay Lite. */
+  function readVarints(bytes, start) {
+    var out = [], i = start || 0;
+    while (i < bytes.length) {
+      var v = 0, shift = 0;
+      while (i < bytes.length) {
+        var c = bytes[i++];
+        v += (c & 0x7f) * Math.pow(2, shift);
+        if (!(c & 0x80)) break;
+        shift += 7;
+      }
+      out.push(v);
+    }
+    return out;
+  }
+  function pushVarint(arr, v) {
+    v = Math.max(0, Math.round(v));
+    do {
+      var b = v % 128;
+      v = Math.floor(v / 128);
+      arr.push(v > 0 ? (b | 0x80) : b);
+    } while (v > 0);
+  }
+
   var FORMATS = {
+    /* ToastyReplay Lite (.ttrl). Worked out from a real Acheron macro.
+     *
+     * "TTRL", u8 version, u8, then a run of LEB128 varints. The first few are
+     * header fields -- varint[2] is the fps (240) and varint[4] is GD's
+     * version as an integer (22081, i.e. 2.2081), which is what confirmed the
+     * field alignment was right rather than coincidence.
+     *
+     * After nine header varints the rest of the stream is plain frame
+     * DELTAS, with press and release alternating implicitly (first value is a
+     * press). Checked against the sample: 460 values summing to 38534 frames,
+     * which at 240fps is 160.6 seconds -- Acheron is about 2:40. A competing
+     * reading (delta<<1|state) gave half that and didn't match, so the plain
+     * delta reading is the one supported by the file.
+     *
+     * Reading is on solid ground. WRITING is not verified: several header
+     * fields are still unidentified and are written back as observed
+     * constants, so ToastyReplay Lite may well reject our output.
+     */
+    ttrl: {
+      name: 'ToastyReplay Lite (.ttrl)',
+      ext: '.ttrl',
+      group: 'Current',
+      confidence: 'exp',
+      note: 'Reading worked out from a real macro and cross-checked against the level length. ' +
+            'Writing reuses header fields that are still unidentified, so it may not load.',
+      detect: function (name, text, buf) {
+        return !!(buf && buf.length > 8 && buf[0] === 0x54 && buf[1] === 0x54 &&
+                  buf[2] === 0x52 && buf[3] === 0x4C);
+      },
+      read: function (buf) {
+        var vs = readVarints(buf, 4);
+        if (vs.length < 10) throw new Error('TTRL: header too short');
+        var tps = vs[2] > 0 ? vs[2] : 240;
+        var inputs = [], frame = 0, down = true;
+        for (var i = 9; i < vs.length; i++) {
+          frame += vs[i];
+          inputs.push({ frame: frame, button: 1, down: down, player2: false });
+          down = !down;
+        }
+        return { tps: tps, inputs: inputs };
+      },
+      write: function (rep) {
+        var out = [0x54, 0x54, 0x52, 0x4C, 0x01, 0x00];
+        // Header varints, positions matching what the sample uses. Only fps
+        // and the GD version are actually understood; the rest are copied
+        // through as seen so the shape stays plausible.
+        pushVarint(out, Math.round(rep.tps));  // fps
+        pushVarint(out, 1);
+        pushVarint(out, 22081);                // GD 2.2081
+        pushVarint(out, 0);
+        pushVarint(out, 5);
+        pushVarint(out, 0);
+        pushVarint(out, 0);
+        var sorted = rep.inputs.slice().sort(function (a, b) { return a.frame - b.frame; });
+        var prev = 0;
+        sorted.forEach(function (i) {
+          pushVarint(out, Math.max(0, i.frame - prev));
+          prev = i.frame;
+        });
+        return new Uint8Array(out);
+      }
+    },
+
     brrr: {
       name: 'GucciBot (.brrr / GBR6)',
       ext: '.brrr',
@@ -487,9 +574,8 @@
    * that's the difference between support that works and support that
    * silently corrupts a macro. The rest still need a sample each. */
   var PLANNED = [
-    ['Silicate v3 (.slc)', 'Current', true],
-    ['ToastyReplay Lite (.ttrl)', 'Current', true],
-    ['Astral (.ast)', 'Current', true],
+    ['Silicate v3 (.slc)', 'Current', true],          // SLC3RPLY magic
+    ['Astral (.ast)', 'Current', true],               // AST2; header solved, sample has 0 inputs
     ['TcBot (.tcm)', 'Current', true],
     ['GDR (binary .gdr)', 'Current', true],
     ['GDR2 (.gdr2)', 'Current', true],
