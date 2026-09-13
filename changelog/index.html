@@ -110,7 +110,7 @@
         <br><br>
         Also: 1.6.5 shipped an update checker that crashed the game on launch. It&rsquo;s gone, and the reason it broke turned out to point at the real cause of the file-picker crashes people reported in 1.6.4 and 1.6.5 too &mdash; two of Geode&rsquo;s async systems being mixed in a way that doesn&rsquo;t work. And the frame-window &ldquo;strange sound&rdquo; a few people reported was never broken: the default is Gucci Mane saying &ldquo;Brrr&rdquo;, the settings text just wrongly called it a chime.
         <br><br>
-        <strong>Switched the main Claude model from Sonnet to Opus.</strong> Everything above from the checkpoint fix onward is Opus; the file-picker guards and the update checker that broke 1.6.5 were Sonnet&rsquo;s last work here. Honest read: it is better at the hard diagnostic work &mdash; the checkpoint bug had survived about ten builds of fixes aimed at the wrong layer, and Opus got it by going and reading Silicate&rsquo;s actual source to compare against. Fair caveat, it wasn&rsquo;t found from nothing: the lead came from anticroom mentioning his Silicate port of the analyzer worked correctly. And it isn&rsquo;t flawless &mdash; it got pulled up on scope twice in the same session, and its first attempt at the new legend looked worse than the one it replaced.
+        <strong>Switched the main Claude model from Claude Sonnet 5 to Claude Opus 5</strong> &mdash; the more powerful model.
       </div>
     </div>
 
