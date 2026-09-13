@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Converter — GucciBot</title>
+<meta name="description" content="Convert Geometry Dash macros between formats, including GucciBot's own .brrr. Runs entirely in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://guccibot.pages.dev/converter/">
+<meta property="og:title" content="Converter — GucciBot">
+<meta property="og:description" content="Convert Geometry Dash macros between formats, including GucciBot's own .brrr. Runs entirely in your browser.">
+<meta property="og:image" content="https://guccibot.pages.dev/static/images/gucci-mane.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Converter — GucciBot">
+<meta name="twitter:description" content="Convert Geometry Dash macros between formats, including GucciBot's own .brrr.">
+<meta name="twitter:image" content="https://guccibot.pages.dev/static/images/gucci-mane.jpg">
+<link rel="icon" type="image/jpeg" href="/static/images/gucci-mane.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/guccibot.css">
+<style>
+  /* Converter-page-only styles -- nothing else on the site needs these. */
+  .conv-hero { padding: 10rem 2rem 1.5rem; text-align: center; }
+  .conv-wrap { max-width: 980px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+  .conv-warn {
+    border: 1px solid rgba(234,88,12,0.45);
+    background: rgba(234,88,12,0.07);
+    padding: 1.15rem 1.35rem;
+    margin: 0 0 2rem;
+  }
+  .conv-warn-title {
+    font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--orange); font-weight: 700; margin-bottom: .55rem;
+  }
+  .conv-warn-body { font-size: 0.75rem; color: #9a9a9a; line-height: 1.85; }
+  .conv-warn-body strong { color: #cfcfcf; }
+
+  .drop {
+    border: 1px dashed rgba(212,175,55,0.4);
+    background: rgba(212,175,55,0.03);
+    padding: 3rem 1.5rem; text-align: center; cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .drop:hover, .drop.over { background: rgba(212,175,55,0.08); border-color: var(--gold); }
+  .drop-main {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--gold);
+  }
+  .drop-sub { font-size: 0.7rem; color: #777; margin-top: .5rem; }
+
+  .panel { background: var(--near-black); padding: 1.5rem 1.6rem; margin-top: 1px; }
+  .panel-title {
+    font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+  }
+  .row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: .35rem; }
+  .field label {
+    font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #777;
+  }
+  select, input[type=number], textarea {
+    background: #0c0c0c; color: var(--white); border: 1px solid #2a2a2a;
+    padding: .55rem .7rem; font-family: 'Space Mono', monospace; font-size: 0.72rem;
+  }
+  select:focus, input:focus, textarea:focus { outline: none; border-color: var(--gold); }
+  textarea { width: 100%; min-height: 260px; line-height: 1.6; resize: vertical; }
+
+  .btn {
+    background: transparent; border: 1px solid var(--gold); color: var(--gold);
+    padding: .55rem 1.1rem; font-family: 'Space Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all .15s ease;
+  }
+  .btn:hover:not(:disabled) { background: var(--gold); color: var(--black); }
+  .btn:disabled { opacity: .3; cursor: not-allowed; }
+  .btn.sub { border-color: #333; color: #999; }
+  .btn.sub:hover:not(:disabled) { background: #222; color: var(--white); border-color: #444; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 2rem; }
+  .stat-k {
+    font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #666;
+  }
+  .stat-v { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; color: var(--white); }
+
+  .tbl-scroll { max-height: 320px; overflow: auto; border: 1px solid #1e1e1e; }
+  table { width: 100%; border-collapse: collapse; font-family: 'Space Mono', monospace; font-size: 0.68rem; }
+  thead th {
+    position: sticky; top: 0; background: #141414; color: #888; text-align: left;
+    padding: .5rem .7rem; font-weight: 400; font-size: 0.55rem; letter-spacing: 1.5px;
+    text-transform: uppercase; border-bottom: 1px solid #242424;
+  }
+  tbody td { padding: .4rem .7rem; color: #bbb; border-bottom: 1px solid #161616; }
+  tbody tr:hover td { background: #151515; }
+  .p2 { color: var(--purple); }
+  .rel { color: #777; }
+
+  .tag {
+    font-family: 'Space Mono', monospace; font-size: 0.5rem; letter-spacing: 1px;
+    text-transform: uppercase; padding: 2px 7px; margin-left: 8px; vertical-align: middle;
+  }
+  .tag.ok { background: rgba(21,128,61,0.22); color: #4ade80; }
+  .tag.exp { background: rgba(234,88,12,0.2); color: #fb923c; }
+  .tag.soon { background: #1c1c1c; color: #666; }
+
+  .fmt-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: .5rem 1.5rem; }
+  .fmt-item { font-size: 0.72rem; color: #999; padding: .3rem 0; border-bottom: 1px solid #171717; }
+
+  .msg { font-size: 0.72rem; line-height: 1.7; padding: .8rem 1rem; margin-top: 1rem; display: none; }
+  .msg.err { display: block; background: rgba(185,28,28,0.12); border: 1px solid rgba(185,28,28,0.4); color: #fca5a5; }
+  .msg.good { display: block; background: rgba(21,128,61,0.12); border: 1px solid rgba(21,128,61,0.4); color: #86efac; }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 700px) {
+    .conv-hero { padding: 6.5rem 1.25rem 1rem; }
+    .panel { padding: 1.25rem 1rem; }
+    .stats { gap: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">GucciBot</div>
+  <ul class="nav-links">
+    <li><a href="/#features">Format</a></li>
+    <li><a href="/#engine">Engine</a></li>
+    <li><a href="/#themes">Themes</a></li>
+    <li><a href="/#trainer">Trainer</a></li>
+    <li><a href="/changelog/">Changelog</a></li>
+    <li><a href="/converter/">Converter</a></li>
+    <li><a href="/#download">Download</a></li>
+  </ul>
+</nav>
+
+<div class="conv-hero reveal">
+  <div class="section-label" style="justify-content:center">Converter</div>
+  <h2 class="section-title">Macros In, Macros Out.</h2>
+  <p style="max-width:600px; font-size:0.8rem; color:#888; line-height:1.9; margin:1rem auto 0;">
+    Convert Geometry Dash macros between bot formats, including GucciBot&rsquo;s own. Everything runs in your browser &mdash; nothing is uploaded anywhere.
+  </p>
+</div>
+
+<div class="conv-wrap reveal">
+
+  <div class="conv-warn">
+    <div class="conv-warn-title">&#9888; Read this before converting anything important</div>
+    <div class="conv-warn-body">
+      Every format here was implemented <strong>from scratch</strong>, by reading format layouts rather than reusing anyone else&rsquo;s converter. That means output <strong>may be wrong, and may be wrong in ways that aren&rsquo;t obvious</strong> &mdash; a macro that loads fine but desyncs partway through is a very possible failure mode.
+      <br><br>
+      <strong>Keep your original file.</strong> Convert to a copy, test the result in-game before trusting it, and don&rsquo;t throw the original away because the conversion &ldquo;looked fine&rdquo;.
+      <br><br>
+      Formats are labelled with how much they&rsquo;ve actually been verified: <span class="tag ok">verified</span> means it&rsquo;s been checked against real files, <span class="tag exp">experimental</span> means it&rsquo;s implemented but not yet confirmed against real-world macros, and <span class="tag soon">planned</span> isn&rsquo;t wired up yet. Trust the labels.
+      <br><br>
+      If something converts wrong, that&rsquo;s worth reporting &mdash; a broken file plus what it should have been is the fastest way to get it fixed: <a href="https://github.com/Nigelx1/GucciBot/issues" style="color:var(--gold)">open an issue</a>.
+    </div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="drop" id="drop">
+    <div class="drop-main">Drop a macro file here</div>
+    <div class="drop-sub">or click to choose one &mdash; nothing leaves your machine</div>
+    <input type="file" id="file" class="hidden">
+  </div>
+
+  <div id="loaded" class="hidden">
+    <div class="panel">
+      <div class="panel-title">Loaded</div>
+      <div class="stats">
+        <div><div class="stat-k">File</div><div class="stat-v" id="s-name">&mdash;</div></div>
+        <div><div class="stat-k">Detected</div><div class="stat-v" id="s-fmt">&mdash;</div></div>
+        <div><div class="stat-k">Inputs</div><div class="stat-v" id="s-count">0</div></div>
+        <div><div class="stat-k">Size</div><div class="stat-v" id="s-size">0 KB</div></div>
+        <div><div class="stat-k">TPS</div><div class="stat-v" id="s-tps">&mdash;</div></div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="panel">
+      <div class="panel-title">Edit</div>
+      <div class="row" style="margin-bottom:1rem">
+        <div class="field">
+          <label for="offset">Frame offset</label>
+          <input type="number" id="offset" value="0" step="1" style="width:120px">
+        </div>
+        <button class="btn sub" id="b-offset">Apply offset</button>
+        <button class="btn sub" id="b-sort">Sort by frame</button>
+        <button class="btn sub" id="b-clean">Clean</button>
+        <button class="btn sub" id="b-rm1">Remove all P1</button>
+        <button class="btn sub" id="b-rm2">Remove all P2</button>
+        <button class="btn sub" id="b-reset">Revert changes</button>
+      </div>
+      <div style="font-size:0.68rem;color:#666;line-height:1.75">
+        <strong style="color:#888">Clean</strong> drops duplicate inputs on the same frame and any release with no matching press. <strong style="color:#888">Revert</strong> puts the file back exactly as loaded.
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="panel">
+      <div class="panel-title">Inputs <span id="tbl-note" style="color:#555;text-transform:none;letter-spacing:0"></span></div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Frame</th><th>Action</th><th>Button</th><th>Player</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="panel">
+      <div class="panel-title">Convert to</div>
+      <div class="row">
+        <div class="field">
+          <label for="outfmt">Output format</label>
+          <select id="outfmt" style="min-width:260px"></select>
+        </div>
+        <div class="field">
+          <label for="outtps">Output TPS</label>
+          <input type="number" id="outtps" value="240" step="1" min="1" style="width:110px">
+        </div>
+        <button class="btn" id="b-save">Save file</button>
+        <button class="btn sub" id="b-text">Plain text editor</button>
+      </div>
+      <div class="msg" id="msg"></div>
+    </div>
+
+    <!-- PLAIN TEXT -->
+    <div class="panel hidden" id="textpanel">
+      <div class="panel-title">Plain text editor</div>
+      <div style="font-size:0.68rem;color:#666;line-height:1.75;margin-bottom:.8rem">
+        One input per line: <code style="color:#999">frame button down player2</code> &mdash; button 1=jump, 2=left, 3=right; down 1=press, 0=release; player2 1 or 0. Lines starting with <code style="color:#999">#</code> are ignored.
+      </div>
+      <textarea id="textarea" spellcheck="false"></textarea>
+      <div class="btn-row" style="margin-top:.8rem">
+        <button class="btn sub" id="b-textload">Load from text</button>
+        <button class="btn sub" id="b-textdump">Fill from current</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMAT SUPPORT -->
+  <div class="panel" style="margin-top:2rem">
+    <div class="panel-title">Format support</div>
+    <div class="fmt-list" id="fmtlist"></div>
+    <div style="font-size:0.68rem;color:#666;line-height:1.75;margin-top:1.2rem">
+      GucciBot&rsquo;s own <code style="color:#999">.brrr</code> (and the theme extensions &mdash; <code style="color:#999">.icebrrr</code>, <code style="color:#999">.toosii</code> and the rest, which are the same data under a different name) is the reason this page exists. The legacy 2.1 binary formats are the largest remaining chunk and are being added one at a time, verified against real files rather than shipped on a guess.
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">GucciBot</div>
+  <div class="footer-tagline">Frame perfect &nbsp;·&nbsp; GBR6 &nbsp;·&nbsp; All four disciplines &nbsp;·&nbsp; Brrr.</div>
+  <div style="font-size:0.6rem; color:#333; letter-spacing:1px">nigelx1.guccibot</div>
+</footer>
+
+<script src="/static/js/guccibot.js"></script>
+<script src="/static/js/converter.js"></script>
+</body>
+</html>
