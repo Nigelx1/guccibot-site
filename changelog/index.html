@@ -97,7 +97,18 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">1.7.1 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">1.7.2 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">Pathfinder stopped searching the wrong frames.</strong> When a death came long after the mistake behind it &mdash; walking off a ledge and dying at the bottom &mdash; Pathfinder used to search the handful of frames right before the death, where nothing it pressed could possibly help, and burn attempt after attempt there. It now checks, frame by frame, whether pressing would change anything at all, skips the stretches where it wouldn&rsquo;t, and looks back as far as the frame that actually decided the run. And when a fix only buys a few frames, it tries different versions of the press before it first, instead of settling for the cramped one. There&rsquo;s a new <strong>Agency Map</strong> toggle in the Pathfinder tab too, which draws which frames an input could change while you play.
+        <br><br>
+        <strong>Editor playtests run at the right speed.</strong> With an FPS cap above 240, a playtest in the level editor ran fast &mdash; 1.5x at 360 FPS &mdash; because the game took a step on every drawn frame instead of only when one was due. Playtests also start clean now: the frame count, the macro&rsquo;s position and any held jump are reset, and the editor&rsquo;s song preview stops, instead of carrying over from whatever happened before. Thanks to the YouTube commenter who reported the editor timing.
+        <br><br>
+        <strong>Frame-window markers can&rsquo;t go missing silently.</strong> A manual frame window on a macro without a recorded path got counted by the legend but never drew in the level. It now uses the position Calculate measured for that click, and the Frame Windows tab tells you if any click has no position to draw at. Thanks to the GitHub issue #4 reporter for sticking with this one.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">1.7.1</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">Fixes a crash 1.7 introduced.</strong> Someone reported GucciBot simply giving up when entering a level, with no crash log to show for it. The overlay that draws frame-window markers hangs onto references to things inside the level, and it only let go of them on one specific kind of exit &mdash; so leaving a level any other way (finishing it and going straight to the menu, for instance) left it pointing at things that no longer existed. That was survivable before 1.7. The new legend reads one of those references every single frame, so 1.7 turned it into something you would actually hit.
         <br><br>

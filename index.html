@@ -264,7 +264,7 @@
       <div class="feature-card" data-num="01">
         <div class="feature-icon">&#x2620;</div>
         <div class="feature-name">Death Is The Signal</div>
-        <div class="feature-desc">It doesn&rsquo;t read the level layout. It runs forward until GD&rsquo;s own collision kills it, and treats that death as proof something earlier had to change. Then it searches backward from there for the input that gets further. No geometry parsing means nothing to get wrong about a 2.2 object nobody accounted for.</div>
+        <div class="feature-desc">It doesn&rsquo;t read the level layout. It runs forward until GD&rsquo;s own collision kills it, and treats that death as proof something earlier had to change. Then it looks back from there &mdash; past any stretch where no input could have changed anything, like the whole fall after walking off a ledge &mdash; for the input that gets further. No geometry parsing means nothing to get wrong about a 2.2 object nobody accounted for.</div>
         <div class="feature-badge">The game decides what kills you.</div>
       </div>
       <div class="feature-card" data-num="02">
@@ -977,7 +977,7 @@
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">What&rsquo;s actually new?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">Current version is <strong style="color:var(--gold)">1.7.1</strong>. Full release history, every version, lives on the <a href="/changelog/" style="color:var(--gold)">Changelog</a> page now instead of one line here that gets overwritten every bump.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">Current version is <strong style="color:var(--gold)">1.7.2</strong>. Full release history, every version, lives on the <a href="/changelog/" style="color:var(--gold)">Changelog</a> page now instead of one line here that gets overwritten every bump.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
@@ -1025,7 +1025,7 @@
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; background:rgba(212,175,55,0.08); margin-top:4rem; border:1px solid rgba(212,175,55,0.08)" class="reveal">
       <div style="padding:2rem; background:var(--black)">
         <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.6">Version</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px">1.7.1</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px">1.7.2</div>
         <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Silicate Engine</div>
       </div>
       <div style="padding:2rem; background:var(--black)">
