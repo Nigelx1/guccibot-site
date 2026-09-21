@@ -98,7 +98,20 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">1.7.2 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">1.8.0 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">A new frame-window analyzer.</strong> Calculate has been rebuilt on anticroom&rsquo;s Silicate analyzer, and it measures every click instead of giving up on the hard ones. Windows are measured against the real engine, with a settings tab behind them: how far a shifted input has to survive before it counts as safe, how much room to leave before the next input so a death gets blamed on the click that caused it, which inputs to measure, and how much of each frame to spend. Sub-tick measurement reads windows finer than a single frame. Results save alongside the macro now, so a macro you measured is still measured when you come back to it.
+        <br><br>
+        <strong>Marker bands.</strong> Every band has its own colour, label, sound and shape &mdash; circle, star, spiral or polygon, drawn as a single outline, an inner ring, or filled. Bands can be reordered, which matters because a window takes the first band that covers it. Sounds come as importable packs, and the bundled set and GucciBot&rsquo;s own Brrr are one click each.
+        <br><br>
+        <strong>Checkpoints rewind the level, not just the player.</strong> A restore used to put the player back perfectly into a level whose moving objects, trigger variance and item counters were still wherever the run had reached. Two older bugs went with it: a checkpoint placed moments before dying could be lost entirely and send you back to the previous one, and its abandoned capture could later be filed against a different attempt &mdash; which is where mismatched hitboxes after a respawn came from.
+        <br><br>
+        <strong>Renders can tell the level&rsquo;s sound from the run&rsquo;s.</strong> A level&rsquo;s own SFX-trigger audio and GD&rsquo;s gameplay sound &mdash; death, orbs, pads, UI &mdash; have separate volumes now, so a showcase keeps what the creator built into the level while dropping the noise the macro makes. There&rsquo;s a one-press showcase preset too: 8K60, lossless x264, FLAC, with the thread count read from your CPU.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">1.7.2</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">Pathfinder stopped searching the wrong frames.</strong> When a death came long after the mistake behind it &mdash; walking off a ledge and dying at the bottom &mdash; Pathfinder used to search the handful of frames right before the death, where nothing it pressed could possibly help, and burn attempt after attempt there. It now checks, frame by frame, whether pressing would change anything at all, skips the stretches where it wouldn&rsquo;t, and looks back as far as the frame that actually decided the run. And when a fix only buys a few frames, it tries different versions of the press before it first, instead of settling for the cramped one. There&rsquo;s a new <strong>Agency Map</strong> toggle in the Pathfinder tab too, which draws which frames an input could change while you play.
         <br><br>
