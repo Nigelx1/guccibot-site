@@ -98,7 +98,22 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">1.8.0 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">2.alpha.1 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">An alpha, and labelled one deliberately.</strong> 2.0 is a reconciliation of GucciBot&rsquo;s engine against Silicate&rsquo;s, and it turned up a pattern: mechanisms that had been ported as function signatures with empty bodies, wired into settings and save files that had been feeding them for months. This release fills them in. It is large, it is not finished, and it wants testing more than it wants applause.
+        <br><br>
+        <strong>Levels replay deterministically now.</strong> Every macro file has carried a random seed since the format was written. Nothing ever spent it. Object variance, Random triggers, teleport and shake RNG now all derive from it, and checkpoints capture and restore every one &mdash; so a macro replays against the level it was recorded on instead of a slightly different one each attempt. Levels built around Random triggers are replayable at all for the first time.
+        <br><br>
+        <strong>The renderer.</strong> Frame capture is asynchronous, pipelined through a ring of GPU buffers with fences rather than stalling the game every frame. Renders fade in and out, picture and audio together. A render holds the view for its whole duration, so a resize or alt-tab partway through no longer fights the output resolution. Audio channel counts are reconciled against what FMOD actually mixes, which is not always what it reports.
+        <br><br>
+        <strong>Pathfinder reaches past its own commits.</strong> A decision point whose search window was cut short by the previous committed input &mdash; every fall off a ledge, where the real mistake is the jump that led there &mdash; now reopens that input instead of exhausting a window that cannot contain the answer.
+        <br><br>
+        <strong>Also:</strong> L* precision readout in the corner of the level, the MegaHack menu style actually looking like MegaHack, High TPS Precision as an option, and a refreshed interface.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">1.8.0</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">A new frame-window analyzer.</strong> Calculate has been rebuilt on anticroom&rsquo;s Silicate analyzer, and it measures every click instead of giving up on the hard ones. Windows are measured against the real engine, with a settings tab behind them: how far a shifted input has to survive before it counts as safe, how much room to leave before the next input so a death gets blamed on the click that caused it, which inputs to measure, and how much of each frame to spend. Sub-tick measurement reads windows finer than a single frame. Results save alongside the macro now, so a macro you measured is still measured when you come back to it.
         <br><br>
