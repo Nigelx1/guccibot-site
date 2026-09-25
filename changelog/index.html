@@ -99,7 +99,20 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">2.alpha.1 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">2.alpha.2 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">Pathfinder stops repeating itself.</strong> It never retries a press it has already proven does not work. It remembers what got past a hard spot and saves it per level &mdash; keyed on the situation you died in, not on the exact run that led there, so the answer still applies after something upstream shifts by a frame. Given two presses that both work, it takes the one that also works a frame late over the one that only works frame-perfect. If there is already a macro on the level, your own presses get tried before anything it invents. And a spot that keeps biting gets a longer look straight away instead of creeping outward one frame at a time.
+        <br><br>
+        <strong>The frame editor drew macros it wasn&rsquo;t saving.</strong> Nothing stopped a hold being dragged straight through the one next to it. The editor showed two holds; the saved macro had a press land while one was already down, which playback ends on the first release &mdash; so the macro played a shorter hold than the picture, and you found out when a run desynced somewhere later. Drags are clamped against their neighbours now, and the editor&rsquo;s rules run as tests at startup so this class of bug reports itself instead of waiting for a run.
+        <br><br>
+        <strong>Assistant Access.</strong> An optional local server, off by default, that lets an AI assistant read what the bot is doing &mdash; the frame, the loaded macro, Calculate&rsquo;s windows, Pathfinder&rsquo;s progress, GucciBot&rsquo;s own logs &mdash; and step the game while something is going wrong, instead of reading a log about it afterwards. Your machine only. It never reaches the network.
+        <br><br>
+        <strong>Credit where it&rsquo;s due:</strong> several of Pathfinder&rsquo;s improvements and the assistant server are Absent&rsquo;s ideas, from Absense. The code here is ours; the ideas are his.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">2.alpha.1</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">An alpha, and labelled one deliberately.</strong> 2.0 is a reconciliation of GucciBot&rsquo;s engine against Silicate&rsquo;s, and it turned up a pattern: mechanisms that had been ported as function signatures with empty bodies, wired into settings and save files that had been feeding them for months. This release fills them in. It is large, it is not finished, and it wants testing more than it wants applause.
         <br><br>
