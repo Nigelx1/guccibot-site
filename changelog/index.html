@@ -99,7 +99,20 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">2.alpha.3 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">2.alpha.4 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">Click Between Frames stops fighting GucciBot.</strong> It and Superb Input Precision apply your clicks outside the path a bot records from, which can leave a macro missing clicks. GucciBot now pauses both while it&rsquo;s recording or playing, and puts them back exactly as they were the moment it&rsquo;s done &mdash; playing normally with CBF is untouched.
+        <br><br>
+        <strong>Open source, officially.</strong> GucciBot is licensed under the GNU GPL v3 now, the same license as Silicate, which it&rsquo;s built on.
+        <br><br>
+        <strong>Converter.</strong> Macros from anticroom&rsquo;s Silicate fork (<code>.scbf1</code>) convert now, with their sub-tick timing intact when the target is GucciBot. Two-player ToastyReplay Lite conversions no longer come out scrambled.
+        <br><br>
+        <strong>Also:</strong> GD&rsquo;s shader effects in a render are set up the way Silicate does it, sized to the render itself &mdash; which fixes a bug that only showed when a render&rsquo;s shape didn&rsquo;t match your window&rsquo;s.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">2.alpha.3</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">Renders work again.</strong> In 2.alpha.1 a render froze after its first frame. Fixed, along with two render bugs found right next to it &mdash; video and audio could write to the file at the same moment, and every render leaked GPU memory on the way out.
         <br><br>
