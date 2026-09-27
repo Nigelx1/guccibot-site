@@ -99,7 +99,20 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">2.alpha.2 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">2.alpha.3 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">Renders work again.</strong> In 2.alpha.1 a render froze after its first frame. Fixed, along with two render bugs found right next to it &mdash; video and audio could write to the file at the same moment, and every render leaked GPU memory on the way out.
+        <br><br>
+        <strong>Sub-tick clicks.</strong> CBF Recording places each click at the point inside the tick you actually pressed it, from the time Windows stamped on the input, and plays it back there. Sub-tick Frame Advance steps through a tick in splits and shows where your hitbox would be, with the hold and release paths from that exact point &mdash; press at a split and the click records there. anticroom&rsquo;s work, like the new render intro card: the level&rsquo;s name, your own lines and your frame-window bands, before the level starts.
+        <br><br>
+        <strong>Menu items that did nothing, now do something.</strong> Lining Absense&rsquo;s settings up against GucciBot&rsquo;s turned up a run of Silicate features that were in the menu and wired to nothing. RNG Lock fixes the seed. No Mirror&rsquo;s Only Recording works. High TPS Precision covers every place GD rounds vertical speed. Teleport triggers and screen shake follow the macro&rsquo;s seed. Backwards Stepping stopped quietly saving every tick as a practice checkpoint &mdash; so a death restarts you again instead of putting you one tick back &mdash; and Back Step Count finally caps it.
+        <br><br>
+        <strong>Also:</strong> Frame Extrapolation and Pathfinder&rsquo;s hold-or-release check were simulating at a sixtieth of real speed; now they don&rsquo;t. Prevent Death can stop before a death, and Find Best Tick tries your next click on every tick. Render the next level you open, hear a render while it records, leave the level when it&rsquo;s done. Frame Pacing, Swift Clicks, an Auto Black Orb UFO loop, Check Macro, fourteen HUD readouts, and more tools for Assistant Access.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">2.alpha.2</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">Pathfinder stops repeating itself.</strong> It never retries a press it has already proven does not work. It remembers what got past a hard spot and saves it per level &mdash; keyed on the situation you died in, not on the exact run that led there, so the answer still applies after something upstream shifts by a frame. Given two presses that both work, it takes the one that also works a frame late over the one that only works frame-perfect. If there is already a macro on the level, your own presses get tried before anything it invents. And a spot that keeps biting gets a longer look straight away instead of creeping outward one frame at a time.
         <br><br>
