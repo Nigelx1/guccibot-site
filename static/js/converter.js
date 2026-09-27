@@ -52,7 +52,7 @@
    *                         delta marker and emits nothing.
    */
   var GBR6_MAGIC = [0x47, 0x42, 0x52, 0x36]; // "GBR6"
-  var GBR6_TWO_PLAYER = 1, GBR6_HAS_LEVELNAME = 16, GBR6_HAS_DEATHS = 32;
+  var GBR6_TWO_PLAYER = 1, GBR6_HAS_LEVELNAME = 16, GBR6_HAS_DEATHS = 32, GBR6_HAS_SUBTICK = 64;
 
   function gbr6DecodeStream(bytes, isP2) {
     var out = [], frame = 0, i = 0, pending = 0;
@@ -203,7 +203,12 @@
         pushVarint(out, 5);
         pushVarint(out, 0);
         pushVarint(out, 0);
-        var sorted = rep.inputs.slice().sort(function (a, b) { return a.frame - b.frame; });
+        // Player 1's jump only (p1only). The format is one alternating
+        // press/release stream with no player flag, so player 2's inputs
+        // mixed in here used to come back as a scrambled player 1.
+        var sorted = rep.inputs
+          .filter(function (i) { return !i.player2 && (i.button === 1 || i.button === undefined); })
+          .sort(function (a, b) { return a.frame - b.frame; });
         var prev = 0;
         sorted.forEach(function (i) {
           pushVarint(out, Math.max(0, i.frame - prev));
@@ -239,23 +244,42 @@
         pos += nameLen;
         if (pos + p1size + p2size > buf.length) throw new Error('truncated GBR6 file');
         var p1 = buf.subarray(pos, pos + p1size); pos += p1size;
-        var p2 = buf.subarray(pos, pos + p2size);
+        var p2 = buf.subarray(pos, pos + p2size); pos += p2size;
         var inputs = gbr6DecodeStream(p1, false).concat(gbr6DecodeStream(p2, true));
         inputs.sort(function (a, b) { return a.frame - b.frame; });
-        void version; void flags;
+        // GucciBot 2.alpha.3+: sub-tick offsets (SCBF) in a section after the
+        // level name and the deaths, keyed by the input itself.
+        if ((flags & GBR6_HAS_SUBTICK) && pos < buf.length) {
+          if (flags & GBR6_HAS_LEVELNAME) pos += 2 + dv.getUint16(pos, true);
+          pos += 4 + dv.getUint32(pos, true) * 5;   // deaths: always written with this section
+          var sc = dv.getUint32(pos, true); pos += 4;
+          var offsets = {};
+          for (var s = 0; s < sc && pos + 14 <= buf.length; s++) {
+            var sf = dv.getUint32(pos, true), sb = buf[pos + 4], bits = buf[pos + 5];
+            offsets[sf + '|' + sb + '|' + (bits & 1) + '|' + ((bits >> 1) & 1)] = dv.getFloat64(pos + 6, true);
+            pos += 14;
+          }
+          inputs.forEach(function (i) {
+            var o = offsets[i.frame + '|' + i.button + '|' + (i.down ? 1 : 0) + '|' + (i.player2 ? 1 : 0)];
+            if (o > 0 && o < 1) i.offset = o;
+          });
+        }
+        void version;
         return { tps: tps > 0 ? tps : 240, inputs: inputs };
       },
       write: function (rep) {
         var p1 = gbr6EncodeStream(rep.inputs.filter(function (i) { return !i.player2; }));
         var p2 = gbr6EncodeStream(rep.inputs.filter(function (i) { return i.player2; }));
         var nameBytes = new TextEncoder().encode('');
-        var total = 4 + 1 + 1 + 4 + 8 + 8 + 4 + 4 + 2 + nameBytes.length + p1.length + p2.length;
+        var sub = rep.inputs.filter(function (i) { return i.offset > 0 && i.offset < 1; });
+        var subBytes = sub.length ? 4 + 4 + sub.length * 14 : 0;   // empty deaths count + section
+        var total = 4 + 1 + 1 + 4 + 8 + 8 + 4 + 4 + 2 + nameBytes.length + p1.length + p2.length + subBytes;
         var buf = new Uint8Array(total);
         var dv = new DataView(buf.buffer);
         var pos = 0;
         GBR6_MAGIC.forEach(function (b) { buf[pos++] = b; });
         dv.setUint8(pos, 1); pos += 1;                                    // version
-        dv.setUint8(pos, p2.length ? GBR6_TWO_PLAYER : 0); pos += 1;      // flags
+        dv.setUint8(pos, (p2.length ? GBR6_TWO_PLAYER : 0) | (sub.length ? GBR6_HAS_SUBTICK : 0)); pos += 1;  // flags
         dv.setFloat32(pos, rep.tps, true); pos += 4;
         dv.setBigInt64(pos, BigInt(Math.floor(Date.now() / 1000)), true); pos += 8;
         dv.setBigUint64(pos, BigInt(0), true); pos += 8;                  // rngSeed
@@ -264,7 +288,18 @@
         dv.setUint16(pos, nameBytes.length, true); pos += 2;
         buf.set(nameBytes, pos); pos += nameBytes.length;
         buf.set(p1, pos); pos += p1.length;
-        buf.set(p2, pos);
+        buf.set(p2, pos); pos += p2.length;
+        if (sub.length) {
+          dv.setUint32(pos, 0, true); pos += 4;                           // no deaths
+          dv.setUint32(pos, sub.length, true); pos += 4;
+          sub.forEach(function (i) {
+            dv.setUint32(pos, i.frame, true);
+            buf[pos + 4] = i.button >= 1 && i.button <= 3 ? i.button : 1;
+            buf[pos + 5] = (i.down ? 1 : 0) | (i.player2 ? 2 : 0);
+            dv.setFloat64(pos + 6, i.offset, true);
+            pos += 14;
+          });
+        }
         void GBR6_HAS_LEVELNAME; void GBR6_HAS_DEATHS;
         return buf;
       }
@@ -518,6 +553,22 @@
 
   function mkInput(frame, hold, p2) {
     return { frame: frame >>> 0, button: 1, down: !!hold, player2: !!p2 };
+  }
+
+  // FNV-1a, 64-bit, as .scbf1's checksum. Two 32-bit halves instead of BigInt
+  // per byte, so a long macro doesn't crawl.
+  function fnv1a64(bytes, len) {
+    var hi = 0xcbf29ce4, lo = 0x84222325;
+    for (var i = 0; i < len; i++) {
+      lo = (lo ^ bytes[i]) >>> 0;
+      // (hi:lo) *= 0x100000001b3  ==  x * 0x1b3 + (x << 40)
+      var loMul = lo * 0x1b3;
+      var carry = Math.floor(loMul / 4294967296);
+      var newLo = loMul >>> 0;
+      var newHi = (Math.imul(hi, 0x1b3) + carry + ((lo << 8) >>> 0)) >>> 0;
+      hi = newHi; lo = newLo;
+    }
+    return (BigInt(hi) << BigInt(32)) | BigInt(lo);
   }
 
   function hasMagic(buf, bytes) {
@@ -1332,6 +1383,74 @@
           dv.setUint32(p, i.frame * 16 + (i.player2 ? 8 : 0) + 2 + (i.down ? 1 : 0), true);
           p += 4;
         });
+        return buf;
+      }
+    },
+
+    // anticroom's Silicate fork saves sub-tick (CBF) macros as .scbf1. Layout
+    // from its replay/scbf.cpp: "SCBF", u16 version (1), u16 reserved, u32
+    // build, f64 tps, u64 seed, u32 action count, u32 trail count, then per
+    // action u64 frame, u8 type (slc: 1-3 buttons, 4-6 restart/full/death,
+    // 7 TPS, 8 bugpoint), u8 bits (1 holding, 2 player 2) and an 8-byte
+    // payload (f64 sub-tick offset / u64 seed / f64 tps; none for bugpoint),
+    // then trail samples (u32 frame, 4x f32, u8 flags), then an FNV-1a 64
+    // checksum over everything before it. Offsets carry through to GucciBot's
+    // own format; every other format here lands clicks on the tick.
+    scbf1: {
+      name: 'Silicate CBF (.scbf1)', ext: '.scbf1', group: 'Current', confidence: 'src',
+      note: 'anticroom\'s Silicate fork, with sub-tick clicks. The sub-tick timing carries over to GucciBot (.gbr6); other formats put each click on its tick.',
+      detect: function (n, t, buf) {
+        return hasMagic(buf, [0x53, 0x43, 0x42, 0x46]) && buf.length >= 44;
+      },
+      read: function (buf) {
+        var dv = dvOf(buf);
+        var body = buf.length - 8;
+        if (fnv1a64(buf, body) !== dv.getBigUint64(body, true))
+          throw new Error('checksum mismatch -- the .scbf1 file is cut off or damaged');
+        var version = dv.getUint16(4, true);
+        if (version !== 1) throw new Error('.scbf1 version ' + version + ' isn\'t supported');
+        var tps = dv.getFloat64(12, true);
+        var count = dv.getUint32(28, true);
+        var out = [], p = 36;
+        for (var i = 0; i < count; i++) {
+          if (p + 10 > body) throw new Error('action ' + i + ' is cut off');
+          var frame = Number(dv.getBigUint64(p, true));
+          var type = buf[p + 8], bits = buf[p + 9];
+          p += 10;
+          if (type >= 1 && type <= 3) {
+            var off = dv.getFloat64(p, true);
+            var inp = { frame: frame, button: type, down: (bits & 1) !== 0, player2: (bits & 2) !== 0 };
+            if (off > 0 && off < 1) inp.offset = off;
+            out.push(inp);
+            p += 8;
+          } else if (type >= 4 && type <= 7) {
+            p += 8;   // resets and TPS changes: the page's model has one rate, no resets
+          } else if (type !== 8) {
+            throw new Error('action ' + i + ' has unknown type ' + type);
+          }
+        }
+        return { tps: tps > 0 ? tps : 240, inputs: out };
+      },
+      write: function (rep) {
+        var list = rep.inputs.slice().sort(function (a, b) { return a.frame - b.frame; });
+        var buf = new Uint8Array(36 + list.length * 18 + 8), dv = dvOf(buf);
+        [0x53, 0x43, 0x42, 0x46].forEach(function (b, k) { buf[k] = b; });
+        dv.setUint16(4, 1, true);                 // version
+        dv.setUint16(6, 0, true);
+        dv.setUint32(8, 81, true);                // build, as his writer stamps it
+        dv.setFloat64(12, rep.tps, true);
+        dv.setBigUint64(20, BigInt(0), true);     // seed
+        dv.setUint32(28, list.length, true);
+        dv.setUint32(32, 0, true);                // no trail
+        var p = 36;
+        list.forEach(function (i) {
+          dv.setBigUint64(p, BigInt(i.frame), true);
+          buf[p + 8] = i.button >= 1 && i.button <= 3 ? i.button : 1;
+          buf[p + 9] = (i.down ? 1 : 0) | (i.player2 ? 2 : 0);
+          dv.setFloat64(p + 10, i.offset > 0 && i.offset < 1 ? i.offset : 0, true);
+          p += 18;
+        });
+        dv.setBigUint64(p, fnv1a64(buf, p), true);
         return buf;
       }
     },
