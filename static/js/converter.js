@@ -1497,9 +1497,8 @@
   /* ----------------------------------------------------- TTR and yBot
    *
    * ToastyReplay's .ttr3, implemented from ToastexGD's own source
-   * (github.com/ToastexGD/ToastyReplay, src/format/ttr3_format.cpp). Nigel
-   * co-owns ToastyReplay, and only the byte layout is taken from it in any
-   * case -- no code was copied.
+   * (github.com/ToastexGD/ToastyReplay, src/format/ttr3_format.cpp). Only the
+   * byte layout is taken from it -- no code was copied.
    *
    * TTR3 is the odd one out here in a way that matters: it stores inputs by
    * ABSOLUTE TIME IN SECONDS, not by frame. Every other format on this page
