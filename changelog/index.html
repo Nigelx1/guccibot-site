@@ -99,7 +99,20 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">2.alpha.4 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">2.beta.1 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">Macros recorded in practice mode play back.</strong> Checkpoints are placed between physics steps and captured in that same instant, the way Silicate does it, so a respawn puts the level and you back at the same moment. They used to come from two different ticks, and a macro recorded through a respawn could break a little past the checkpoint &mdash; if one of yours did, re-record it.
+        <br><br>
+        <strong>Calculate launches off slopes.</strong> GD&rsquo;s anticheat spike was being swallowed while Calculate ran instead of handed to the game, which cut every collision check short &mdash; and that&rsquo;s where GD launches you off the top of a slope. Calculate now plays a level exactly the way normal playback does.
+        <br><br>
+        <strong>Pathfinder keeps more than one click.</strong> The same anticheat fix gives its runs their slope launches back, and a search that could never commit a second input now can.
+        <br><br>
+        <strong>Also:</strong> frame windows leave with their macro (new recording, deleted macro); the Calculating box shows real progress instead of 0%; bands start on the Bells.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">2.alpha.4</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">Click Between Frames stops fighting GucciBot.</strong> It and Superb Input Precision apply your clicks outside the path a bot records from, which can leave a macro missing clicks. GucciBot now pauses both while it&rsquo;s recording or playing, and puts them back exactly as they were the moment it&rsquo;s done &mdash; playing normally with CBF is untouched.
         <br><br>
