@@ -99,7 +99,20 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">2.beta.1 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">2.0.0-beta.2 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">A new Pathfinder.</strong> The default engine is now Absense&rsquo;s pathfinder, by Absent, ported in whole: before every click it runs copies of you ahead through the level, plays the idea that lasts, and goes back when a way dead-ends. On top of it, GucciBot&rsquo;s own addition &mdash; in ship, wave, UFO and swing it tries holding you at a spread of heights, which is what finally gets a ship through a tight gap. It beats full levels with flying parts that the old one couldn&rsquo;t, learns each level as it goes, and can start from the pause menu or from the very beginning. The old engine is still there as Classic.
+        <br><br>
+        <strong>Recording keeps every click.</strong> A tap while you&rsquo;re already holding is a release, a press and a release in the same tick, and the last release was being thrown away as a &ldquo;duplicate&rdquo; &mdash; the replay stayed held and died. Every input is kept now, and loading a macro keeps them too.
+        <br><br>
+        <strong>Backwards Stepping steps one tick.</strong> A step back now lands on exactly the frame before, with the frame counter matching where you are. The first step used to jump two, and Prevent Death landed a tick early.
+        <br><br>
+        <strong>ToastyReplay Lite isn&rsquo;t required anymore.</strong> GucciBot only stands down if it&rsquo;s enabled at the same time.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">2.beta.1</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">Macros recorded in practice mode play back.</strong> Checkpoints are placed between physics steps and captured in that same instant, the way Silicate does it, so a respawn puts the level and you back at the same moment. They used to come from two different ticks, and a macro recorded through a respawn could break a little past the checkpoint &mdash; if one of yours did, re-record it.
         <br><br>

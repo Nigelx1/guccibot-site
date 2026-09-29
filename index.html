@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GucciBot 2.beta.1 — Frame Perfect. GBR6. Brrr.</title>
+<title>GucciBot 2.0.0-beta.2 — Frame Perfect. GBR6. Brrr.</title>
 <meta name="description" content="A Geometry Dash macro bot built on Silicate's physics engine, with GBR6 hypercompression and a full Jupiter My Favourite practice trainer. Frame perfect. Ice cold. Brrr.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://guccibot.net/">
@@ -259,38 +259,38 @@
       <div class="section-label">Pathfinder</div>
       <h2 class="section-title">No Recording.<br>No Macro.<br>It Finds One.</h2>
       <p style="max-width:560px; font-size:0.8rem; color:#888; line-height:1.9; margin-top:1rem;">
-        Open a level with nothing. Hit Pathfinder. It plays the level itself, dies, works out what had to be different, and tries again &mdash; thousands of times if that&rsquo;s what it takes &mdash; until it has a run that reaches the end. Then it hands you the macro, named after the level, saved and ready. You recorded nothing.
+        Open a level with nothing. Hit Pathfinder. It plays the level itself, thinking ahead before every click and going back whenever a way turns out to be a dead end, until it reaches the end. Then it hands you the macro, named after the level, saved and ready. You recorded nothing.
       </p>
     </div>
     <div class="feature-grid reveal">
       <div class="feature-card" data-num="01">
-        <div class="feature-icon">&#x2620;</div>
-        <div class="feature-name">Death Is The Signal</div>
-        <div class="feature-desc">It doesn&rsquo;t read the level layout. It runs forward until GD&rsquo;s own collision kills it, and treats that death as proof something earlier had to change. Then it looks back from there &mdash; past any stretch where no input could have changed anything, like the whole fall after walking off a ledge &mdash; for the input that gets further. No geometry parsing means nothing to get wrong about a 2.2 object nobody accounted for.</div>
-        <div class="feature-badge">The game decides what kills you.</div>
+        <div class="feature-icon">&#x25B6;</div>
+        <div class="feature-name">It Looks Before It Clicks</div>
+        <div class="feature-desc">Before every input it runs copies of you ahead through the real level &mdash; Silicate&rsquo;s physics for portals, orbs, pads and dashes, and a model of the level&rsquo;s own triggers &mdash; tries dozens of ideas, and plays the one that lasts. The game still has the last word: when the real level disagrees, it believes the level.</div>
+        <div class="feature-badge">Thinks ahead.</div>
       </div>
       <div class="feature-card" data-num="02">
         <div class="feature-icon">&#x21B6;</div>
         <div class="feature-name">Real Backtracking</div>
-        <div class="feature-desc">Every input it tries at a decision point is crossed off there permanently. Run out of options and it restores a real checkpoint further back and takes the next branch instead. It never sits there retrying the same failed thing &mdash; the exact behaviour that makes other attempts at this useless.</div>
-        <div class="feature-badge">Never tries the same thing twice.</div>
+        <div class="feature-desc">Dead end? It goes back through the frames it kept and takes another way &mdash; and further back each time a spot keeps biting. What got it past a hard spot is remembered per level, so the next search of that level is quicker.</div>
+        <div class="feature-badge">Learns the level.</div>
       </div>
       <div class="feature-card" data-num="03">
-        <div class="feature-icon">&#x2713;</div>
-        <div class="feature-name">It Proves Its Own Answer</div>
-        <div class="feature-desc">A solution stitched together from checkpoint restores isn&rsquo;t the same as a macro that plays from frame zero. So before Pathfinder gives you anything, it replays the entire input list from a genuine cold start and requires it to reach the end again on its own. If it can&rsquo;t, it isn&rsquo;t a solution and it keeps looking.</div>
-        <div class="feature-badge">Verified cold. Every time.</div>
+        <div class="feature-icon">&#x2708;</div>
+        <div class="feature-name">Threads The Gap</div>
+        <div class="feature-desc">GucciBot&rsquo;s own addition. In ship, wave, UFO and swing it also tries holding you at a spread of heights, the way you&rsquo;d line a ship up with a gap &mdash; the thing a plain search keeps missing when the way through is a fifty-unit hole between two rows of spikes.</div>
+        <div class="feature-badge">Ship. Wave. UFO. Swing.</div>
       </div>
       <div class="feature-card" data-num="04">
         <div class="feature-icon">&#x25A4;</div>
-        <div class="feature-name">Watch Or Don&rsquo;t</div>
-        <div class="feature-desc">Runs, depth, best frame, best percent &mdash; all live while it works. Leave the cover on and let it surprise you, or turn it off and watch it fail its way forward in real time, which is genuinely fun to sit through. Cancel whenever. It saves what it found.</div>
+        <div class="feature-name">Watch It Work</div>
+        <div class="feature-desc">It plays in real time, right there in the level, with its progress in the corner. Start it from wherever you are, straight from the pause menu, or from the very beginning. Stop whenever &mdash; it saves what it found.</div>
         <div class="feature-badge">Let it grind.</div>
       </div>
     </div>
     <div class="reveal" style="margin-top:3rem;border:1px solid rgba(234,88,12,0.3);padding:1.75rem;background:rgba(234,88,12,0.04);max-width:760px">
       <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--orange);opacity:.75;margin-bottom:.75rem">Straight Up: Where It&rsquo;s At</div>
-      <p style="font-size:0.75rem;color:#888;line-height:1.9">Pathfinder is v1 and we&rsquo;re not going to pretend otherwise. It is genuinely solid on cube &mdash; jumps, spikes, the stuff a level throws at you early. It is <strong style="color:#cfcfcf">not</strong> there yet on ship, wave, robot, spider, or anything where surviving means a whole sequence of inputs instead of one well-placed press. That&rsquo;s a limitation of how v1 searches, not a bug, and the next version is being designed around exactly that. Point it at a cube level and it&rsquo;s real. Point it at a wave and it&rsquo;ll grind. We&rsquo;d rather tell you that than have you find out.</p>
+      <p style="font-size:0.75rem;color:#888;line-height:1.9">Pathfinder&rsquo;s engine is now <strong style="color:#cfcfcf">Absense&rsquo;s pathfinder, by Absent</strong>, ported in whole, with GucciBot&rsquo;s height-holding on top. It beats full levels with ship, wave and UFO parts that the old engine couldn&rsquo;t touch, usually in a few minutes. Some spots still take it a while to crack, and a level that needs something it has never seen can still stop it. The old engine is still in the tab, as Classic.</p>
     </div>
   </div>
 </section>
@@ -979,7 +979,7 @@
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">What&rsquo;s actually new?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">Current version is <strong style="color:var(--gold)">2.beta.1</strong> — a beta, and labelled one on purpose. Full release history, every version, lives on the <a href="/changelog/" style="color:var(--gold)">Changelog</a> page now instead of one line here that gets overwritten every bump.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">Current version is <strong style="color:var(--gold)">2.0.0-beta.2</strong> — a beta, and labelled one on purpose. Full release history, every version, lives on the <a href="/changelog/" style="color:var(--gold)">Changelog</a> page now instead of one line here that gets overwritten every bump.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
@@ -999,7 +999,7 @@
 <div style="padding:3rem 2rem;border-top:1px solid rgba(255,255,255,0.04)">
   <div class="container">
     <div style="font-size:0.5rem;color:#2a2a2a;line-height:1.9;letter-spacing:0.3px;max-width:900px">
-      &#x204E; DISCLAIMER: GucciBot is an independent fan project and is not affiliated with, endorsed by, sponsored by, or in any way associated with Radric Delantic Davis, professionally known as Gucci Mane, 1017 Records, Atlantic Records, or any related entities. The name "GucciBot" is used as a fan tribute and constitutes nominative fair use. All quotes attributed to Gucci Mane on this page are entirely fictional and were written by Claude.ai for comedic purposes at no charge to Gucci Mane. Gucci Mane has not played Geometry Dash to our knowledge, has not used GucciBot, has never heard of GucciBot, and has not made any statements about macro bots, TPS, lock delta, GBR6 hypercompression, backwards stepping, or Geode mods. The "Gucci Mane Certified® Platinum Bot" designation is not a real certification, trademark, or designation of any kind and was invented by Claude.ai at approximately 2am during a build session. It is not recognized by any standards body, industry organization, or Gucci Mane himself. The star on the superscript of "Yes" in the FAQ section that says "No" in tiny text is an accurate representation of the factual answer to that question. The reviews attributed to "Z***k" and "W*****f" are entirely fictional and any resemblance to real Geometry Dash players is coincidental and intended as affectionate satire. GucciBot is a Geode mod for Geometry Dash 2.2081 (Windows only). Geometry Dash is a registered trademark of RobTop Games AB. Geode is an open-source mod loader not affiliated with RobTop Games. The GBR6 format, Type A/B/C compression, all eighteen themed extensions, the render settings UI layout, the autoclicker delta compression algorithm (Type C), the macro diff viewer, the bot settings presets system, and the overall GucciBot branding are original work by Nigelx1. The Silicate physics engine including the BotUpdater, PracticeFix system, CCScheduler hook, CCDirector hook, all midhook implementations, and all five binary patch offsets are the work of peony, used with deep appreciation. GucciBot, like Silicate, is licensed under the GNU General Public License v3.0; its source is published in full. The Astral contributions that elevate GucciBot to top tier in all four disciplines are the work of GWDdoS. Several of Pathfinder's improvements in version 2.alpha.2, the in-game assistant server, and Check Macro, Replace All, the respawn timer and the black orb autoclicker loop in version 2.alpha.3 are ideas taken from Absense by Absent and reimplemented here. kepe built yBot, whose file size standard GBR6 was designed to meet. The TTR renderer backend is the work of ToastexGD and powered rendering through version 1.x; rendering from 2.0 onward runs on the Silicate renderer. The frame-window accuracy fixes in version 1.6.1, the entire frame-window analyzer shipped in version 1.8, and the sub-tick CBF recording and render intro card in version 2.alpha.3 are the work of anticroom, GucciBot's first outside contributor. The L* precision formula is the work of NaN GD, published at nandl.pages.dev; the C++ implementation of it used here is the work of C0nscious, from Frame Window Counter, used under the MIT license. L* is a precision measurement derived from timing windows and is not a difficulty rating; NaN says so himself and so do we. The Toosii, Ja, Giddey, Bam, Sexyy, Butler, Saweetie, Maybach, Romo, Grizzley, Waka, Youngsta, and Knockerz themes are named in tribute to their respective inspirations who have no connection to this software. The JuiceBot theme is named for and colored after an actual beta tester of this software, which is a different situation entirely. This website including all copy, the layout, the fake quotes, the footnotes, the tiny disclaimers, the stats section, the testimonials, the legal wall you are currently reading, and the decision to make it this long was produced by Claude.ai (Anthropic) in collaboration with Nigelx1. Claude.ai does not receive royalties. Brrr.
+      &#x204E; DISCLAIMER: GucciBot is an independent fan project and is not affiliated with, endorsed by, sponsored by, or in any way associated with Radric Delantic Davis, professionally known as Gucci Mane, 1017 Records, Atlantic Records, or any related entities. The name "GucciBot" is used as a fan tribute and constitutes nominative fair use. All quotes attributed to Gucci Mane on this page are entirely fictional and were written by Claude.ai for comedic purposes at no charge to Gucci Mane. Gucci Mane has not played Geometry Dash to our knowledge, has not used GucciBot, has never heard of GucciBot, and has not made any statements about macro bots, TPS, lock delta, GBR6 hypercompression, backwards stepping, or Geode mods. The "Gucci Mane Certified® Platinum Bot" designation is not a real certification, trademark, or designation of any kind and was invented by Claude.ai at approximately 2am during a build session. It is not recognized by any standards body, industry organization, or Gucci Mane himself. The star on the superscript of "Yes" in the FAQ section that says "No" in tiny text is an accurate representation of the factual answer to that question. The reviews attributed to "Z***k" and "W*****f" are entirely fictional and any resemblance to real Geometry Dash players is coincidental and intended as affectionate satire. GucciBot is a Geode mod for Geometry Dash 2.2081 (Windows only). Geometry Dash is a registered trademark of RobTop Games AB. Geode is an open-source mod loader not affiliated with RobTop Games. The GBR6 format, Type A/B/C compression, all eighteen themed extensions, the render settings UI layout, the autoclicker delta compression algorithm (Type C), the macro diff viewer, the bot settings presets system, and the overall GucciBot branding are original work by Nigelx1. The Silicate physics engine including the BotUpdater, PracticeFix system, CCScheduler hook, CCDirector hook, all midhook implementations, and all five binary patch offsets are the work of peony, used with deep appreciation. GucciBot, like Silicate, is licensed under the GNU General Public License v3.0; its source is published in full. The Astral contributions that elevate GucciBot to top tier in all four disciplines are the work of GWDdoS. The Pathfinder engine that is the default from version 2.0.0-beta.2 is Absense's pathfinder by Absent, ported in; several earlier Pathfinder improvements in version 2.alpha.2, the in-game assistant server, and Check Macro, Replace All, the respawn timer and the black orb autoclicker loop in version 2.alpha.3 are ideas taken from Absense and reimplemented here. kepe built yBot, whose file size standard GBR6 was designed to meet. The TTR renderer backend is the work of ToastexGD and powered rendering through version 1.x; rendering from 2.0 onward runs on the Silicate renderer. The frame-window accuracy fixes in version 1.6.1, the entire frame-window analyzer shipped in version 1.8, and the sub-tick CBF recording and render intro card in version 2.alpha.3 are the work of anticroom, GucciBot's first outside contributor. The L* precision formula is the work of NaN GD, published at nandl.pages.dev; the C++ implementation of it used here is the work of C0nscious, from Frame Window Counter, used under the MIT license. L* is a precision measurement derived from timing windows and is not a difficulty rating; NaN says so himself and so do we. The Toosii, Ja, Giddey, Bam, Sexyy, Butler, Saweetie, Maybach, Romo, Grizzley, Waka, Youngsta, and Knockerz themes are named in tribute to their respective inspirations who have no connection to this software. The JuiceBot theme is named for and colored after an actual beta tester of this software, which is a different situation entirely. This website including all copy, the layout, the fake quotes, the footnotes, the tiny disclaimers, the stats section, the testimonials, the legal wall you are currently reading, and the decision to make it this long was produced by Claude.ai (Anthropic) in collaboration with Nigelx1. Claude.ai does not receive royalties. Brrr.
     </div>
   </div>
 </div>
@@ -1012,8 +1012,8 @@
       <div class="download-title">Get the Drip.</div>
       <p class="download-sub">Geode 5.10.1+ &nbsp;·&nbsp; GD 2.2081 &nbsp;·&nbsp; Windows &nbsp;·&nbsp; Free &nbsp;·&nbsp; Brrr.</p>
       <div class="download-btn-wrap">
-        <a href="https://github.com/Nigelx1/GucciBot/releases/tag/v2.0.0-beta.1" class="btn-download">
-          ↓ &nbsp; Download 2.beta.1
+        <a href="https://github.com/Nigelx1/GucciBot/releases/tag/v2.0.0-beta.2" class="btn-download">
+          ↓ &nbsp; Download 2.0.0-beta.2
         </a>
       </div>
       <div style="text-align:center; margin-top:1.5rem; display:flex; flex-direction:column; gap:.6rem; align-items:center">
@@ -1027,7 +1027,7 @@
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; background:rgba(212,175,55,0.08); margin-top:4rem; border:1px solid rgba(212,175,55,0.08)" class="reveal">
       <div style="padding:2rem; background:var(--black)">
         <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.6">Version</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px">2.beta.1</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px">2.0.0-beta.2</div>
         <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Silicate Engine</div>
       </div>
       <div style="padding:2rem; background:var(--black)">
@@ -1096,7 +1096,7 @@
       <div class="credit-card">
         <div class="credit-role">Pathfinder &amp; Assistant Access</div>
         <div class="credit-name">Absent</div>
-        <div class="credit-desc">Built Absense, another bot on top of Silicate. Several of Pathfinder&rsquo;s improvements, the in-game assistant server, Check Macro, Replace All, the respawn timer and the black orb autoclicker loop are his ideas, worked out again here from his source. The code is ours. The ideas are his, and he should get said so.</div>
+        <div class="credit-desc">Built Absense, another bot on top of Silicate. Pathfinder&rsquo;s default engine is his &mdash; Absense&rsquo;s pathfinder, look-ahead and all, ported in whole. The in-game assistant server, Check Macro, Replace All, the respawn timer and the black orb autoclicker loop are his ideas too, worked out again here from his source. He should get said so.</div>
       </div>
       <div class="credit-card">
         <div class="credit-role">Renderer &amp; Foundation</div>
