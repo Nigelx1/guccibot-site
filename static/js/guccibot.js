@@ -22,15 +22,21 @@ if (track) {
   track.innerHTML = html + html;
 }
 
-// Scroll reveal
+// Scroll reveal. An element shows once 10% of it is on screen -- except
+// one taller than the screen, which shows as soon as it scrolls in: 10% of
+// something over ten screens tall can never be on screen at once, and the
+// changelog list (one .reveal holding every entry) grew past that and
+// stayed invisible (2026-09-29).
 const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
+    const screen = e.rootBounds ? e.rootBounds.height : window.innerHeight;
+    const tall = e.boundingClientRect.height > screen;
+    if (e.isIntersecting && (tall || e.intersectionRatio >= 0.1)) {
       e.target.classList.add('visible');
       obs.unobserve(e.target);
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+}, { threshold: [0, 0.1], rootMargin: '0px 0px -50px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
