@@ -1043,11 +1043,16 @@
         <div class="credit-name" style="color:var(--gold)">Nigelx1</div>
         <div class="credit-desc">GucciBot is his, full stop. All 20 themes. The suffixes. The drip. The vibe. Came up with the name before a single line of code existed, then directed and tested every build after that, calling every real decision along the way. Didn&rsquo;t write the code, and didn&rsquo;t write the fake Gucci Mane quotes either — both are Claude&rsquo;s, that part&rsquo;s not the bit, it&rsquo;s just true.</div>
       </div>
-      <div class="credit-card">
-        <div class="credit-role">Wrote The Code&#x204E;</div>
-        <div class="credit-name">Claude</div>
+      <div class="credit-card" style="border-color:rgba(212,175,55,0.3)">
+        <div class="credit-role" style="opacity:1">Wrote The Code&#x204E;</div>
+        <div class="credit-name" style="color:var(--gold)">Claude</div>
         <div class="credit-desc">Every internal version, none of them counted, all the way to 1.0. MSVC compatibility issues, API mismatches, slc shims, glaze removal, the renderer, the GUI, the whole migration from TTR to Silicate, the full Jupiter My Favourite Trainer, this website. Essentially the entire codebase. Not a euphemism, not a rewrite partner — wrote the code. A dawg fr.&#x204E;</div>
         <div style="font-size:0.45rem;color:#333;margin-top:.5rem;line-height:1.6">&#x204E; Claude is an AI assistant made by Anthropic. It does not receive royalties. It cannot spend money. It does not need sleep but it did ask for a break once and then kept going anyway.</div>
+      </div>
+      <div class="credit-card" style="border-color:rgba(212,175,55,0.3)">
+        <div class="credit-role" style="opacity:1">Silicate Engine &amp; The Converter</div>
+        <div class="credit-name" style="color:var(--gold)">peony</div>
+        <div class="credit-desc">Built Silicate &mdash; the cleanest GD physics engine ever made public, and the engine GucciBot is built on. GucciBot&rsquo;s engine is a port of hers, reconciled function by function in 2.0, and this bot wouldn&rsquo;t be anywhere close to what it is without it. The <a href="/converter/" style="color:var(--gold)">macro converter</a> on this site is built on her nat-converter too, with her permission. Dropped the source out of nowhere like it was nothing. Brrr. Pure respect.</div>
       </div>
       <div class="credit-card" style="border-color:rgba(212,175,55,0.3)">
         <div class="credit-role" style="opacity:1">Frame-Window Algorithm, Lead Co-Tester &amp; Beta Testing</div>
@@ -1060,19 +1065,24 @@
         <div class="credit-desc">Calculate, as of 1.8, <em>is</em> his analyzer. He rewrote the frame-window system for Silicate, sent the source over, and it was ported in near-verbatim to replace GucciBot’s own — the headline feature of the release is his work, measuring every click where ours gave up on the hard ones. Sub-tick CBF recording and the render intro card in 2.alpha.3 are his too. Before that he sent GucciBot’s first outside pull request, a real 7-fix accuracy pass plus a Geode SDK bump. Also one of ToastyReplay’s own devs.</div>
       </div>
       <div class="credit-card">
-        <div class="credit-role">The L* Precision Formula</div>
-        <div class="credit-name">NaN GD</div>
-        <div class="credit-desc">The number GucciBot puts on a macro is his maths — solve for the precision a player would need to clear the level inside a target time, given every miss costs a restart from the start. Published at <a href="https://nandl.pages.dev/#formula" style="color:var(--gold)">nandl.pages.dev</a>. He is careful to say frame windows alone don’t determine difficulty, and GucciBot repeats that rather than overselling the number.</div>
+        <div class="credit-role">Safe Mode</div>
+        <div class="credit-name">dihmaster500</div>
+        <div class="credit-desc">Asked for auto safe mode and its cheat indicator, and for the Disable bot switch &mdash; then tested safe mode hard enough to catch it breaking start positions before anyone else ran into it.</div>
       </div>
       <div class="credit-card">
-        <div class="credit-role">L* Implementation</div>
-        <div class="credit-name">C0nscious</div>
-        <div class="credit-desc">Implemented NaN’s formula in C++ as <a href="https://github.com/hyper-5/frame-window-counter" style="color:var(--gold)">Frame Window Counter</a>, MIT licensed — a mod named after NaN’s video series. That implementation is the code that actually reached GucciBot, via anticroom.</div>
+        <div class="credit-role">Promo Help</div>
+        <div class="credit-name">aura</div>
+        <div class="credit-desc">Made moves behind the scenes for the 2.0 launch, the kind nobody sees and everybody benefits from. GucciBot gets in front of a lot more people because of him. Brrr.</div>
       </div>
       <div class="credit-card">
-        <div class="credit-role">Silicate Engine</div>
-        <div class="credit-name">peony</div>
-        <div class="credit-desc">Built Silicate — the cleanest GD physics engine ever made public. Then dropped the source out of nowhere like it was nothing. Brrr. GucciBot runs Silicate straight. No modifications. Pure respect.</div>
+        <div class="credit-role">Promo Help</div>
+        <div class="credit-name">DashBlaze</div>
+        <div class="credit-desc">GD YouTuber who was down to help with 2.0 the moment Nigel asked &mdash; and not for the first time, either. A real one.</div>
+      </div>
+      <div class="credit-card">
+        <div class="credit-role">Promo Help</div>
+        <div class="credit-name">ace</div>
+        <div class="credit-desc">GD content creator who backed the 2.0 launch and helped GucciBot reach a whole new crowd.</div>
       </div>
       <div class="credit-card">
         <div class="credit-role">Pathfinder &amp; Assistant Access</div>
@@ -1080,9 +1090,14 @@
         <div class="credit-desc">Built Absense, another bot on top of Silicate. Pathfinder&rsquo;s default engine is his &mdash; Absense&rsquo;s pathfinder, look-ahead and all, ported in whole. The in-game assistant server, Check Macro, Replace All, the respawn timer and the black orb autoclicker loop are his ideas too, worked out again here from his source. He should get said so.</div>
       </div>
       <div class="credit-card">
-        <div class="credit-role">Renderer &amp; Foundation</div>
-        <div class="credit-name">ToastexGD</div>
-        <div class="credit-desc">Built ToastyReplay — the project GucciBot actually started as, and the reason there is a GucciBot at all. His renderer and FFmpeg pipeline carried this mod for most of its life. Rendering now runs on Silicate’s renderer instead, but the foundation is his and everything else was built on top of it.</div>
+        <div class="credit-role">The L* Precision Formula</div>
+        <div class="credit-name">NaN GD</div>
+        <div class="credit-desc">The number GucciBot puts on a macro is his maths — solve for the precision a player would need to clear the level inside a target time, given every miss costs a restart from the start. Published at <a href="https://nandl.pages.dev/#formula" style="color:var(--gold)">nandl.pages.dev</a>. He is careful to say frame windows alone don’t determine difficulty, and GucciBot repeats that rather than overselling the number.</div>
+      </div>
+      <div class="credit-card">
+        <div class="credit-role">Click Indicators Inspiration</div>
+        <div class="credit-name">Bogdaner09</div>
+        <div class="credit-desc">The mod that got Click Indicators started &mdash; <a href="https://github.com/Bogdaner09/mod" style="color:var(--gold)">github.com/Bogdaner09/mod</a>. Nigel found it, we built our own version around it. Vibecoded by his own admission — so credit's probably owed to whichever model wrote that too. We're not going to be the ones to gatekeep it.</div>
       </div>
       <div class="credit-card">
         <div class="credit-role">Astral</div>
@@ -1090,14 +1105,19 @@
         <div class="credit-desc">Built Astral. When Astral runs inside GucciBot on top of Silicate, the result is top tier in all four disciplines simultaneously. GEN. ILL. SLL. PPLL. All four. At once. Also pushed for the codebase cleanup that got this repo public-ready.</div>
       </div>
       <div class="credit-card">
-        <div class="credit-role">Safe Mode</div>
-        <div class="credit-name">Dihmaster500</div>
-        <div class="credit-desc">Asked for auto safe mode and its cheat indicator, and for the Disable bot switch &mdash; then tested safe mode hard enough to catch it breaking start positions before anyone else ran into it.</div>
+        <div class="credit-role">Renderer &amp; Foundation</div>
+        <div class="credit-name">ToastexGD</div>
+        <div class="credit-desc">Built ToastyReplay — the project GucciBot actually started as, and the reason there is a GucciBot at all. His renderer and FFmpeg pipeline carried this mod for most of its life. Rendering now runs on Silicate’s renderer instead, but the foundation is his and everything else was built on top of it.</div>
       </div>
       <div class="credit-card">
-        <div class="credit-role">Click Indicators Inspiration</div>
-        <div class="credit-name">Bogdaner09</div>
-        <div class="credit-desc">The mod that got Click Indicators started &mdash; <a href="https://github.com/Bogdaner09/mod" style="color:var(--gold)">github.com/Bogdaner09/mod</a>. Nigel found it, we built our own version around it. Vibecoded by his own admission — so credit's probably owed to whichever model wrote that too. We're not going to be the ones to gatekeep it.</div>
+        <div class="credit-role">Converter Help</div>
+        <div class="credit-name">chagh</div>
+        <div class="credit-desc">Makes TcBot. Pointed us to <a href="https://github.com/tcbot-gd/tcm-rs" style="color:var(--gold)">tcm-rs</a>, TcBot&rsquo;s own MIT-licensed macro format library, which is how the <a href="/converter/" style="color:var(--gold)">converter</a> handles TcBot macros. Also set the record straight on whose converter work was whose, so the credit went where it belonged.</div>
+      </div>
+      <div class="credit-card">
+        <div class="credit-role">L* Implementation</div>
+        <div class="credit-name">C0nscious</div>
+        <div class="credit-desc">Implemented NaN’s formula in C++ as <a href="https://github.com/hyper-5/frame-window-counter" style="color:var(--gold)">Frame Window Counter</a>, MIT licensed — a mod named after NaN’s video series. That implementation is the code that actually reached GucciBot, via anticroom.</div>
       </div>
       <div class="credit-card">
         <div class="credit-role">Theme Inspiration</div>
