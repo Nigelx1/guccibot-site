@@ -55,7 +55,7 @@
     </div>
   </div>
   <div class="hero-stats">
-    <div><span>5</span>midhooks</div>
+    <div><span>12</span>midhooks</div>
     <div><span>2 bytes</span>per input</div>
     <div><span>20</span>themes</div>
     <div><span>0</span>macros needed</div>
@@ -77,7 +77,7 @@
       <h2 class="section-title">GBR6.<br>Hypercompressed.<br>Yours.</h2>
       <p style="max-width:560px; font-size:0.8rem; color:#888; line-height:1.9;">
         2 bytes per input. Matches kepe&rsquo;s yBot file sizes for human gameplay.<br>
-        Autoclicker macro of any length — stored in <strong style="color:var(--gold)">4 bytes</strong>.
+        An autoclicker run of up to 65,535 clicks in <strong style="color:var(--gold)">4 bytes</strong>, and 4 more bytes for each 65,535 after that.
         The bot stores the <em style="color:var(--gold)">description</em> of the pattern, not the output. Nobody else has published this. Brrr.
       </p>
     </div>
@@ -97,7 +97,7 @@
       <div class="feature-card" data-num="03">
         <div class="feature-icon">∞</div>
         <div class="feature-name">Type C &mdash; AC Delta</div>
-        <div class="feature-desc">Any length autoclicker macro. Octillions of clicks. 4 bytes. The description of the pattern, not the output. Reconstruct at playback. This is publicly unique. Brrr.</div>
+        <div class="feature-desc">Up to 65,535 autoclicker clicks in 4 bytes, 4 more for each 65,535 after that. The description of the pattern, not the output: hold and release of 1 to 15 ticks on the jump button, 8 clicks or more. Reconstructed at playback. This is publicly unique. Brrr.</div>
         <div class="feature-badge">Nobody else has this.</div>
       </div>
     </div>
@@ -133,13 +133,13 @@
       <div class="disc-row">
         <div class="disc-tag">SLL</div>
         <div><div class="disc-name">SLL</div></div>
-        <div class="disc-focus">Astral + Silicate = different level</div>
+        <div class="disc-focus">Silicate engine = different level</div>
         <div class="disc-status status-top">Top Tier</div>
       </div>
       <div class="disc-row">
         <div class="disc-tag">PPLL</div>
         <div><div class="disc-name">PPLL</div></div>
-        <div class="disc-focus">4 bytes. Infinite clicks. Brrr.</div>
+        <div class="disc-focus">4 bytes per 65,535 clicks. Brrr.</div>
         <div class="disc-status status-top">Top Tier</div>
       </div>
     </div>
@@ -161,36 +161,46 @@
         <li><span><span class="engine-highlight">12 midhooks</span> surgically placed inside GD&rsquo;s binary. physDt, physStepCount, restorePhysDt, earlyUpdate and frameUpdate run the physics loop; four more seed the screen shake, one the random teleports, one places checkpoints and one rounds vertical velocity. Exact 2.2081 offsets. Not guessed. Not estimated. Exact. The physics loop bends to our will because we asked it to, politely, with a hex editor.</span></li>
         <li><span><span class="engine-highlight">Proper TPS bypass</span> — the CCScheduler hook drives the physics loop at whatever TPS you set. 240 means 240 ticks per second. Not 60. Not 60 with interpolation. 240. Your inputs land where they land and they stay there.</span></li>
         <li><span><span class="engine-highlight">SSB fix</span> — the scroll speed bug that caused physics drift at certain speeds. Eliminated. Works in normal play, in recording, in playback, in layout mode. It does not come back. It is gone. Brrr.</span></li>
-        <li><span><span class="engine-highlight">Lock delta, two modes</span> — Performance mode for playback speed, Accuracy mode for physics purity. Accuracy uses real-time scroll position delta to keep the timing tight. You pick based on what matters to you. Both are correct choices.</span></li>
+        <li><span><span class="engine-highlight">Lock delta</span> — a fixed physics step every tick, on by default (Hacks &gt; Engine), so playback runs the physics exactly the way recording did. Frame pacing (Real time, Fixed or Dynamic) sets how many ticks run for each drawn frame, and Fixed can scale with the tick rate. One mode. The correct one.</span></li>
         <li><span><span class="engine-highlight">Full PracticeFix</span> — the most complete SavedPlayerCheckpoint state capture of any public bot. Position, rotation, velocity, gravity, game mode, both players, full GJGameState. When you load a checkpoint it actually loads. Not approximately. Exactly.</span></li>
         <li><span><span class="engine-highlight">Backwards stepping</span> — step backwards through a level mid-attempt, one frame at a time. GucciBot saves a configurable number of frames as you play. You go back. The physics wind back. You try again from exactly there. Most bots cannot do this. Drip.</span></li>
         <li><span><span class="engine-highlight">Intentional deaths</span> — tell the bot that this death was planned. It records it in the replay as Death, RestartFull, or Restart. Playback recreates the reset at the right frame. The verifier sees a full attempt. Everything checks out. Hypothetically.</span></li>
-        <li><span><span class="engine-highlight">Macro diff viewer</span> — load two replays and compare them frame by frame, up to 500 differences. See exactly where they diverge. Useful for debugging, for comparing attempts, for understanding why a run looks different. Drip and utility.</span></li>
-        <li><span><span class="engine-highlight">TPS mid-macro changes</span> — change TPS during a recording and the new TPS is stored as an action in the replay. Playback reads it and switches TPS at that exact frame. The physics adjust. Nobody else stores TPS changes in the replay data itself.</span></li>
-        <li><span><span class="engine-highlight">Mirror inputs</span> — flip which player is which during playback. Useful for two-player levels, for practice, for situations where controls are inverted.</span></li>
-        <li><span><span class="engine-highlight">Maintain gravity</span> — gravity state is preserved on reset. Your player doesn&rsquo;t randomly flip orientation when the level resets. It stays where it was.</span></li>
-        <li><span><span class="engine-highlight">Auto-flip on death</span> — when the player dies, GucciBot automatically queues an input to flip gravity. Useful for specific skip setups. Sounds niche. Is extremely useful if you need it.</span></li>
-        <li><span><span class="engine-highlight">Prevent death</span> — the bot intercepts the destroy call before the player actually dies and backsteps instead. Noclip without the visual pass-through. Physics stay intact. The level keeps running.</span></li>
-        <li><span><span class="engine-highlight">Noclip</span> — full noclip with death flash, accuracy percentage display, and an auto-disable threshold. Set it to disable at 97% and it disengages automatically. Or leave it on and just vibe.</span></li>
-        <li><span><span class="engine-highlight">Noclip accuracy display</span> — shows what percentage of the level you got through before dying. Optional. Visible in the HUD. Updates in real time. Pairs with the threshold.</span></li>
-        <li><span><span class="engine-highlight">Autoclicker</span> — fully independent Hold Ticks, Release Ticks, and Clicks Per Hold per player, matching Silicate's own model, with a one-shot sync button between them. Stores as GBR6 Type C — 4 bytes no matter how long the level. The description of the pattern is stored, not the output. This is unique to GucciBot publicly.</span></li>
+        <li><span><span class="engine-highlight">Macro diff</span> — compare two saved macros frame by frame: every input that moved, that only one of them has, or whose sub-tick or TPS differs, plus a different level, seed or starting TPS (Macro Tools &gt; Diff). Trim (keep one stretch of a macro) and Merge (play one after another) sit next to it, each saving a new macro. Drip and utility.</span></li>
+        <li><span><span class="engine-highlight">TPS mid-macro changes</span> — change TPS during a recording and the new TPS is stored as an action in the replay. Playback reads it and switches TPS at that exact frame. The physics adjust. TcBot, Silicate and yBot macros carry TPS changes too, and GucciBot&rsquo;s converter keeps them when it converts.</span></li>
+        <li><span><span class="engine-highlight">Mirror inputs</span> — while you record a two-player level, each player&rsquo;s press also presses for the other (with Mirror inverted, the opposite), and the macro keeps both.</span></li>
+        <li><span><span class="engine-highlight">Maintain gravity</span> — while you record, your jump is flipped whenever you&rsquo;re upside down, so holding keeps you moving the same way on screen through gravity portals. Player 1&rsquo;s jump only.</span></li>
+        <li><span><span class="engine-highlight">Auto flip on death</span> — works with Prevent death. Where Prevent death would stop you, it flips your input instead (lets go if you were holding, presses if you weren&rsquo;t) and keeps going: right after the step back, or, with Stop before a death, just before the hit. Sounds niche. Is extremely useful if you need it.</span></li>
+        <li><span><span class="engine-highlight">Prevent death</span> — when you die, the game pauses on that tick. With Backwards stepping on (Macro &gt; Frame stepper), it also steps back to the tick before, so you can go again from there. Stop before a death (Hacks &gt; Prediction) looks four ticks ahead and pauses just before the hit instead.</span></li>
+        <li><span><span class="engine-highlight">Noclip</span> — full noclip with a flash on each blocked death and a Die below line: set it to 97% and a hit that would take this attempt&rsquo;s accuracy under 97% kills you as if noclip were off. Or leave it at 0 and just vibe.</span></li>
+        <li><span><span class="engine-highlight">Noclip accuracy</span> — the share of this attempt&rsquo;s ticks on which noclip didn&rsquo;t have to save you, shown at the top of the screen while noclip is on. A reset or a respawn starts it over. Optional. Pairs with Die below.</span></li>
+        <li><span><span class="engine-highlight">Autoclicker</span> — fully independent Hold Ticks, Release Ticks, and Clicks Per Hold per player, matching Silicate's own model, with a one-shot Copy to Player 2. Only while holding clicks just while you hold jump yourself, for either player. Plain rhythms (hold and release of 1 to 15 ticks, one click per hold, no swift clicks) are stored as GBR6 Type C: 4 bytes per 65,535 clicks. The description of the pattern is stored, not the output. This is unique to GucciBot publicly.</span></li>
         <li><span><span class="engine-highlight">Frame advance and frame stepping</span> — pause the physics loop and step forward one frame at a time. Useful for precise input placement, for debugging, for watching a crash in slow motion with full composure.</span></li>
-        <li><span><span class="engine-highlight">Hotkeys for everything</span> — every feature has a rebindable hotkey. Toggle noclip mid-run. Toggle recording. Frame advance. Backwards step. Intentional death. All keybindable. None of them conflict with GD unless you set them to.</span></li>
+        <li><span><span class="engine-highlight">Hotkeys</span> — 19 rebindable keys (Settings &gt; Keybinds): open the menu, frame advance and step back, start or stop playback, noclip, intentional death, safe mode, Prevent death, the autoclicker, hitboxes, Compact Mode and more. A toggle by key sticks after a restart, same as the menu switch. None of them conflict with GD unless you set them to. Not on iOS, where no key reaches the mod.</span></li>
         <li><span><span class="engine-highlight">Layout mode</span> — strips the visual layer. Background becomes flat. Ground becomes flat. Decorative objects become invisible. The physics still run. You see the geometry, nothing else. Pure.</span></li>
         <li><span><span class="engine-highlight">No mirror effect</span> — suppress the visual flip when the level mirrors. Physics unaffected. Optional: recording-only mode so it only suppresses during record, not playback.</span></li>
-        <li><span><span class="engine-highlight">Bot settings presets</span> — save your entire configuration as a named preset. TPS, speed, lock delta mode, SSB fix, backwards stepping, noclip threshold — all of it. Load it back with one click. Swap between setups instantly.</span></li>
-        <li><span><span class="engine-highlight">Metadata editor</span> — rename any macro, change its author tag, edit the metadata without rerecording. It&rsquo;s a file and the file has fields and you can change them. Organized.</span></li>
-        <li><span><span class="engine-highlight">Autosave at level end</span> — when the level completes, the current macro saves automatically if a name is set. Optional. Defaults off. The kind of feature you forget about until you desperately need it.</span></li>
-        <li><span><span class="engine-highlight">Autosave on timer</span> — saves the macro every N seconds during recording. Configurable interval. Runs in the background. Also the kind of feature you forget about until you desperately need it. Enable both.</span></li>
-        <li><span><span class="engine-highlight">Auto safe mode</span> — on by default. Cheat during an attempt (a macro playing, noclip, speedhack, a TPS other than 240, the autoclicker, Prevent Death, frame advance) and that attempt just doesn&rsquo;t count: no completion, no new best, no percentage, nothing sent to the servers. Turn it off and a small red dot sits in the corner while a cheat&rsquo;s on, right there in your recordings. Keep it honest. Brrr.</span></li>
-        <li><span><span class="engine-highlight">Setup check</span> — the engine breaks with GD&rsquo;s Auto-Checkpoints, other mods&rsquo; practice fixes, Frame Extrapolation and a second bot running alongside. GucciBot checks for all of them and tells you, once per launch and again when you hit Record or Play. It never touches another mod&rsquo;s settings.</span></li>
+        <li><span><span class="engine-highlight">Bot settings presets</span> — save the engine settings under a name and load them back in one click: TPS, speed, lock delta, scroll speed fix, backwards stepping, frame extrapolation, Prevent death, auto flip, maintain gravity, mirror inputs, noclip and autosave (Hacks &gt; Presets). Render settings have presets of their own. Swap between setups instantly.</span></li>
+        <li><span><span class="engine-highlight">Edit a macro</span> — rename it from its &hellip; menu in Saved macros; Macro Tools &gt; Edit a macro changes the name stored in it, its level, its starting TPS and its TPS changes, without re-recording. It&rsquo;s a file and the file has fields and you can change them. Organized.</span></li>
+        <li><span><span class="engine-highlight">Autosave at level end</span> — finish the level while recording and the macro saves under its name. On by default; a macro with no name isn&rsquo;t saved until you give it one. The kind of feature you forget about until you desperately need it.</span></li>
+        <li><span><span class="engine-highlight">Autosave on timer</span> — saves the macro every few minutes while you record (you pick, from half a minute to 30), once it has a name. Runs in the background. Also the kind of feature you forget about until you desperately need it. Enable both.</span></li>
+        <li><span><span class="engine-highlight">Block inputs during playback</span> — on by default, as in Silicate: while a macro plays, only the macro presses buttons, and your own clicks don&rsquo;t reach the game. Switch it off (Macro &gt; Recording and playback) to let them through.</span></li>
+        <li><span><span class="engine-highlight">Auto safe mode</span> — on by default. Cheat during an attempt (a macro playing, Calculate or the Pathfinder running, noclip, speedhack, a TPS other than 240, the autoclicker, Prevent Death, frame advance, Force Platformer, or anything that shows the way through the level: Click Indicators, the Survival Indicator, the path preview, the macro path, Practice range or a trainer&rsquo;s ghosts) and that attempt just doesn&rsquo;t count: no completion, no new best, no percentage, nothing sent to the servers. Turn it off and a small red dot sits in the corner while a cheat&rsquo;s on, right there in your recordings. Keep it honest. Brrr.</span></li>
+        <li><span><span class="engine-highlight">Setup check</span> — the engine breaks with GD&rsquo;s Auto-Checkpoints, other mods&rsquo; practice fixes, Mega Hack&rsquo;s or QOLMod&rsquo;s Frame Extrapolation (not GucciBot&rsquo;s own) and a second bot running alongside. GucciBot checks for all of them and tells you, once per launch and again when you hit Record or Play. It never touches another mod&rsquo;s settings.</span></li>
         <li><span><span class="engine-highlight">Disable bot</span> — one switch takes GucciBot out of the game completely, no restart: every hook and patch comes out until you flip it back.</span></li>
         <li><span><span class="engine-highlight">RNG lock</span> — freezes the random seed so shake effects and randomized elements behave identically between attempts. Deterministic. Consistent. Locked.</span></li>
-        <li><span><span class="engine-highlight">Render tab</span> — full video recording with codec dropdown (h264_nvenc, hevc_nvenc, libx264, av1 and more), audio codec dropdown (aac, libopus, libmp3lame), pixel format selector, separate video and audio args fields, resolution, FPS, bitrate, output path. Optional 4-track audio split too — combined mix, music, SFX, and frame-window cues, each on their own track instead of mixed into one. All configurable. All saved. All yours.</span></li>
-        <li><span><span class="engine-highlight">Click sounds</span> — plays audio feedback on inputs during recording and optionally during playback. Configurable per player. P1 and P2 have separate packs. Background noise support.</span></li>
-        <li><span><span class="engine-highlight">Audio pitch with speedhack</span> — when speedhack is active, the audio pitch scales with the speed. 2x speed, 2x pitch. Sounds natural. Doesn&rsquo;t sound like a chipmunk. Actually sounds natural.</span></li>
+        <li><span><span class="engine-highlight">Render tab</span> — FFmpeg video. Type any encoder into Codec (blank picks one for your graphics card: h264_nvenc, h264_amf, h264_qsv or libx264, and falls back to libx264 if that one won&rsquo;t open) and into Audio codec (aac by default). A pixel format picker, an Extra FFmpeg options field, width, height, FPS, bitrate, file type, output folder and file name, render presets and anticroom&rsquo;s intro card, every line of it editable. Optional separate audio tracks put the full mix, the music, the sound effects and the frame-window cues on four tracks of their own. All saved. All yours. Windows only for now.</span></li>
+        <li><span><span class="engine-highlight">Click sounds</span> — a click on every jump press and a release sound when you let go, from the built-in Clickbot pack or your own. It clicks for a playing macro&rsquo;s inputs too, and in renders if you want. Soft clicks for quick re-presses, background noise, and a separate pack for player 2 in two-player levels.</span></li>
+        <li><span><span class="engine-highlight">Audio pitch follows speed</span> — one switch (Hacks &gt; Engine), on by default: the music and sounds play faster or slower with the game speed, and at their normal pitch when it&rsquo;s off. 2x speed, 2x pitch. Sounds natural. Doesn&rsquo;t sound like a chipmunk. Actually sounds natural.</span></li>
         <li><span><span class="engine-highlight">Frame extrapolation</span> — visual position extrapolates between physics ticks. At 240 TPS the visuals update smoothly, not in discrete jumps. The game looks right. The physics are right. Everything is right.</span></li>
-        <li><span><span class="engine-highlight">HUD label system</span> — customizable on-screen labels showing TPS, current frame, player position, velocity, rotation. Configurable scale, opacity, anchor position. Information where you want it.</span></li>
+        <li><span><span class="engine-highlight">HUD label system</span> — customizable on-screen labels showing TPS, current frame, player position, velocity, rotation, and CPS and Max CPS (jump presses in the last second, yours or the macro&rsquo;s while it plays, and the most in any one second this attempt). Configurable scale, opacity, anchor position. Information where you want it.</span></li>
+        <li><span><span class="engine-highlight">Other bots&rsquo; macros</span> — Saved macros lists GDR, Silicate, TcBot, ToastyReplay, yBot, xdBot, Mega Hack, Echo and more under From other bots, one click to convert: 27 formats read, 21 written (Export as, from any macro&rsquo;s &hellip; menu). Or Import a macro from anywhere.</span></li>
+        <li><span><span class="engine-highlight">Frame Editor</span> — a timeline of a macro&rsquo;s inputs: drag, stretch or shorten any press, with undo and redo (Macro Tools &gt; Frame Editor). Check macro (Saved macros) lists anything that would desync playback.</span></li>
+        <li><span><span class="engine-highlight">Editor tools</span> — Macro Buffing lays the path you played into the level as objects, spider snaps included; Replace All turns every object of one ID into another (Macro Tools &gt; Editor Tools).</span></li>
+        <li><span><span class="engine-highlight">Hitboxes</span> — collision boxes over the level in play, practice, recording and playback, optionally only once you die, with a trail and your own colors (Macro page).</span></li>
+        <li><span><span class="engine-highlight">Path preview</span> — lines ahead of the player, green if you hold, red if you let go (Hacks &gt; Prediction). Counts as a cheat.</span></li>
+        <li><span><span class="engine-highlight">Click Indicators</span> — the macro&rsquo;s clicks coming at you over the level and down a rhythm lane, scored Perfect / OK / Miss, with every option of Bogdaner09&rsquo;s free mod (JMF Trainer and Trainer pages). Safe mode counts it as a cheat.</span></li>
+        <li><span><span class="engine-highlight">Survival Indicator</span> — a live green or red readout of whether clicking right now survives what&rsquo;s coming, in four styles, with a click cue and an accuracy streak (trainer pages). Safe mode counts it as a cheat too.</span></li>
+        <li><span><span class="engine-highlight">Video Mode</span> — a full-screen video on the click bar&rsquo;s clock, with an Alignment Tool; its opacity, sync offset and nudge sit in a small Video settings window over the video (trainer pages; Windows only).</span></li>
+        <li><span><span class="engine-highlight">Compact Mode</span> — a small window for while you actually play: Off / Rec / Play, a saved macro to load, the name, Save and Calculate, tick rate and game speed, and Pause and step buttons in a level (Settings &gt; Look, or a key you bind).</span></li>
         <li><span><span class="engine-highlight">20 themes with 18 file extensions</span> — GucciBot, ToosiiBot &times;3, JaBot, GiddeyBot, BamBot, SexyyBot, JuiceBot, ButlerBot, SaweetieBot, MaybachBot, RomoBot, GrizzleyBot, Red Kingdom, LemonadeBot, BrrrBot, WakaBot, YoungstaBot, KnockerzBot. Each has its own color palette. Each saves macros with its own extension. The payload is always GBR6. The extension is the drip.</span></li>
       </ul>
       <div class="reveal" style="display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:80px">
@@ -200,11 +210,11 @@
         </div>
         <div style="border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02)">
           <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.75rem">The Build Story</div>
-          <p style="font-size:0.75rem;color:#888;line-height:1.9">Years of internal churn. Engine swaps, format rewrites, false starts that never saw daylight. None of that was ever really "released" &mdash; so we stopped counting it. Everything lined up: engine, format, themes, render, and now a full practice trainer. This is the first one we're calling done. 1.0. Brrr.</p>
+          <p style="font-size:0.75rem;color:#888;line-height:1.9">Years of internal churn. Engine swaps, format rewrites, false starts that never saw daylight. None of that was ever really "released" &mdash; so we stopped counting it. Everything lined up: engine, format, themes, render, and now a full practice trainer. 1.0 was the first one we called done; 2.0 is the one we're finishing now. Brrr.</p>
         </div>
         <div style="border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02)">
           <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.75rem">Disciplines</div>
-          <p style="font-size:0.75rem;color:#888;line-height:1.9">GWDdoS&rsquo;s Astral. Silicate&rsquo;s engine. GBR6&rsquo;s format. GucciBot&rsquo;s themes. All four disciplines. GEN. ILL. SLL. PPLL. All top tier. Simultaneously. The other bots don&rsquo;t do this. We do. Brrr.</p>
+          <p style="font-size:0.75rem;color:#888;line-height:1.9">Silicate&rsquo;s engine. GBR6&rsquo;s format. Calculate&rsquo;s frame windows. GucciBot&rsquo;s themes. All four disciplines. GEN. ILL. SLL. PPLL. All top tier. Simultaneously. The other bots don&rsquo;t do this. We do. Brrr.</p>
         </div>
       </div>
     </div>
@@ -231,7 +241,7 @@
       <div class="feature-card" data-num="02">
         <div class="feature-icon">&#x25EF;</div>
         <div class="feature-name">The Overlay</div>
-        <div class="feature-desc">Rings in the level at every input, sized and colored by how much room that click actually has. The tight ones are obvious at a glance. Default Look draws it like the counter in NaN GD&rsquo;s videos, or turn it off and drive the whole thing yourself. Toggle it mid-level without leaving the run.</div>
+        <div class="feature-desc">Rings in the level at every input, sized and colored by how much room that click actually has. The tight ones are obvious at a glance. Default Look draws it like the counter in NaN GD&rsquo;s videos, or turn it off and drive the whole thing yourself. Toggle it mid-level without leaving the run, and the markers you just passed redraw in the new look. Put your own text in the level too, over any measured input.</div>
         <div class="feature-badge">See the tight ones. Instantly.</div>
       </div>
       <div class="feature-card" data-num="03">
@@ -250,7 +260,7 @@
     <div class="reveal" style="margin-top:3rem;border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02);max-width:760px">
       <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.75rem">Where The Algorithm Came From</div>
       <p style="font-size:0.75rem;color:#888;line-height:1.9;margin-bottom:.75rem">The whole frame-window trend started with NaN GD, and the L* precision number GucciBot puts on a macro comes from his formula: solve for the precision a player would need to clear the level inside a target time, given every miss costs a restart from the start. It&rsquo;s published at <a href="https://nandl.pages.dev/#formula" style="color:var(--gold)">nandl.pages.dev</a>. He&rsquo;s careful to say frame windows alone don&rsquo;t determine difficulty, and GucciBot says the same.</p>
-      <p style="font-size:0.75rem;color:#888;line-height:1.9">Juice designed the measurement algorithm Calculate ran on through 1.7, then spent round after round breaking it on purpose until it stopped being wrong. His Alignment-Independent method is back in 2.0: when a tight click sits right after another input, Calculate counts it his way too, so a window is a window no matter where the input before it landed, and the Frame Editor shows the suggestion. Manual entries for the Trainer started as his idea too. Brrr.</p>
+      <p style="font-size:0.75rem;color:#888;line-height:1.9">Juice designed the measurement algorithm Calculate ran on through 1.7, then spent round after round breaking it on purpose until it stopped being wrong. His Alignment-Independent method is back in 2.0: when a tight click sits right after another input, Calculate counts it his way too, so a window is a window no matter where the input before it landed, and the Frame Editor shows the suggestion. Manual Frame Windows (Calculate &gt; Windows by hand) started as his idea too. Brrr.</p>
     </div>
   </div>
 </section>
@@ -490,7 +500,7 @@
       </div>
     </div>
     <p style="max-width:600px; font-size:0.8rem; color:#888; line-height:1.9; margin-top:2rem;">
-      Twenty not drippy enough? Build your own &mdash; full color palette, your own extension, your own quotes, your own Big Brrr track if you want one. Saved and switchable right alongside all of these.
+      Twenty not drippy enough? Build your own on the Themes page &mdash; full color palette, your own extension, your own quotes, BrrrBot&rsquo;s live snow falling behind the menu if you want it, your own Big Brrr track if you want one. Saved and switchable right alongside all of these.
     </p>
   </div>
 </section>
@@ -526,7 +536,7 @@
             <div style="font-size:0.75rem;color:#888;line-height:1.8;font-style:italic">&ldquo;They asked me what bot I use. I said the one with my name on it. What kind of question is that.&rdquo;</div>
           </div>
           <div style="border-left:2px solid rgba(212,175,55,0.3);padding-left:1.25rem">
-            <div style="font-size:0.75rem;color:#888;line-height:1.8;font-style:italic">&ldquo;The autoclicker delta compression stores octillions of clicks in four bytes. I got more chains than that. Respect.&rdquo;</div>
+            <div style="font-size:0.75rem;color:#888;line-height:1.8;font-style:italic">&ldquo;The autoclicker delta compression stores sixty-five thousand clicks in four bytes. I got more chains than that. Respect.&rdquo;</div>
           </div>
           <div style="border-left:2px solid rgba(212,175,55,0.3);padding-left:1.25rem">
             <div style="font-size:0.75rem;color:#888;line-height:1.8;font-style:italic">&ldquo;They said the bot was made by Claude.ai. I said good. I don&rsquo;t do things without AI involvement anymore. Brrr.&rdquo;</div>
@@ -614,10 +624,10 @@
   </svg>
   <div class="container" style="position:relative;z-index:1">
     <div class="reveal">
-      <div class="section-label">New in 1.0</div>
+      <div class="section-label">Since 1.0</div>
       <h2 class="section-title">Nigel&rsquo;s Jupiter<br>My Favourite<br>Trainer.</h2>
       <p style="max-width:560px; font-size:0.8rem; color:#b6b0e8; line-height:1.9;">
-        A whole practice tab built around one level. Loads itself &mdash; the macro, the click data, all of it &mdash; the moment you open the mod. No setup. Brrr.
+        A whole practice tab built around one level. Loads itself &mdash; the macro, the click data, all of it &mdash; the moment you open the mod. No setup, apart from one bot run for the macro ghost. Brrr.
       </p>
     </div>
     <div class="feature-grid reveal">
@@ -630,7 +640,7 @@
       <div class="feature-card" data-num="02">
         <div class="feature-icon">◐</div>
         <div class="feature-name">Ghosts</div>
-        <div class="feature-desc">The macro&rsquo;s ghost runs live in the game world next to you. Your own best attempt this session gets tracked and rendered too &mdash; a second ghost, your own. Scrub Preview freezes either one at any point in the level so you can study a section without touching your actual run.</div>
+        <div class="feature-desc">The macro&rsquo;s ghost runs live in the level next to you. Your own best attempt this session gets tracked and drawn too &mdash; a second ghost, your own, lined up with your run. Both show up in Jupiter My Favourite itself, nowhere else. Scrub freezes both at one point in the level so you can study a section without touching your actual run. On the JMF tab the macro ghost needs one bot run first: play a JMF macro with the bot to the end, then press Use it under Ghosts.</div>
         <div class="feature-badge">Two ghosts. Zero teleporting.</div>
       </div>
       <div class="feature-card" data-num="03">
@@ -652,7 +662,7 @@
         <p style="font-size:0.75rem;color:#b6b0e8;line-height:1.9">This one&rsquo;s built around Jupiter My Favourite specifically. Want the exact same toolset for a macro of your own? That&rsquo;s the tab right next to it.</p>
       </div>
       <div style="border:1px solid rgba(252,245,80,0.25);padding:1.75rem;background:rgba(252,245,80,0.04)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:#FCF550;opacity:.7;margin-bottom:.75rem">Also In Settings &rarr; Fun</div>
+        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:#FCF550;opacity:.7;margin-bottom:.75rem">Also In Settings &rarr; BIG BRRRR</div>
         <p style="font-size:0.75rem;color:#b6b0e8;line-height:1.9">BIG BRRRR. A toggle. It plays something. It makes the menu bounce. It mutes the game while it does. That&rsquo;s all you&rsquo;re getting. You&rsquo;ll know it when you see it. Brrr.</p>
       </div>
     </div>
@@ -663,7 +673,7 @@
 <section id="trainer-any" style="background:var(--black)">
   <div class="container">
     <div class="reveal">
-      <div class="section-label">New in 1.1</div>
+      <div class="section-label">Since 1.1</div>
       <h2 class="section-title">Same Trainer.<br>Any Macro.<br>Your Call.</h2>
       <p style="max-width:560px; font-size:0.8rem; color:#888; line-height:1.9;">
         Right next to the Jupiter tab, same toolset underneath, pointed at whichever of your own saved macros you pick instead of one bundled level. Swap it whenever you want.
@@ -767,9 +777,9 @@
       </div>
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
-        <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I asked my friend what bot to use. He said yBot. I said my bot has the yBot file size benchmark built into its format spec AND Astral AND Silicate AND ten themes. He went quiet. He uses GucciBot now.&rdquo;</div>
+        <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I asked my friend what bot to use. He said yBot. I said my bot has the yBot file size benchmark built into its format spec AND Silicate AND ten themes. He went quiet. He uses GucciBot now.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— ConvincedHim2024&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; The friend is fictional. The yBot benchmark is real. kepe made yBot. GWDdoS made Astral. Nigelx1 put them in a gold wrapper. This is the pipeline.</div>
+        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; The friend is fictional. The yBot benchmark is real. kepe made yBot. Silicate is the engine. Nigelx1 put it all in a gold wrapper. This is the pipeline.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
@@ -854,8 +864,8 @@
       </div>
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">4</div>
-        <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Bytes for ∞ clicks&#x204E;</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">&#x204E; Autoclicker delta only. Regular inputs are 2 bytes each.</div>
+        <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Bytes per 65,535 clicks&#x204E;</div>
+        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">&#x204E; Autoclicker runs only. Regular inputs are 2 bytes each.</div>
       </div>
 
       <div style="background:var(--black);padding:2.5rem 2rem">
@@ -874,7 +884,7 @@
         <div style="font-size:0.5rem;color:#333;margin-top:.4rem">&#x204E; All fictional. Do not cite these in academic papers.</div>
       </div>
       <div style="background:var(--black);padding:2.5rem 2rem">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">32</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">44</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Features</div>
         <div style="font-size:0.5rem;color:#333;margin-top:.4rem">counted them. every single one is in the engine list above. go look.</div>
       </div>
@@ -931,22 +941,22 @@
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">Can I use GucciBot on a Mac?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">Yes, since 2.0.0-beta.3. GucciBot runs on macOS, iOS and Android as well as Windows, all from the same download &mdash; experimental on those three, so if something&rsquo;s off, open an issue. Pathfinder, rendering and Video Mode still need Windows for now. On a phone, the menu opens from the GucciBot button in the pause menu, fills the screen and scrolls when you drag it. On a Mac, Option opens it. Nigelx1 got asked really nicely.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">Yes, since 2.0.0-beta.3. GucciBot runs on macOS, iOS and Android as well as Windows, all from the same download &mdash; experimental on those three, so if something&rsquo;s off, open an issue. Pathfinder, rendering, Video Mode and tick rates under 162 TPS (those run at 240 there) still need Windows for now. On a phone, the menu opens from the GucciBot button in the pause menu, fills the screen and scrolls when you drag it. On a Mac, Option opens it. Nigelx1 got asked really nicely.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">Why is the autoclicker delta compression unique?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">Because instead of storing every single autoclicker press and release (which could be millions of inputs for a long level), GBR6 Type C stores the <em style="color:var(--gold)">pattern description</em> — hold ticks, release ticks, start frame. From that, the entire click sequence can be reconstructed at playback. 4 bytes for any autoclicker macro of any length. Nobody else has published this.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">Because instead of storing every single autoclicker press and release (which could be millions of inputs for a long level), GBR6 Type C stores the <em style="color:var(--gold)">pattern description</em> — hold ticks, release ticks and how many clicks. From that, the whole run is rebuilt at playback: 4 bytes for up to 65,535 clicks, and 4 more for each 65,535 after that. Nobody else has published this.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">What is SLL and why is GucciBot top tier in it?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">SLL stands for Silent Levels List — a GD community discipline focused on completing specific levels with extreme precision. GucciBot uses the Silicate engine which has the most accurate TPS bypass and delta locking of any public bot. With GWDdoS&rsquo;s Astral additions, the physics accuracy is competitive at the top of that scene. We updated the rating from &ldquo;Competitive&rdquo; to &ldquo;Top Tier&rdquo; partway through building this website. The old rating is preserved below for historical accuracy. The new rating is more accurate. We were being modest before.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">SLL stands for Silent Levels List — a GD community discipline focused on completing specific levels with extreme precision. GucciBot uses the Silicate engine which has the most accurate TPS bypass and delta locking of any public bot. We updated the rating from &ldquo;Competitive&rdquo; to &ldquo;Top Tier&rdquo; partway through building this website. The new rating is more accurate. We were being modest before.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">Who are kepe and GWDdoS, and what did they contribute?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">GWDdoS built Astral, which when combined with Silicate&rsquo;s engine inside GucciBot, makes the whole thing top tier in all four disciplines simultaneously. This is not a small thing. Before Astral was added the SLL rating was &ldquo;Competitive.&rdquo; After, it became &ldquo;Top Tier.&rdquo; Numbers don&rsquo;t lie. kepe made yBot — the file size benchmark GBR6 was designed to match — though he's not personally involved with GucciBot in any way. GWDdoS is a real contributor, credited for Astral and for pushing the codebase cleanup that got this repo public-ready.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">kepe made yBot — the file size benchmark GBR6 was designed to match — though he's not personally involved with GucciBot in any way. GWDdoS is a real contributor, credited for optimization help and for pushing the codebase cleanup that got this repo public-ready.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
@@ -966,12 +976,12 @@
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">Why are there two Trainer tabs?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">The Jupiter tab is the original &mdash; built around one level, permanently, on purpose. The new Trainer tab is the same toolset generalized to work with whatever macro you actually have loaded. One is a dedication. The other is a utility. Both are real. Use whichever one your grind actually needs.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">The Jupiter tab is the original &mdash; built around one level, permanently, on purpose. The new Trainer tab is the same toolset for any saved macro you pick in it. One is a dedication. The other is a utility. Both are real. Use whichever one your grind actually needs.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">Will there be a GucciBot 2.0?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">Probably. The Jupiter My Favourite Trainer shipped after 1.0 was already supposed to be "done," then a bug-fix pass happened, then a whole second Trainer tab and a beat-synced BIG BRRRR showed up for 1.1, then 1.2 brought real bug fixes from actual beta testing, a compact window, and two more themes. Clearly the answer to "are we finished" is never actually yes. The codebase is clean. Silicate is in. The themes are in (all twenty of them). The format is solid. Whatever's next will probably be for new features, not for fixing things that were already broken -- probably. That is growth. That is the drip mentality. Brrr.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">You&rsquo;re looking at it. 2.0 is in beta now (2.0.0-beta.5), and the full release is next. The <a href="/changelog/" style="color:var(--gold)">Changelog</a> has what each beta added. Clearly the answer to &ldquo;are we finished&rdquo; is never actually yes. That is growth. That is the drip mentality. Brrr.</div>
       </div>
     </div>
   </div>
@@ -981,7 +991,7 @@
 <div style="padding:3rem 2rem;border-top:1px solid rgba(255,255,255,0.04)">
   <div class="container">
     <div style="font-size:0.5rem;color:#2a2a2a;line-height:1.9;letter-spacing:0.3px;max-width:900px">
-      &#x204E; DISCLAIMER: GucciBot is an independent fan project and is not affiliated with, endorsed by, sponsored by, or in any way associated with Radric Delantic Davis, professionally known as Gucci Mane, 1017 Records, Atlantic Records, or any related entities. The name "GucciBot" is used as a fan tribute and constitutes nominative fair use. All quotes attributed to Gucci Mane on this page are entirely fictional and were written by Claude.ai for comedic purposes at no charge to Gucci Mane. Gucci Mane has not played Geometry Dash to our knowledge, has not used GucciBot, has never heard of GucciBot, and has not made any statements about macro bots, TPS, lock delta, GBR6 hypercompression, backwards stepping, or Geode mods. The "Gucci Mane Certified® Platinum Bot" designation is not a real certification, trademark, or designation of any kind and was invented by Claude.ai at approximately 2am during a build session. It is not recognized by any standards body, industry organization, or Gucci Mane himself. The star on the superscript of "Yes" in the FAQ section that says "No" in tiny text is an accurate representation of the factual answer to that question. The reviews attributed to "Z***k" and "W*****f" are entirely fictional and any resemblance to real Geometry Dash players is coincidental and intended as affectionate satire. GucciBot is a Geode mod for Geometry Dash 2.2081 (Windows, macOS, iOS and Android). Geometry Dash is a registered trademark of RobTop Games AB. Geode is an open-source mod loader not affiliated with RobTop Games. The GBR6 format, Type A/B/C compression, all eighteen themed extensions, the render settings UI layout, the autoclicker delta compression algorithm (Type C), the macro diff viewer, the bot settings presets system, and the overall GucciBot branding are original work by Nigelx1. The Silicate physics engine including the BotUpdater, PracticeFix system, CCScheduler hook, CCDirector hook, all midhook implementations, and all four binary patch offsets are the work of peony, used with deep appreciation. GucciBot, like Silicate, is licensed under the GNU General Public License v3.0; its source is published in full. The Astral contributions that elevate GucciBot to top tier in all four disciplines are the work of GWDdoS. The Pathfinder engine that is the default from version 2.0.0-beta.2 is Absense's pathfinder by Absent, ported in; several earlier Pathfinder improvements in version 2.alpha.2, the in-game assistant server, and Check Macro, Replace All, the respawn timer and the black orb autoclicker loop in version 2.alpha.3 are ideas taken from Absense and reimplemented here. kepe built yBot, whose file size standard GBR6 was designed to meet. The TTR renderer backend is the work of ToastexGD and powered rendering through version 1.x; rendering from 2.0 onward runs on the Silicate renderer. The frame-window accuracy fixes in version 1.6.1, the entire frame-window analyzer shipped in version 1.8, and the sub-tick CBF recording and render intro card in version 2.alpha.3 are the work of anticroom, GucciBot's first outside contributor. The whole frame-window trend started with NaN GD, and the L* precision formula is his work, published at nandl.pages.dev; the C++ implementation of it used here is the work of C0nscious, from Frame Window Counter, used under the MIT license. L* is a precision measurement derived from timing windows and is not a difficulty rating; NaN says so himself and so do we. The Toosii, Ja, Giddey, Bam, Sexyy, Butler, Saweetie, Maybach, Romo, Grizzley, Waka, Youngsta, and Knockerz themes are named in tribute to their respective inspirations who have no connection to this software. The JuiceBot theme is named for and colored after an actual beta tester of this software, which is a different situation entirely. This website including all copy, the layout, the fake quotes, the footnotes, the tiny disclaimers, the stats section, the testimonials, the legal wall you are currently reading, and the decision to make it this long was produced by Claude.ai (Anthropic) in collaboration with Nigelx1. Claude.ai does not receive royalties. Brrr.
+      &#x204E; DISCLAIMER: GucciBot is an independent fan project and is not affiliated with, endorsed by, sponsored by, or in any way associated with Radric Delantic Davis, professionally known as Gucci Mane, 1017 Records, Atlantic Records, or any related entities. The name "GucciBot" is used as a fan tribute and constitutes nominative fair use. All quotes attributed to Gucci Mane on this page are entirely fictional and were written by Claude.ai for comedic purposes at no charge to Gucci Mane. Gucci Mane has not played Geometry Dash to our knowledge, has not used GucciBot, has never heard of GucciBot, and has not made any statements about macro bots, TPS, lock delta, GBR6 hypercompression, backwards stepping, or Geode mods. The "Gucci Mane Certified® Platinum Bot" designation is not a real certification, trademark, or designation of any kind and was invented by Claude.ai at approximately 2am during a build session. It is not recognized by any standards body, industry organization, or Gucci Mane himself. The star on the superscript of "Yes" in the FAQ section that says "No" in tiny text is an accurate representation of the factual answer to that question. The reviews attributed to "Z***k" and "W*****f" are entirely fictional and any resemblance to real Geometry Dash players is coincidental and intended as affectionate satire. GucciBot is a Geode mod for Geometry Dash 2.2081 (Windows, macOS, iOS and Android). Geometry Dash is a registered trademark of RobTop Games AB. Geode is an open-source mod loader not affiliated with RobTop Games. The GBR6 format, Type A/B/C compression, all eighteen themed extensions, the render settings UI layout, the autoclicker delta compression algorithm (Type C), the macro diff viewer, the bot settings presets system, and the overall GucciBot branding are original work by Nigelx1. The Silicate physics engine including the BotUpdater, PracticeFix system, CCScheduler hook, CCDirector hook, all midhook implementations, and all four binary patch offsets are the work of peony, used with deep appreciation. GucciBot, like Silicate, is licensed under the GNU General Public License v3.0; its source is published in full. The Pathfinder engine that is the default from version 2.0.0-beta.2 is Absense's pathfinder by Absent, ported in; several earlier Pathfinder improvements in version 2.alpha.2, the in-game assistant server, and Check Macro, Replace All, the respawn timer and the black orb autoclicker loop in version 2.alpha.3 are ideas taken from Absense and reimplemented here. kepe built yBot, whose file size standard GBR6 was designed to meet. The TTR renderer backend is the work of ToastexGD and powered rendering through version 1.x; rendering from 2.0 onward runs on the Silicate renderer. The frame-window accuracy fixes in version 1.6.1, the entire frame-window analyzer shipped in version 1.8, and the sub-tick CBF recording and render intro card in version 2.alpha.3 are the work of anticroom, GucciBot's first outside contributor. The whole frame-window trend started with NaN GD, and the L* precision formula is his work, published at nandl.pages.dev; the C++ implementation of it used here is the work of C0nscious, from Frame Window Counter, used under the MIT license. L* is a precision measurement derived from timing windows and is not a difficulty rating; NaN says so himself and so do we. The Toosii, Ja, Giddey, Bam, Sexyy, Butler, Saweetie, Maybach, Romo, Grizzley, Red Kingdom, Waka, Youngsta, and Knockerz themes are named in tribute to their respective inspirations who have no connection to this software. The JuiceBot theme is named for and colored after an actual beta tester of this software, which is a different situation entirely. This website including all copy, the layout, the fake quotes, the footnotes, the tiny disclaimers, the stats section, the testimonials, the legal wall you are currently reading, and the decision to make it this long was produced by Claude.ai (Anthropic) in collaboration with Nigelx1. Claude.ai does not receive royalties. Brrr.
     </div>
   </div>
 </div>
