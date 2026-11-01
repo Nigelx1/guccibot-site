@@ -52,7 +52,8 @@
    *                         delta marker and emits nothing.
    */
   var GBR6_MAGIC = [0x47, 0x42, 0x52, 0x36]; // "GBR6"
-  var GBR6_TWO_PLAYER = 1, GBR6_HAS_LEVELNAME = 16, GBR6_HAS_DEATHS = 32, GBR6_HAS_SUBTICK = 64;
+  var GBR6_TWO_PLAYER = 1, GBR6_HAS_LEVELNAME = 16, GBR6_HAS_DEATHS = 32, GBR6_HAS_SUBTICK = 64,
+      GBR6_HAS_TPS = 128;
 
   function gbr6DecodeStream(bytes, isP2) {
     var out = [], frame = 0, i = 0, pending = 0;
@@ -247,25 +248,47 @@
         var p2 = buf.subarray(pos, pos + p2size); pos += p2size;
         var inputs = gbr6DecodeStream(p1, false).concat(gbr6DecodeStream(p2, true));
         inputs.sort(function (a, b) { return a.frame - b.frame; });
-        // GucciBot 2.alpha.3+: sub-tick offsets (SCBF) in a section after the
-        // level name and the deaths, keyed by the input itself.
-        if ((flags & GBR6_HAS_SUBTICK) && pos < buf.length) {
+        // The tail, as gbr6_format.cpp writes it: level name, deaths, sub-tick
+        // offsets (SCBF, 2.alpha.3+), then mid-macro TPS changes. A later
+        // block always has the blocks before it on disk, written empty when
+        // their flag is off, so each one can be found.
+        var hasSub = (flags & GBR6_HAS_SUBTICK) !== 0, hasTps = (flags & GBR6_HAS_TPS) !== 0;
+        var tpsChanges = [];
+        if ((hasSub || hasTps) && pos < buf.length) {
           if (flags & GBR6_HAS_LEVELNAME) pos += 2 + dv.getUint16(pos, true);
-          pos += 4 + dv.getUint32(pos, true) * 5;   // deaths: always written with this section
-          var sc = dv.getUint32(pos, true); pos += 4;
-          var offsets = {};
-          for (var s = 0; s < sc && pos + 14 <= buf.length; s++) {
-            var sf = dv.getUint32(pos, true), sb = buf[pos + 4], bits = buf[pos + 5];
-            offsets[sf + '|' + sb + '|' + (bits & 1) + '|' + ((bits >> 1) & 1)] = dv.getFloat64(pos + 6, true);
-            pos += 14;
+          pos += 4 + dv.getUint32(pos, true) * 5;   // deaths (an empty block if the flag is off)
+          if (hasSub) {
+            // Sub-tick offsets, keyed by the input itself.
+            var sc = dv.getUint32(pos, true); pos += 4;
+            var offsets = {};
+            for (var s = 0; s < sc && pos + 14 <= buf.length; s++) {
+              var sf = dv.getUint32(pos, true), sb = buf[pos + 4], bits = buf[pos + 5];
+              offsets[sf + '|' + sb + '|' + (bits & 1) + '|' + ((bits >> 1) & 1)] = dv.getFloat64(pos + 6, true);
+              pos += 14;
+            }
+            inputs.forEach(function (i) {
+              var o = offsets[i.frame + '|' + i.button + '|' + (i.down ? 1 : 0) + '|' + (i.player2 ? 1 : 0)];
+              if (o > 0 && o < 1) i.offset = o;
+            });
+          } else {
+            pos += 4;   // the empty sub-tick block
           }
-          inputs.forEach(function (i) {
-            var o = offsets[i.frame + '|' + i.button + '|' + (i.down ? 1 : 0) + '|' + (i.player2 ? 1 : 0)];
-            if (o > 0 && o < 1) i.offset = o;
-          });
+          // TPS changes: u32 frame, f64 rate. This page's model has one rate
+          // for the whole macro, so they are kept only to warn that the
+          // converted file can't carry them (see tpsNote below).
+          if (hasTps && pos + 4 <= buf.length) {
+            var tc = dv.getUint32(pos, true); pos += 4;
+            for (var t = 0; t < tc && pos + 12 <= buf.length; t++) {
+              var tf = dv.getUint32(pos, true), tv = dv.getFloat64(pos + 4, true);
+              pos += 12;
+              if (isFinite(tv) && tv > 0) tpsChanges.push({ frame: tf, tps: tv });
+            }
+          }
         }
         void version;
-        return { tps: tps > 0 ? tps : 240, inputs: inputs };
+        var rep = { tps: tps > 0 ? tps : 240, inputs: inputs };
+        if (tpsChanges.length) rep.tpsChanges = tpsChanges;
+        return rep;
       },
       write: function (rep) {
         var p1 = gbr6EncodeStream(rep.inputs.filter(function (i) { return !i.player2; }));
@@ -1125,7 +1148,7 @@
       duration: last / (rep.tps || 240),
       author: 'CONVERTED MACRO',
       seed: 0, coins: 0, ldm: false,
-      bot: { name: 'GucciBot', version: '1.7.1' },
+      bot: { name: 'GucciBot', version: '2.0' },
       level: { id: 0, name: 'LEVEL NAME' },
       inputs: list.map(function (i) {
         return { frame: i.frame, btn: i.button, '2p': i.player2, down: i.down };
@@ -1242,7 +1265,7 @@
         // v2 can store either tps or its reciprocal; bit 1 says which.
         var tps = (version === 1 || (flags & 2)) ? tpsOrDt : 1 / tpsOrDt;
         var p = 80;                 // 16-byte magic + 0x40 meta
-        var out = [];
+        var out = [], tpsAt = [];
 
         function varint() {
           var v = 0, shift = 1, byte;
@@ -1302,7 +1325,10 @@
               next = 'action';
             } else if (next === 'tps') {
               if (p + 4 > buf.length) break;
-              p += 4;               // a mid-replay tps change; we keep the header's
+              // A mid-replay tps change. The page keeps the header's rate and
+              // only notes where the change was, to warn about it.
+              tpsAt.push({ frame: frame2 });
+              p += 4;
               next = 'delta';
             } else {                // seed
               if (p + 8 > buf.length) break;
@@ -1313,7 +1339,9 @@
         } else {
           throw new Error('TCM: unsupported version ' + version + '.');
         }
-        return { tps: tps > 0 ? tps : 240, inputs: out };
+        var rep = { tps: tps > 0 ? tps : 240, inputs: out };
+        if (tpsAt.length) rep.tpsChanges = tpsAt;
+        return rep;
       },
       write: function (rep) {
         var list = rep.inputs.slice().sort(function (a, b) { return a.frame - b.frame; });
@@ -1664,7 +1692,7 @@
         var fps = metaLen >= 28 ? dv.getFloat32(16 + 24, true) : 240;
         var p = 16 + metaLen;
         for (var b = 0; b < blobs; b++) { p += 4 + dv.getUint32(p, true); }
-        var out = [], frame = 0;
+        var out = [], frame = 0, fpsAt = [];
         while (p < buf.length) {
           var v = 0, shift = 1, byte;
           do {
@@ -1677,11 +1705,13 @@
           var f = v & 15;
           frame += Math.floor(v / 16);
           var button = f >> 2;
-          if (button < 1 || button > 3) { p += 4; continue; }   // an FPS change
+          if (button < 1 || button > 3) { fpsAt.push({ frame: frame }); p += 4; continue; }   // an FPS change
           // Bit 0 is player ONE here, not player two.
           out.push({ frame: frame, button: button, down: (f & 2) !== 0, player2: (f & 1) === 0 });
         }
-        return { tps: fps > 0 ? fps : 240, inputs: out };
+        var rep = { tps: fps > 0 ? fps : 240, inputs: out };
+        if (fpsAt.length) rep.tpsChanges = fpsAt;
+        return rep;
       },
       write: function (rep) {
         var list = rep.inputs.slice().sort(function (a, b) { return a.frame - b.frame; });
@@ -1764,7 +1794,24 @@
   var $ = function (id) { return document.getElementById(id); };
 
   function clone(rep) {
-    return { tps: rep.tps, inputs: rep.inputs.map(function (i) { return Object.assign({}, i); }) };
+    var c = { tps: rep.tps, inputs: rep.inputs.map(function (i) { return Object.assign({}, i); }) };
+    if (rep.tpsChanges) c.tpsChanges = rep.tpsChanges.slice();
+    return c;
+  }
+
+  /* A macro whose TPS changes partway (GucciBot's .brrr, TcBot, yBot) can't
+   * be carried by this page: its model has one rate for the whole macro, so
+   * a converted file plays every input at the starting rate. Say so on load
+   * and on save, instead of handing back a file that quietly desyncs. */
+  function tpsNote(rep) {
+    var c = rep && rep.tpsChanges;
+    if (!c || !c.length) return '';
+    var first = c[0];
+    var rate = first.tps ? ', to ' + (Math.round(first.tps * 100) / 100) + ' TPS' : '';
+    return '<strong>This macro changes TPS ' + (c.length === 1 ? 'once' : c.length + ' times') +
+      '</strong> (first at frame ' + first.frame.toLocaleString() + rate + '). This converter keeps ' +
+      'one rate for the whole macro, so a file saved here plays all of it at ' + rep.tps + ' TPS ' +
+      'and will desync after that first change.';
   }
 
   function detect(name, buf, text) {
@@ -1824,9 +1871,11 @@
         $('loaded').classList.remove('hidden');
         $('s-name').textContent = file.name;
         $('s-fmt').textContent = 'Unknown';
-        show('err', '<strong>Couldn\'t recognise that format.</strong> It may be one of the ' +
-          'binary formats still listed as planned below &mdash; those genuinely aren\'t ' +
-          'implemented yet, so this isn\'t a bug in your file.');
+        show('err', '<strong>Couldn\'t recognize that format.</strong> This page reads the ' +
+          Object.keys(FORMATS).length + ' formats under Format support below. If the file is one ' +
+          'of them, it may be damaged or from a version of that bot this page doesn\'t know; if ' +
+          'it isn\'t, <a href="https://github.com/Nigelx1/GucciBot/issues" style="color:var(--gold)">' +
+          'open an issue</a> and say which bot made it.');
         current = original = { tps: 240, inputs: [] };
         refresh();
         return;
@@ -1870,11 +1919,15 @@
         return n > 0 && i.frame < current.inputs[n - 1].frame;
       });
 
+      var tpsWarn = tpsNote(current);
       if (backwards) {
         show('err', '<strong>This macro contains restarts.</strong> The frame numbers jump ' +
           'backwards, so it is a recording of several attempts rather than one run. Every ' +
           'attempt is loaded here, one after another &mdash; converting it as-is will not ' +
-          'give you a playable single run.');
+          'give you a playable single run.' + (tpsWarn ? '<br><br>' + tpsWarn : ''));
+      } else if (tpsWarn) {
+        show('warn', 'Loaded ' + current.inputs.length.toLocaleString() + ' inputs as ' +
+          FORMATS[key].name + '.<br><br>' + tpsWarn);
       } else {
         show('good', 'Loaded ' + current.inputs.length.toLocaleString() + ' inputs as ' +
           FORMATS[key].name + '.');
@@ -1922,9 +1975,16 @@
       list.appendChild(d);
     });
 
-    // Drop zone.
+    // Drop zone. It's a role=button with a tabindex, so Enter and Space open
+    // the file picker the way a click does (the keyboard couldn't before).
     var drop = $('drop');
     drop.addEventListener('click', function () { $('file').click(); });
+    drop.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        $('file').click();
+      }
+    });
     $('file').addEventListener('change', function (e) {
       if (e.target.files && e.target.files[0]) load(e.target.files[0]);
     });
@@ -2039,14 +2099,18 @@
       a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
       var droppedP2 = f.p1only && out.inputs.some(function (i) { return i.player2; });
-      show(droppedP2 ? 'err' : f.timeBased ? 'warn' : 'good',
+      var droppedTps = !!(out.tpsChanges && out.tpsChanges.length);
+      show(droppedP2 ? 'err' : (f.timeBased || droppedTps) ? 'warn' : 'good',
         'Saved as ' + f.name + '.' + (droppedP2 ?
           ' <strong>Player 2 inputs were dropped.</strong> ' + f.name + ' has no ' +
           'player field at all, so only player 1 survives the conversion.' : '') +
         (f.timeBased ?
           ' <strong>' + f.name + ' stores time, not frames.</strong> Every input was written ' +
           'as its frame divided by ' + out.tps + ' TPS &mdash; if that is not the rate the macro ' +
-          'was recorded at, the inputs will land in the wrong place.' : ''));
+          'was recorded at, the inputs will land in the wrong place.' : '') +
+        (droppedTps ?
+          ' <strong>Its TPS changes were dropped:</strong> the file plays all of it at ' +
+          out.tps + ' TPS, so it will desync after the first change.' : ''));
     }
     }
   }

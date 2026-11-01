@@ -39,7 +39,7 @@
   .conv-warn > summary::after {
     content: '+'; margin-left: auto; color: var(--muted); font-family: 'Space Mono', monospace;
   }
-  .conv-warn[open] > summary::after { content: '3'; }
+  .conv-warn[open] > summary::after { content: '\2212'; }
   .conv-warn > summary strong { color: #b5b5b5; font-weight: 600; }
   .conv-warn-body {
     font-size: 0.73rem; color: #8a8a8a; line-height: 1.85;
@@ -65,7 +65,10 @@
     text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
   }
   .row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; }
-  .field { display: flex; flex-direction: column; gap: .35rem; }
+  .field { display: flex; flex-direction: column; gap: .35rem; min-width: 0; max-width: 100%; }
+  /* 260 px wide where there is room; never wider than the panel (a 320 px
+     phone has about 240 px inside it). */
+  #outfmt { width: 260px; max-width: 100%; }
   .field label {
     font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 1.5px;
     text-transform: uppercase; color: var(--muted);
@@ -177,7 +180,9 @@
       <br><br>
       A few conversions lose information no matter how correct the code is. ToastyReplay Lite has no
       player-2 field, so a 2-player macro comes out halved. ToastyReplay stores time in seconds rather
-      than frames, so the output TPS decides where the inputs land. Both say so when it happens.
+      than frames, so the output TPS decides where the inputs land. And this page keeps one TPS for the
+      whole macro, so a GucciBot, TcBot or yBot macro that changes TPS partway loses those changes.
+      All three say so when it happens.
       <br><br>
       If something converts wrong, that&rsquo;s worth reporting &mdash; a broken file plus what it
       should have been is the fastest way to get it fixed:
@@ -241,7 +246,7 @@
       <div class="row">
         <div class="field">
           <label for="outfmt">Output format</label>
-          <select id="outfmt" style="min-width:260px"></select>
+          <select id="outfmt"></select>
         </div>
         <div class="field">
           <label for="outtps">Output TPS</label>
