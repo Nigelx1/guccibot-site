@@ -54,14 +54,19 @@
     z-index: 9998;
   }
 
-  /* ── NAVIGATION ── */
+  /* ── NAVIGATION ──
+     Nine links plus Download need about 1,150 px in one row. From 1,180 px
+     up they sit in the bar. Narrower, Download stays in the bar and the
+     rest open from the Menu button as a panel of big tap targets. Before
+     2026-11-01 the last links fell off the right edge at 701-1,100 px with
+     no way to reach them, and phones got a 14 px tall sideways strip. */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 1.25rem;
     padding: 0 2rem;
     height: 56px;
     border-bottom: 1px solid rgba(212,175,55,0.2);
@@ -74,25 +79,156 @@
     font-size: 1.6rem;
     letter-spacing: 3px;
     color: var(--gold);
+    text-decoration: none;
     text-shadow: 0 0 20px rgba(212,175,55,0.5);
+    margin-right: auto;
+    flex-shrink: 0;
+    line-height: 1;
+    padding: 10px 0;
   }
 
   .nav-links {
     display: flex;
-    gap: 2rem;
+    align-items: center;
+    gap: 1.5rem;
     list-style: none;
   }
 
   .nav-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     font-size: 0.7rem;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     color: var(--muted);
     text-decoration: none;
+    white-space: nowrap;
     transition: color 0.2s;
   }
 
-  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--gold); }
+
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 16px;
+    flex-shrink: 0;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    background: var(--gold);
+    transition: background 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--gold-bright); }
+
+  .nav-toggle {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    padding: 0 12px;
+    flex-shrink: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: transparent;
+    border: 1px solid rgba(212,175,55,0.4);
+    cursor: pointer;
+  }
+
+  .nav-toggle-icon,
+  .nav-toggle-icon::before,
+  .nav-toggle-icon::after {
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .nav-toggle-icon { position: relative; }
+  .nav-toggle-icon::before,
+  .nav-toggle-icon::after { content: ''; position: absolute; left: 0; }
+  .nav-toggle-icon::before { top: -5px; }
+  .nav-toggle-icon::after { top: 5px; }
+  nav.nav-open .nav-toggle-icon { background: transparent; }
+  nav.nav-open .nav-toggle-icon::before { transform: translateY(5px) rotate(45deg); }
+  nav.nav-open .nav-toggle-icon::after { transform: translateY(-5px) rotate(-45deg); }
+
+  /* Behind the open panel: a tap outside it closes the menu. */
+  .nav-scrim {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    height: 100vh;
+    background: rgba(0,0,0,0.55);
+    border: 0;
+    cursor: default;
+  }
+
+  @media (max-width: 1179px) {
+    .nav-toggle { display: inline-flex; }
+
+    /* Without JavaScript the Menu button can't work, so the links stay
+       in the bar as a sideways strip instead. */
+    html:not(.js) .nav-toggle { display: none; }
+    html:not(.js) .nav-links {
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    html:not(.js) .nav-links::-webkit-scrollbar { display: none; }
+
+    .js .nav-links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      z-index: 1;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      max-height: calc(100vh - 56px);
+      overflow-y: auto;
+      background: #0d0d0d;
+      border-bottom: 1px solid rgba(212,175,55,0.25);
+    }
+    .js nav.nav-open .nav-links { display: grid; }
+    .js nav.nav-open .nav-scrim { display: block; }
+    .js .nav-links a {
+      display: flex;
+      min-height: 56px;
+      padding: 0 1.5rem;
+      font-size: 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .js .nav-links li:nth-child(3n+2) a,
+    .js .nav-links li:nth-child(3n+3) a { border-left: 1px solid rgba(255,255,255,0.06); }
+  }
+
+  @media (max-width: 560px) {
+    nav { padding: 0 1rem; gap: 0.6rem; }
+    .nav-logo { font-size: 1.3rem; letter-spacing: 2px; }
+    .nav-cta { padding: 0 12px; letter-spacing: 1.5px; }
+    .nav-toggle { padding: 0 10px; gap: 8px; }
+    .js .nav-links { grid-template-columns: 1fr; }
+    .js .nav-links li a { border-left: 0 !important; }
+  }
+
+  @media (max-width: 359px) {
+    .nav-toggle-label { display: none; }
+    .nav-toggle { padding: 0 12px; }
+  }
+
+  section[id] { scroll-margin-top: 56px; }
 
   /* ── HERO ── */
   .hero {
@@ -611,21 +747,8 @@
        breakpoint had before (theme-card hover transforms + two grid
        collapses), nowhere near a real responsive treatment. */
 
-    /* Nav -- 6 links (Format/Engine/Themes/Trainer/Changelog/Download)
-       at desktop gap+font-size don't fit a phone-width screen at all.
-       Shrink both, and make horizontal scroll the fallback instead of
-       letting it visibly overflow/overlap if it still doesn't all fit
-       on the narrowest phones. */
-    nav { padding: 0 1rem; }
-    .nav-logo { font-size: 1.25rem; flex-shrink: 0; }
-    .nav-links {
-      gap: 1rem;
-      overflow-x: auto;
-      max-width: 62vw;
-      scrollbar-width: none;
-    }
-    .nav-links::-webkit-scrollbar { display: none; }
-    .nav-links a { font-size: 0.6rem; white-space: nowrap; }
+    /* (The nav's narrow layout has its own breakpoints, with the nav's
+       rules near the top of this file.) */
 
     /* Hero -- the 4-item stats row is centered+absolute at desktop
        gap/size, which overflows a phone viewport on BOTH edges (it's

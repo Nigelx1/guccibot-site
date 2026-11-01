@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>document.documentElement.classList.add('js')</script>
 <title>Converter — GucciBot</title>
 <meta name="description" content="Convert Geometry Dash macros between formats, including GucciBot's own .brrr. Runs entirely in your browser.">
 <meta property="og:type" content="website">
@@ -132,19 +133,23 @@
 </head>
 <body>
 
-<!-- NAVIGATION -->
-<nav>
-  <div class="nav-logo">GucciBot</div>
-  <ul class="nav-links">
+<!-- NAVIGATION (the same on every page; only the hrefs differ) -->
+<nav aria-label="Main">
+  <a class="nav-logo" href="/">GucciBot</a>
+  <ul class="nav-links" id="nav-links">
     <li><a href="/#features">Format</a></li>
     <li><a href="/#engine">Engine</a></li>
+    <li><a href="/#windows">Frame Windows</a></li>
+    <li><a href="/#pathfinder">Pathfinder</a></li>
     <li><a href="/#themes">Themes</a></li>
     <li><a href="/#trainer">Trainer</a></li>
     <li><a href="/changelog/">Changelog</a></li>
-    <li><a href="/converter/">Converter</a></li>
+    <li><a href="/converter/" aria-current="page">Converter</a></li>
     <li><a href="/contact/">Contact</a></li>
-    <li><a href="/#download">Download</a></li>
   </ul>
+  <a class="nav-cta" href="/#download">Download</a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><span class="nav-toggle-icon" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
+  <button class="nav-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
 </nav>
 
 <div class="conv-hero reveal">

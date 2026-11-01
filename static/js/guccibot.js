@@ -12,6 +12,35 @@ const items = [
   'Frame Windows','Calculate','Custom Tiers','Pathfinder','No Recording Needed','26 Formats','Brrr.',
 ];
 
+// Nav: under 1,180 px wide the links fold into a panel behind the Menu
+// button (guccibot.css). Every control here is a real <a> or <button>, so
+// none of it sets off the click gag at the bottom of this file; the scrim
+// behind the open panel is a button too, so a tap outside the panel only
+// closes the menu.
+(function () {
+  const nav = document.querySelector('nav');
+  const toggle = nav && nav.querySelector('.nav-toggle');
+  if (!toggle) return;
+  const label = toggle.querySelector('.nav-toggle-label');
+  const scrim = nav.querySelector('.nav-scrim');
+  function setOpen(open, refocus) {
+    nav.classList.toggle('nav-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (label) label.textContent = open ? 'Close' : 'Menu';
+    if (!open && refocus) toggle.focus();
+  }
+  toggle.addEventListener('click', () => setOpen(!nav.classList.contains('nav-open')));
+  if (scrim) scrim.addEventListener('click', () => setOpen(false));
+  nav.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('nav-open')) setOpen(false, true);
+  });
+  const wide = window.matchMedia('(min-width: 1180px)');
+  const onWide = () => { if (wide.matches) setOpen(false); };
+  if (wide.addEventListener) wide.addEventListener('change', onWide);
+  else if (wide.addListener) wide.addListener(onWide);
+})();
+
 // Shared across every page now that this is a real multi-page site
 // (site/, not one guccibot.html) -- guarded so pages without a
 // marquee (e.g. the changelog) don't error on the missing element.
