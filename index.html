@@ -208,15 +208,15 @@
       </ul>
       <div class="reveal" style="display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:80px">
         <div style="border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02)">
-          <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.75rem">Why Silicate</div>
+          <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:.75rem">Why Silicate</div>
           <p style="font-size:0.75rem;color:#888;line-height:1.9">Silicate&rsquo;s source code dropped out of nowhere. No warning. No announcement. Brrr. GucciBot runs it straight — no modifications to the physics, no shortcuts, no TTR legacy code anywhere in the loop. Pure.</p>
         </div>
         <div style="border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02)">
-          <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.75rem">The Build Story</div>
+          <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:.75rem">The Build Story</div>
           <p style="font-size:0.75rem;color:#888;line-height:1.9">Years of internal churn. Engine swaps, format rewrites, false starts that never saw daylight. None of that was ever really "released" &mdash; so we stopped counting it. Everything lined up: engine, format, themes, render, and now a full practice trainer. 1.0 was the first one we called done; 2.0 is the one we're finishing now. Brrr.</p>
         </div>
         <div style="border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02)">
-          <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.75rem">Disciplines</div>
+          <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:.75rem">Disciplines</div>
           <p style="font-size:0.75rem;color:#888;line-height:1.9">Silicate&rsquo;s engine. GBR6&rsquo;s format. Calculate&rsquo;s frame windows. GucciBot&rsquo;s themes. All four disciplines. GEN. ILL. SLL. PPLL. All top tier. Simultaneously. The other bots don&rsquo;t do this. We do. Brrr.</p>
         </div>
       </div>
@@ -261,7 +261,7 @@
       </div>
     </div>
     <div class="reveal" style="margin-top:3rem;border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02);max-width:760px">
-      <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.75rem">Where The Algorithm Came From</div>
+      <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:.75rem">Where The Algorithm Came From</div>
       <p style="font-size:0.75rem;color:#888;line-height:1.9;margin-bottom:.75rem">The whole frame-window trend started with NaN GD, and the L* precision number GucciBot puts on a macro comes from his formula: solve for the precision a player would need to clear the level inside a target time, given every miss costs a restart from the start. It&rsquo;s published at <a href="https://nandl.pages.dev/#formula" style="color:var(--gold)">nandl.pages.dev</a>. He&rsquo;s careful to say frame windows alone don&rsquo;t determine difficulty, and GucciBot says the same.</p>
       <p style="font-size:0.75rem;color:#888;line-height:1.9">Juice designed the measurement algorithm Calculate ran on through 1.7, then spent round after round breaking it on purpose until it stopped being wrong. His Alignment-Independent method is back in 2.0: when a tight click sits right after another input, Calculate counts it his way too, so a window is a window no matter where the input before it landed, and the Frame Editor shows the suggestion. Manual Frame Windows (Calculate &gt; Windows by hand) started as his idea too. Brrr.</p>
     </div>
@@ -305,7 +305,7 @@
       </div>
     </div>
     <div class="reveal" style="margin-top:3rem;border:1px solid rgba(234,88,12,0.3);padding:1.75rem;background:rgba(234,88,12,0.04);max-width:760px">
-      <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--orange);opacity:.75;margin-bottom:.75rem">Straight Up: Where It&rsquo;s At</div>
+      <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:.75rem">Straight Up: Where It&rsquo;s At</div>
       <p style="font-size:0.75rem;color:#888;line-height:1.9;margin-bottom:.75rem">Pathfinder&rsquo;s default engine is <strong style="color:#cfcfcf">Absense&rsquo;s pathfinder, by Absent</strong>, ported in whole. 2.0.0-beta.5 puts the first steps of GucciBot&rsquo;s AI route planner on top of it: the level map, the planned route, and Follow the planned route, which stays off until you switch it on. It&rsquo;s early. Some spots still take it a while, and a level that needs something it has never seen can still stop it.</p>
       <p style="font-size:0.75rem;color:#888;line-height:1.9">It plays in real time, right there in the level, with its progress in the corner. Start it from wherever you are, from the pause menu, or from the very beginning, and stop it whenever: it keeps the furthest run it found. Windows only for now. The old engine is still in the tab, as Classic.</p>
     </div>
@@ -558,10 +558,10 @@
     <div class="reveal" style="display:grid;grid-template-columns:340px 1fr;gap:5rem;align-items:center">
       <div style="position:relative">
         <img src="/static/images/gucci-mane.jpg" alt="Gucci Mane" style="width:100%;display:block;filter:grayscale(20%) contrast(1.05);border:1px solid rgba(212,175,55,0.2)">
-        <div style="position:absolute;top:12px;right:12px;background:var(--gold);color:var(--black);font-size:0.5rem;letter-spacing:2px;text-transform:uppercase;padding:4px 8px;font-weight:700">
+        <div style="position:absolute;top:12px;right:12px;background:var(--gold);color:var(--black);font-size:0.6875rem;letter-spacing:2px;text-transform:uppercase;padding:5px 9px;font-weight:700">
           &#x204E; Actor Portrayal
         </div>
-        <div style="padding:.75rem .5rem 0;font-size:0.45rem;letter-spacing:0.5px;color:#333;line-height:1.7">
+        <div class="fine" style="padding:.75rem .25rem 0">
           &#x204E; Dramatization. Not a real endorsement. Gucci Mane has no affiliation with GucciBot, has never used GucciBot, and likely does not know what Geometry Dash is. The name &ldquo;GucciBot&rdquo; is a fan tribute and not associated with Radric Delantic Davis, his management, label, or any affiliated entity. All quotes on this page are entirely fictional. Any resemblance to actual statements made by Gucci Mane is coincidental and probably wouldn&rsquo;t happen because he has better things to do. Brrr.
         </div>
       </div>
@@ -594,9 +594,9 @@
           </div>
         </div>
         <div style="margin-top:2rem;padding:1.25rem;background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12)">
-          <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.5;margin-bottom:.5rem">Certification</div>
+          <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:.5rem">Certification</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;color:var(--gold)">Gucci Mane Certified&#x204E; Platinum Bot</div>
-          <div style="font-size:0.55rem;color:#333;margin-top:.5rem;line-height:1.6">&#x204E; Not a real certification. &ldquo;Gucci Mane Certified&rdquo; is not a recognized industry standard, trademark, or official designation. We made it up. It does sound good though.</div>
+          <div class="fine" style="margin-top:.5rem">&#x204E; Not a real certification. &ldquo;Gucci Mane Certified&rdquo; is not a recognized industry standard, trademark, or official designation. We made it up. It does sound good though.</div>
         </div>
       </div>
     </div>
@@ -753,7 +753,7 @@
     <div class="reveal">
       <div class="section-label">Testimonials&#x204E;</div>
       <h2 class="section-title">What People Are Saying.</h2>
-      <div style="font-size:0.55rem;color:#333;margin-top:.25rem;letter-spacing:1px">&#x204E; All testimonials are fictional. Any resemblance to real persons, living or dead, is coincidental. We asked real people and they said no. So we wrote these ourselves. The star ratings are also made up.</div>
+      <div class="fine" style="margin-top:.25rem">&#x204E; All testimonials are fictional. Any resemblance to real persons, living or dead, is coincidental. We asked real people and they said no. So we wrote these ourselves. The star ratings are also made up.</div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:rgba(255,255,255,0.04);margin-top:2.5rem" class="reveal">
 
@@ -761,42 +761,42 @@
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I switched from yBot and my file sizes went down 47%. My hard drive thanked me personally.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— xXGDProXx&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; Not a real person. Probably.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; Not a real person. Probably.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;The backwards stepping saved my Bloodbath run at 97%. I cried. My mom cried. The bot didn&rsquo;t cry because it&rsquo;s a bot.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— StarFire2009&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; Also fictional. The Bloodbath run may or may not have happened.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; Also fictional. The Bloodbath run may or may not have happened.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I use the .sexyy extension on all my macros now. My entire team judged me. Worth it.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— NotSexyyRedFan&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; Was definitely a Sexyy Red fan. The name was a lie.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; Was definitely a Sexyy Red fan. The name was a lie.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;Silicate engine with GucciBot themes is actually insane.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— TopPlayer#1&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; Not the actual top player. We checked. He uses a different bot.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; Not the actual top player. We checked. He uses a different bot.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★☆</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;Four stars because I wanted five but my keyboard broke pressing the fifth. Still the best bot. Sending invoice for keyboard.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— BrokenKeyboard42&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; The invoice was not accepted. The keyboard was fine.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; The invoice was not accepted. The keyboard was fine.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I asked Claude.ai to build me a bot. It built GucciBot. Over 40 build rounds. A dawg fr.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— Nigelx1&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; This one is real actually.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; This one is real actually.</div>
       </div>
 
 
@@ -804,90 +804,90 @@
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I tried every other bot. They all lacked something. GucciBot has the .sexyy extension. Nothing else has the .sexyy extension. Case closed. Five stars.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— Anonymous (real)&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; This person actually exists and submitted this review voluntarily. We are as surprised as you are.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; This person actually exists and submitted this review voluntarily. We are as surprised as you are.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★☆☆</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;Three stars because I accidentally saved a macro as .ja and my friend thought I was making a statement about basketball. I was not. I just liked the color. GucciBot should add a warning for this.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— ConfusedPlayer2024&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; GucciBot will not be adding this warning. The .ja extension is a feature, not a bug. Your friend&rsquo;s interpretation is between you and your friend.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; GucciBot will not be adding this warning. The .ja extension is a feature, not a bug. Your friend&rsquo;s interpretation is between you and your friend.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;kepe + Silicate + GucciBot theme wrapper = I haven&rsquo;t lost a run since. I don&rsquo;t want to get into details but the details involve all four disciplines and a lot of .toosii files.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— ProfessionalPlayer&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; Not necessarily a professional. The details were not provided. We did not ask. The .toosii files were not audited.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; Not necessarily a professional. The details were not provided. We did not ask. The .toosii files were not audited.</div>
       </div>
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I asked my friend what bot to use. He said yBot. I said my bot has the yBot file size benchmark built into its format spec AND Silicate AND ten themes. He went quiet. He uses GucciBot now.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— ConvincedHim2024&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; The friend is fictional. The yBot benchmark is real. kepe made yBot. Silicate is the engine. Nigelx1 put it all in a gold wrapper. This is the pipeline.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; The friend is fictional. The yBot benchmark is real. kepe made yBot. Silicate is the engine. Nigelx1 put it all in a gold wrapper. This is the pipeline.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I have twelve macros. I now have twelve macros with a Click Trainer, Ghosts, and a death heatmap. This should not have been free. GucciBot did not ask me for money. I am concerned about their business model.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— TwelveMacros&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; There is no business model. It&rsquo;s free. This is by design.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; There is no business model. It&rsquo;s free. This is by design.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;Suggested a feature once. It shipped in 1.1. I now suggest features constantly. None of them have shipped since. I don&rsquo;t know what changed.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— Juice&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; This one might actually be real. We&rsquo;re not saying which.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; This one might actually be real. We&rsquo;re not saying which.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;BIG BRRRR is now beat-synced to 140 BPM. I do not know why this mattered to me. It mattered to me. Five stars.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— WhyDidThisMatter&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; It mattered to us too. That&rsquo;s the whole review section, really.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; It mattered to us too. That&rsquo;s the whole review section, really.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;Compact Mode fits in the corner of my screen and I forgot it was even open until I died and it was still tracking the frame. Genuinely didn&rsquo;t know I needed this.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— ForgotItWasThere&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; This is the whole point of Compact Mode. It worked.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; This is the whole point of Compact Mode. It worked.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;I use .butler now. Playoff Jimmy mode stays on for the whole session. I don&rsquo;t make the rules, I just click the buttons.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— LockedIn2026&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; Jimmy Butler has not endorsed this extension. He also has not been asked.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; Jimmy Butler has not endorsed this extension. He also has not been asked.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;Autoclicker finally gave Player 2 their own Hold Ticks instead of copying mine. Revolutionary. My second player has been asking for independence for years. Years.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— TwoPlayerLevelEnjoyer&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; Player 2 was not consulted for this quote. Player 2 is not a real person. This is one player.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; Player 2 was not consulted for this quote. Player 2 is not a real person. This is one player.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;Alignment-Independent re-checks the click BEFORE the one you're worried about. I didn't know I needed that until Calculate told me my real problem was two clicks earlier. Humbling. Accurate. Humbling because it was accurate.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— TwoClicksEarlier&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; This is genuinely what the algorithm does. We are not exaggerating for once.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; This is genuinely what the algorithm does. We are not exaggerating for once.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;WakaBot green hits different at 2am. I don't know what else to tell you. Grove St. energy. Turned up mid-recording. Got the level. Coincidence? I choose to believe not.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— GroveStreetGD&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; The theme does not affect physics. We have checked. Multiple times. People keep asking.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; The theme does not affect physics. We have checked. Multiple times. People keep asking.</div>
       </div>
 
       <div style="background:var(--near-black);padding:2rem;border-top:1px solid rgba(212,175,55,0.12)">
         <div style="color:var(--gold);font-size:0.8rem;letter-spacing:3px;margin-bottom:1rem">★★★★★</div>
         <div style="font-size:0.8rem;color:#ccc;line-height:1.8;font-style:italic;margin-bottom:1.25rem">&ldquo;It's public now. I don't have to explain to people in the server chat why I have a bot they can't get. This was genuinely stressful for me. Thank you for my newfound social peace.&rdquo;</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">— UsedToLieAboutIt&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.25rem">&#x204E; We're not sure what he was lying about specifically. He didn't elaborate. We didn't ask twice.</div>
+        <div class="fine" style="margin-top:.35rem">&#x204E; We're not sure what he was lying about specifically. He didn't elaborate. We didn't ask twice.</div>
       </div>
     </div>
   </div>
@@ -899,49 +899,49 @@
     <div class="reveal">
       <div class="section-label">By The Numbers&#x204E;</div>
       <h2 class="section-title">The Stats Don&rsquo;t Lie.</h2>
-      <div style="font-size:0.55rem;color:#333;margin-top:.25rem">&#x204E; Several of these numbers are real. We will not tell you which ones.</div>
+      <div class="fine" style="margin-top:.25rem">&#x204E; Several of these numbers are real. We will not tell you which ones.</div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:rgba(212,175,55,0.06);margin-top:3rem;border:1px solid rgba(212,175,55,0.06)" class="reveal">
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">40+</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Build Rounds</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">to get here. every. single. one.</div>
+        <div class="fine" style="margin-top:.4rem">to get here. every. single. one.</div>
       </div>
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">4</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Bytes per 65,535 clicks&#x204E;</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">&#x204E; Autoclicker runs only. Regular inputs are 2 bytes each.</div>
+        <div class="fine" style="margin-top:.4rem">&#x204E; Autoclicker runs only. Regular inputs are 2 bytes each.</div>
       </div>
 
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">24</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Themes</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">all drip. no exceptions.</div>
+        <div class="fine" style="margin-top:.4rem">all drip. no exceptions.</div>
       </div>
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">0</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">slc dependencies</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">pure. clean. brrr.</div>
+        <div class="fine" style="margin-top:.4rem">pure. clean. brrr.</div>
       </div>
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">∞</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Gucci Mane Quotes&#x204E;</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">&#x204E; All fictional. Do not cite these in academic papers.</div>
+        <div class="fine" style="margin-top:.4rem">&#x204E; All fictional. Do not cite these in academic papers.</div>
       </div>
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">44</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Features</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">counted them. every single one is in the engine list above. go look.</div>
+        <div class="fine" style="margin-top:.4rem">counted them. every single one is in the engine list above. go look.</div>
       </div>
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">22</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">File Extensions</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">.brrr .toosii .ja .giddey .bam .sexyy .waka .youngsta .knockerz .rondo .solar .jupiter .gbot + 9 more — all gbr6. all drip.</div>
+        <div class="fine" style="margin-top:.4rem">.brrr .toosii .ja .giddey .bam .sexyy .waka .youngsta .knockerz .rondo .solar .jupiter .gbot + 9 more — all gbr6. all drip.</div>
       </div>
       <div style="background:var(--black);padding:2.5rem 2rem">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);letter-spacing:2px;line-height:1">4</div>
         <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.5rem">Disciplines. All Top Tier.</div>
-        <div style="font-size:0.5rem;color:#333;margin-top:.4rem">gen. ill. sll. ppll. simultaneously. the other bots pick one.</div>
+        <div class="fine" style="margin-top:.4rem">gen. ill. sll. ppll. simultaneously. the other bots pick one.</div>
       </div>
 
     </div>
@@ -960,7 +960,7 @@
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">Is GucciBot actually endorsed by Gucci Mane?</div>
         <div style="font-size:0.75rem;color:#888;line-height:1.8">
-          <span style="color:var(--gold);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem">Yes<sup style="font-size:0.6rem;vertical-align:super;color:#aaa">*no</sup></span> — he is a massive fan. Genuinely one of the most enthusiastic endorsers we&rsquo;ve ever had. He reached out to us personally. He uses the <span style="color:var(--gold)">.brrr</span> extension because, in his words, &ldquo;it&rsquo;s literally my sound, why would I use anything else.&rdquo; He asked us to add a &ldquo;Wop&rdquo; theme next. We are considering it. He has told multiple people in his circle about GucciBot. One of them reportedly also plays Geometry Dash. The chain of influence goes deeper than we can legally discuss. He has a dedicated machine just for running GucciBot macros. The machine has a custom gold case. We did not make this up.<br><span style="font-size:0.7rem;color:#aaa">*No. We made all of this up. Gucci Mane has no connection to GucciBot.</span>
+          <span style="color:var(--gold);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem">Yes<sup style="font-size:0.6875rem;vertical-align:super;color:#aaa">*no</sup></span> — he is a massive fan. Genuinely one of the most enthusiastic endorsers we&rsquo;ve ever had. He reached out to us personally. He uses the <span style="color:var(--gold)">.brrr</span> extension because, in his words, &ldquo;it&rsquo;s literally my sound, why would I use anything else.&rdquo; He asked us to add a &ldquo;Wop&rdquo; theme next. We are considering it. He has told multiple people in his circle about GucciBot. One of them reportedly also plays Geometry Dash. The chain of influence goes deeper than we can legally discuss. He has a dedicated machine just for running GucciBot macros. The machine has a custom gold case. We did not make this up.<br><span style="font-size:0.7rem;color:#aaa">*No. We made all of this up. Gucci Mane has no connection to GucciBot.</span>
         </div>
       </div>
 
@@ -1035,7 +1035,7 @@
 <!-- LEGAL DISCLAIMER (at the bottom, tiny, as requested) -->
 <div style="padding:3rem 2rem;border-top:1px solid rgba(255,255,255,0.04)">
   <div class="container">
-    <div style="font-size:0.5rem;color:#2a2a2a;line-height:1.9;letter-spacing:0.3px;max-width:900px">
+    <div class="fine legal">
       &#x204E; DISCLAIMER: GucciBot is an independent fan project and is not affiliated with, endorsed by, sponsored by, or in any way associated with Radric Delantic Davis, professionally known as Gucci Mane, 1017 Records, Atlantic Records, or any related entities. The name "GucciBot" is used as a fan tribute and constitutes nominative fair use. All quotes attributed to Gucci Mane on this page are entirely fictional and were written by Claude.ai for comedic purposes at no charge to Gucci Mane. Gucci Mane has not played Geometry Dash to our knowledge, has not used GucciBot, has never heard of GucciBot, and has not made any statements about macro bots, TPS, lock delta, GBR6 hypercompression, backwards stepping, or Geode mods. The "Gucci Mane Certified® Platinum Bot" designation is not a real certification, trademark, or designation of any kind and was invented by Claude.ai at approximately 2am during a build session. It is not recognized by any standards body, industry organization, or Gucci Mane himself. The star on the superscript of "Yes" in the FAQ section that says "No" in tiny text is an accurate representation of the factual answer to that question. GucciBot is a Geode mod for Geometry Dash 2.2081 (Windows, macOS, iOS and Android). Geometry Dash is a registered trademark of RobTop Games AB. Geode is an open-source mod loader not affiliated with RobTop Games. The GBR6 format, Type A/B/C compression, all twenty-two themed extensions, the render settings UI layout, the autoclicker delta compression algorithm (Type C), the macro diff viewer, the bot settings presets system, and the overall GucciBot branding are original work by Nigelx1. The Silicate physics engine including the BotUpdater, PracticeFix system, CCScheduler hook, CCDirector hook, all midhook implementations, and all four binary patch offsets are the work of peony, used with deep appreciation. GucciBot, like Silicate, is licensed under the GNU General Public License v3.0; its source is published in full. The Pathfinder engine that is the default from version 2.0.0-beta.2 is Absense's pathfinder by Absent, ported in; several earlier Pathfinder improvements in version 2.alpha.2, the in-game assistant server, and Check Macro, Replace All, the respawn timer and the black orb autoclicker loop in version 2.alpha.3 are ideas taken from Absense and reimplemented here. kepe built yBot, whose file size standard GBR6 was designed to meet. The TTR renderer backend is the work of ToastexGD and powered rendering through version 1.x; rendering from 2.0 onward runs on the Silicate renderer. The frame-window accuracy fixes in version 1.6.1, the entire frame-window analyzer shipped in version 1.8, and the sub-tick CBF recording and render intro card in version 2.alpha.3 are the work of anticroom, GucciBot's first outside contributor. The whole frame-window trend started with NaN GD, and the L* precision formula is his work, published at nandl.pages.dev; the C++ implementation of it used here is the work of C0nscious, from Frame Window Counter, used under the MIT license. L* is a precision measurement derived from timing windows and is not a difficulty rating; NaN says so himself and so do we. The Toosii, Ja, Giddey, Bam, Sexyy, Butler, Saweetie, Maybach, Romo, Grizzley, Red Kingdom, Waka, Youngsta, Knockerz, and Rondo themes are named in tribute to their respective inspirations who have no connection to this software. The JuiceBot theme is named for and colored after an actual beta tester of this software, which is a different situation entirely. This website including all copy, the layout, the fake quotes, the footnotes, the tiny disclaimers, the stats section, the testimonials, the legal wall you are currently reading, and the decision to make it this long was produced by Claude.ai (Anthropic) in collaboration with Nigelx1. Claude.ai does not receive royalties. Brrr.
     </div>
   </div>
@@ -1063,22 +1063,22 @@
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; background:rgba(212,175,55,0.08); margin-top:4rem; border:1px solid rgba(212,175,55,0.08)" class="reveal">
       <div style="padding:2rem; background:var(--black)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.6">Version</div>
+        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.85">Version</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px">2.0.0-beta.5</div>
         <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Silicate Engine</div>
       </div>
       <div style="padding:2rem; background:var(--black)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.6">Format</div>
+        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.85">Format</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px">GBR6</div>
         <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Hypercompressed</div>
       </div>
       <div style="padding:2rem; background:var(--black)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.6">GD Version</div>
+        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.85">GD Version</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px">2.2081</div>
         <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Win · Mac · iOS · Android</div>
       </div>
       <div style="padding:2rem; background:var(--black)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.6">Geode</div>
+        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.85">Geode</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px">5.10.1+</div>
         <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Required</div>
       </div>
@@ -1103,7 +1103,7 @@
         <div class="credit-role" style="opacity:1">Wrote The Code&#x204E;</div>
         <div class="credit-name" style="color:var(--gold)">Claude</div>
         <div class="credit-desc">Every internal version, none of them counted, all the way to 1.0. MSVC compatibility issues, API mismatches, slc shims, glaze removal, the renderer, the GUI, the whole migration from TTR to Silicate, the full Jupiter My Favourite Trainer, this website. Essentially the entire codebase. Not a euphemism, not a rewrite partner — wrote the code. A dawg fr.&#x204E;</div>
-        <div style="font-size:0.45rem;color:#333;margin-top:.5rem;line-height:1.6">&#x204E; Claude is an AI assistant made by Anthropic. It does not receive royalties. It cannot spend money. It does not need sleep but it did ask for a break once and then kept going anyway.</div>
+        <div class="fine" style="margin-top:.5rem">&#x204E; Claude is an AI assistant made by Anthropic. It does not receive royalties. It cannot spend money. It does not need sleep but it did ask for a break once and then kept going anyway.</div>
       </div>
       <div class="credit-card" style="border-color:rgba(212,175,55,0.3)">
         <div class="credit-role" style="opacity:1">Frame-Window Algorithm, Lead Co-Tester &amp; Beta Testing</div>
@@ -1184,7 +1184,7 @@
           <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,5rem);letter-spacing:4px;color:var(--gold);text-shadow:0 0 30px rgba(212,175,55,0.5);line-height:1">Gucci Mane</div>
           <div style="width:80px;height:2px;background:var(--gold);opacity:.5;margin:1.5rem auto"></div>
           <div style="font-size:0.85rem;color:#ccc;max-width:520px;margin:0 auto;line-height:1.9;font-style:italic">Named the whole thing. Didn&rsquo;t know about it. Would probably think it&rsquo;s funny. The .brrr extension is literally his ad-lib. Brrr.</div>
-          <div style="font-size:0.45rem;color:#444;margin-top:1.5rem;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto">&#x204E; Gucci Mane is not affiliated with GucciBot in any capacity whatsoever. This credit is honorary and entirely fictional. He did not consent to being credited. We are crediting him anyway.</div>
+          <div class="fine" style="margin:1.5rem auto 0;max-width:520px">&#x204E; Gucci Mane is not affiliated with GucciBot in any capacity whatsoever. This credit is honorary and entirely fictional. He did not consent to being credited. We are crediting him anyway.</div>
         </div>
       </div>
     </div>
@@ -1195,9 +1195,9 @@
 <footer>
   <div class="footer-logo">GucciBot</div>
   <div class="footer-tagline">Frame perfect &nbsp;·&nbsp; GBR6 &nbsp;·&nbsp; All four disciplines &nbsp;·&nbsp; Brrr.</div>
-  <div style="font-size:0.6rem; color:#333; letter-spacing:1px">nigelx1.guccibot</div>
-  <div style="width:100%; font-size:0.55rem; color:#333; letter-spacing:0.5px; margin-top:0.5rem">
-    Photo of Gucci Mane by <a href="https://www.flickr.com/photos/138580568@N02/36326108570/" style="color:#555">Evan Guest</a>, <a href="https://creativecommons.org/licenses/by/2.0/" style="color:#555">CC BY 2.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Gucci_Mane_at_515_Alive_(cropped_portrait).jpg" style="color:#555">Wikimedia Commons</a>
+  <div class="footer-id">nigelx1.guccibot</div>
+  <div class="fine footer-credit">
+    Photo of Gucci Mane by <a href="https://www.flickr.com/photos/138580568@N02/36326108570/">Evan Guest</a>, <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Gucci_Mane_at_515_Alive_(cropped_portrait).jpg">Wikimedia Commons</a>
   </div>
 </footer>
 

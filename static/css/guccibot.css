@@ -6,7 +6,9 @@
     --near-black: #111111;
     --dark: #1a1a1a;
     --white: #f5f0e8;
-    --muted: #666;
+    /* 5.5:1 on --near-black, 5.7:1 on --black (WCAG AA wants 4.5). It was
+       #666, 3.3:1, on the nav, the credits and every footnote's label. */
+    --muted: #8a8a8a;
     --purple: #7c3aed;
     --orange: #ea580c;
     --blue: #1d4ed8;
@@ -608,7 +610,7 @@
     font-family: 'Space Mono', monospace;
     font-size: 0.65rem;
     letter-spacing: 2px;
-    opacity: 0.6;
+    opacity: 0.8;
   }
 
   .theme-name {
@@ -620,7 +622,7 @@
 
   .theme-desc {
     font-size: 0.65rem;
-    opacity: 0.55;
+    opacity: 0.8;
     line-height: 1.6;
   }
 
@@ -728,10 +730,8 @@
   .t-gbot     .bg-accent { background: #5b81aa; }
   .t-gbot     .theme-name { color: #a5bad0; }
 
-  /* The two light cards: the shared dimming is tuned for light text on a
-     dark card, so their extension and colors line get a little more weight. */
-  .t-rondo .theme-ext, .t-rondo .theme-desc,
-  .t-solar .theme-ext, .t-solar .theme-desc { opacity: 0.75; }
+  /* (The two light cards, RondoBot and SolarBot, used to get extra weight
+     here; the shared dimming is light enough for them now.) */
 
   /* ── ENGINE SECTION ── */
   .engine-split {
@@ -980,6 +980,30 @@
     color: var(--muted);
     text-transform: uppercase;
   }
+
+  .footer-id {
+    font-size: 0.6875rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+  }
+
+  .footer-credit { width: 100%; margin-top: 0.5rem; }
+
+  /* ── SMALL PRINT ──
+     Footnotes, disclaimers, the legal wall and the photo credit. The jokes
+     call it tiny; the text itself stays readable: 11 px and 5.5:1 at
+     least. It used to be 7-9 px at 1.4-1.6:1, which is the part that
+     carries the legal weight of the fake-endorsement bits. */
+  .fine {
+    font-size: 0.6875rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .fine a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .fine a:hover { color: var(--gold); }
+
+  .legal { max-width: 900px; line-height: 1.85; }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
