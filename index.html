@@ -286,27 +286,28 @@
         <div class="feature-badge">Thinks ahead.</div>
       </div>
       <div class="feature-card" data-num="02">
+        <div class="feature-icon">&#x25A6;</div>
+        <div class="feature-name">It Maps The Whole Level</div>
+        <div class="feature-desc"><strong style="color:#cfcfcf">Show the level map</strong> draws what it knows right over the level: every gap the player fits through, every choice &mdash; forks, orbs, pads, portals &mdash; and every part that moves. A copy of the player rides the level in the background to time the moving parts, without holding the game up.</div>
+        <div class="feature-badge">Knows the level.</div>
+      </div>
+      <div class="feature-card" data-num="03">
+        <div class="feature-icon">&#x21E2;</div>
+        <div class="feature-name">It Plans A Route</div>
+        <div class="feature-desc"><strong style="color:#cfcfcf">Show the planned route</strong> draws the way it would take through the whole level, from where you are. Switch on <strong style="color:#cfcfcf">Follow the planned route (AI)</strong> and every decision first tries the way GD&rsquo;s own physics finds to the route&rsquo;s next gate. When that way dead-ends, it jumps back to where it left the route.</div>
+        <div class="feature-badge">The AI&rsquo;s first steps.</div>
+      </div>
+      <div class="feature-card" data-num="04">
         <div class="feature-icon">&#x21B6;</div>
         <div class="feature-name">Real Backtracking</div>
         <div class="feature-desc">Dead end? It goes back through the frames it kept and takes another way &mdash; and further back each time a spot keeps biting. What got it past a hard spot is remembered per level, so the next search of that level is quicker.</div>
         <div class="feature-badge">Learns the level.</div>
       </div>
-      <div class="feature-card" data-num="03">
-        <div class="feature-icon">&#x2708;</div>
-        <div class="feature-name">Threads The Gap</div>
-        <div class="feature-desc">GucciBot&rsquo;s own addition. In ship, wave, UFO and swing it also tries holding you at a spread of heights, the way you&rsquo;d line a ship up with a gap &mdash; the thing a plain search keeps missing when the way through is a fifty-unit hole between two rows of spikes.</div>
-        <div class="feature-badge">Ship. Wave. UFO. Swing.</div>
-      </div>
-      <div class="feature-card" data-num="04">
-        <div class="feature-icon">&#x25A4;</div>
-        <div class="feature-name">Watch It Work</div>
-        <div class="feature-desc">It plays in real time, right there in the level, with its progress in the corner. Start it from wherever you are, straight from the pause menu, or from the very beginning. Stop whenever &mdash; it saves what it found.</div>
-        <div class="feature-badge">Let it grind.</div>
-      </div>
     </div>
     <div class="reveal" style="margin-top:3rem;border:1px solid rgba(234,88,12,0.3);padding:1.75rem;background:rgba(234,88,12,0.04);max-width:760px">
       <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--orange);opacity:.75;margin-bottom:.75rem">Straight Up: Where It&rsquo;s At</div>
-      <p style="font-size:0.75rem;color:#888;line-height:1.9">Pathfinder&rsquo;s engine is now <strong style="color:#cfcfcf">Absense&rsquo;s pathfinder, by Absent</strong>, ported in whole, with GucciBot&rsquo;s height-holding on top. It beats full levels with ship, wave and UFO parts that the old engine couldn&rsquo;t touch, usually in a few minutes. Some spots still take it a while to crack, and a level that needs something it has never seen can still stop it. The old engine is still in the tab, as Classic.</p>
+      <p style="font-size:0.75rem;color:#888;line-height:1.9;margin-bottom:.75rem">Pathfinder&rsquo;s default engine is <strong style="color:#cfcfcf">Absense&rsquo;s pathfinder, by Absent</strong>, ported in whole. 2.0.0-beta.5 puts the first steps of GucciBot&rsquo;s AI route planner on top of it: the level map, the planned route, and Follow the planned route, which stays off until you switch it on. It&rsquo;s early. Some spots still take it a while, and a level that needs something it has never seen can still stop it.</p>
+      <p style="font-size:0.75rem;color:#888;line-height:1.9">It plays in real time, right there in the level, with its progress in the corner. Start it from wherever you are, from the pause menu, or from the very beginning, and stop it whenever: it keeps the furthest run it found. Windows only for now. The old engine is still in the tab, as Classic.</p>
     </div>
   </div>
 </section>
