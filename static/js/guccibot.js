@@ -1,6 +1,6 @@
 // Marquee
 const items = [
-  'GBR6','Frame Perfect','Silicate Engine','20 Themes','4 Disciplines',
+  'GBR6','Frame Perfect','Silicate Engine','24 Themes','4 Disciplines',
   'Brrr.','TPS 240','Backwards Stepping','SSB Fix','Lock Delta',
   'Type C Delta','Autoclicker','Noclip','Macro Diff','Brrr.',
   '.brrr','.toosii','.ja','.giddey','.bam','.sexyy','.juice','.butler',
@@ -8,6 +8,7 @@ const items = [
   'Trainer Tab','Any Macro','Manual Frame Windows','140 BPM','Brrr.',
   'Compact Mode','JuiceBot','ButlerBot','Playoff Jimmy','Brrr.',
   'Click Indicators','Video Mode','RomoBot','GrizzleyBot','BrrrBot','Custom Themes','Brrr.',
+  'RondoBot','Playoff Rondo','SolarBot','JupiterBot','Brrr.',
   'Frame Windows','Calculate','Custom Tiers','Pathfinder','No Recording Needed','26 Formats','Brrr.',
 ];
 

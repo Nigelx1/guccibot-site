@@ -1778,7 +1778,7 @@
    * same data under a different name. Used by the override gag below. */
   var GUCCI_EXTS = ['.brrr', '.icebrrr', '.toosii', '.ja', '.giddey', '.bam', '.sexyy',
     '.juice', '.butler', '.saweetie', '.maybach', '.romo', '.grizzley', '.redkingdom',
-    '.lemonade', '.waka', '.youngsta', '.knockerz'];
+    '.lemonade', '.waka', '.youngsta', '.knockerz', '.rondo', '.solar', '.jupiter', '.gbot'];
 
   function isGucciFile(name) {
     name = (name || '').toLowerCase();

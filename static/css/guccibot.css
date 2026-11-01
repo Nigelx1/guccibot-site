@@ -568,6 +568,27 @@
   .t-knockerz .bg-accent { background: #12c7b8; }
   .t-knockerz .theme-name { color: #7de0d8; }
 
+  .t-rondo    { background: #ffffff; color: #00642a; }
+  .t-rondo    .bg-accent { background: #007a33; }
+  .t-rondo    .theme-name { color: #007a33; }
+
+  .t-solar    { background: #9a3d00; color: #ffe680; }
+  .t-solar    .bg-accent { background: #ffc400; }
+  .t-solar    .theme-name { color: #ffdf73; }
+
+  .t-jupiter  { background: #07043f; color: #f4f2ff; }
+  .t-jupiter  .bg-accent { background: #fcf550; }
+  .t-jupiter  .theme-name { color: #fdfa9f; }
+
+  .t-gbot     { background: #1e1f22; color: #e3e5e8; }
+  .t-gbot     .bg-accent { background: #5b81aa; }
+  .t-gbot     .theme-name { color: #a5bad0; }
+
+  /* The two light cards: the shared dimming is tuned for light text on a
+     dark card, so their extension and colors line get a little more weight. */
+  .t-rondo .theme-ext, .t-rondo .theme-desc,
+  .t-solar .theme-ext, .t-solar .theme-desc { opacity: 0.75; }
+
   /* ── ENGINE SECTION ── */
   .engine-split {
     display: grid;
@@ -578,7 +599,7 @@
   }
 
   @media (max-width: 700px) {
-    .t-gucci, .t-toosii, .t-toosii2, .t-toosii3, .t-ja, .t-giddey, .t-bam, .t-sexyy, .t-juice, .t-butler, .t-saweetie, .t-maybach, .t-romo, .t-grizzley, .t-redkingdom, .t-lemonade, .t-brrr, .t-waka, .t-youngsta, .t-knockerz { transform: none !important; }
+    .t-gucci, .t-toosii, .t-toosii2, .t-toosii3, .t-ja, .t-giddey, .t-bam, .t-sexyy, .t-juice, .t-butler, .t-saweetie, .t-maybach, .t-romo, .t-grizzley, .t-redkingdom, .t-lemonade, .t-brrr, .t-waka, .t-youngsta, .t-knockerz, .t-rondo, .t-solar, .t-jupiter, .t-gbot { transform: none !important; }
     .reveal[style*="grid-template-columns:340px"] { grid-template-columns: 1fr !important; gap: 2rem !important; }
 
     .engine-split { grid-template-columns: 1fr; }
