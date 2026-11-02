@@ -15,7 +15,7 @@ const items = [
   'Compact Mode','JuiceBot','ButlerBot','Playoff Jimmy','Brrr.',
   'Click Indicators','Video Mode','RomoBot','GrizzleyBot','BrrrBot','Custom Themes','Brrr.',
   'RondoBot','Playoff Rondo','SolarBot','JupiterBot','Brrr.',
-  'Frame Windows','Calculate','Custom Tiers','Pathfinder','No Recording Needed','26 Formats','Brrr.',
+  'Frame Windows','Calculate','Custom Tiers','Pathfinder','No Recording Needed','27 Formats','Brrr.',
 ];
 
 // Nav: under 1,180 px wide the links fold into a panel behind the Menu
