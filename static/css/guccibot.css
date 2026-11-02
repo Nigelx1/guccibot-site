@@ -785,8 +785,12 @@
        Disciplines heading) was overflowing/clipping on phone widths.
        The clamp()'s 2rem floor plus a long unbroken word was the
        problem -- overflow-wrap above is the safety net for ANY title,
-       this just also lowers the floor so it doesn't need to rely on
-       that safety net kicking in to look right. */
+       this just also lowers the floor. Syne is wide, though: at 375 px
+       "Hypercompressed." and "Simultaneously." still didn't fit, and the
+       safety net broke them mid-word ("Hypercompre / ssed."). Those two
+       carry a soft hyphen in the HTML now, so on a phone they break as
+       Hyper- / compressed. and Simul- / taneously., and not at all where
+       they fit. */
     .section-title { font-size: clamp(1.6rem, 8vw, 3.5rem); }
   }
 
