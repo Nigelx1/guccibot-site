@@ -721,6 +721,9 @@
   .t-solar    { background: #9a3d00; color: #ffe680; }
   .t-solar    .bg-accent { background: #ffc400; }
   .t-solar    .theme-name { color: #ffdf73; }
+  /* Sun yellow on deep orange needs the full color to pass AA (5.5:1;
+     the shared 0.8 dimming left it at 4.2:1). */
+  .t-solar    .theme-ext, .t-solar .theme-desc { opacity: 1; }
 
   .t-jupiter  { background: #07043f; color: #f4f2ff; }
   .t-jupiter  .bg-accent { background: #fcf550; }
@@ -1393,13 +1396,49 @@
 
   .blink { animation: pulse 1.5s ease infinite; }
 
-  /* scroll reveal */
-  .reveal {
+  /* Scroll reveal. Only hidden when the script that reveals it runs: the
+     head marks the page .js, and takes that back on load if guccibot.js
+     never ran. Before 2026-11-01 a reader view, a crawler without
+     JavaScript or a failed script load saw blank sections. */
+  .js .reveal {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s ease, transform 0.6s ease;
   }
-  .reveal.visible {
+  .js .reveal.visible {
     opacity: 1;
     transform: none;
+  }
+
+  /* ── KEYBOARD FOCUS ──
+     A ring on whatever the keyboard is on, never on a mouse click. White
+     on the gold buttons, where a gold ring would vanish. */
+  a:focus-visible, button:focus-visible, summary:focus-visible,
+  select:focus-visible, input:focus-visible, textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--gold-bright);
+    outline-offset: 3px;
+  }
+
+  .btn-primary:focus-visible, .btn-download:focus-visible, .nav-cta:focus-visible {
+    outline-color: var(--white);
+  }
+
+  .dl-tabs [role="tab"]:focus-visible, .js .nav-links a:focus-visible { outline-offset: -3px; }
+
+  /* ── REDUCED MOTION ──
+     For anyone whose system asks for less motion: no marquee, no fades, no
+     smooth scrolling, no hover lifts. Everything shows where it ends up. */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0s !important;
+    }
+    .marquee-track { animation: none !important; }
+    .js .reveal { opacity: 1; transform: none; }
+    .btn-primary:hover, .btn-secondary:hover, .btn-download:hover, .theme-card:hover { transform: none; }
   }

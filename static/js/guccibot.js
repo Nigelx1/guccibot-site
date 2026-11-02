@@ -1,3 +1,9 @@
+// The page's head marks it .js, so the CSS can hide what this script
+// reveals or folds away (scroll reveals, the nav's panel, the download
+// picker's tabs). If this file never runs, the head takes .js back on load
+// and everything shows as plain content.
+window.GucciBotReady = true;
+
 // Marquee
 const items = [
   'GBR6','Frame Perfect','Silicate Engine','24 Themes','4 Disciplines',
