@@ -444,6 +444,30 @@
     margin-top: 3rem;
   }
 
+  /* No card left alone next to an empty tinted block (the grid's gap color
+     shows through an empty cell). Four cards (Frame Windows, Pathfinder,
+     the JMF trainer) go two by two: auto-fit made three columns from about
+     1,000 px up. Three cards (GBR6's types, the Trainer) where only two fit
+     across: the third takes the whole row. */
+  @media (min-width: 701px) {
+    .feature-grid:has(> .feature-card:nth-child(4):last-child) { grid-template-columns: repeat(2, 1fr); }
+  }
+  .feature-grid:has(> .feature-card:nth-child(3):last-child) { grid-template-columns: 1fr; }
+  @media (min-width: 600px) {
+    .feature-grid:has(> .feature-card:nth-child(3):last-child) { grid-template-columns: repeat(2, 1fr); }
+    .feature-grid:has(> .feature-card:nth-child(3):last-child) > .feature-card:nth-child(3) { grid-column: 1 / -1; }
+  }
+  @media (min-width: 960px) {
+    .feature-grid:has(> .feature-card:nth-child(3):last-child) { grid-template-columns: repeat(3, 1fr); }
+    .feature-grid:has(> .feature-card:nth-child(3):last-child) > .feature-card:nth-child(3) { grid-column: auto; }
+  }
+
+  /* By The Numbers: eight stats, four across or two by two (auto-fill made
+     five or three columns, with empty tinted cells after the last). */
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
+
   .feature-card {
     background: var(--near-black);
     padding: 2.5rem;
