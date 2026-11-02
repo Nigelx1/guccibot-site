@@ -28,7 +28,7 @@
     max-width: 760px;
     margin: 3rem auto 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1px;
     background: rgba(255,255,255,0.04);
   }
@@ -53,6 +53,28 @@
   }
   .contact-card .value a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,175,55,0.3); }
   .contact-card .value a:hover { border-bottom-color: var(--gold); }
+  .contact-card .label { font-size: 0.6875rem; }
+  /* The Discord handle copies on a press (a button, so it never starts the
+     click gag the way selecting plain text would). */
+  .contact-copy {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid rgba(212,175,55,0.3);
+    cursor: copy;
+  }
+  .contact-copy:hover { border-bottom-color: var(--gold); }
+  .contact-copy .dl-copy-hint {
+    font-size: 0.6875rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
   .contact-card .note {
     font-size: 0.7rem;
     color: var(--muted);
@@ -103,13 +125,18 @@
 
 <div class="contact-grid reveal">
   <div class="contact-card">
+    <div class="label">Discord server</div>
+    <div class="value"><a href="https://discord.gg/m95NUPdbpJ">Nigel&rsquo;s Neighborhood</a></div>
+    <div class="note">The GucciBot server. How to use it, setting it up, what&rsquo;s coming next, or anything that isn&rsquo;t a bug: ask there.</div>
+  </div>
+  <div class="contact-card">
     <div class="label">Email</div>
     <div class="value"><a href="mailto:nigel@guccibot.net">nigel@guccibot.net</a></div>
     <div class="note">Best for anything long, or anything with a file attached &mdash; a macro, a crash log, a render that came out wrong.</div>
   </div>
   <div class="contact-card">
     <div class="label">Discord</div>
-    <div class="value">jimmybutlerfan</div>
+    <div class="value"><button type="button" class="contact-copy" data-copy="jimmybutlerfan" aria-label="Copy the Discord username jimmybutlerfan"><span>jimmybutlerfan</span><span class="dl-copy-hint" aria-live="polite">Copy</span></button></div>
     <div class="note">Fastest reply. Where most of the testing and back-and-forth actually happens.</div>
   </div>
   <div class="contact-card">
@@ -127,9 +154,16 @@
 <footer>
   <div class="footer-logo">GucciBot</div>
   <div class="footer-tagline">Frame perfect &nbsp;·&nbsp; GBR6 &nbsp;·&nbsp; All four disciplines &nbsp;·&nbsp; Brrr.</div>
-  <div class="footer-id">nigelx1.guccibot</div>
-  <div class="fine footer-credit">
-    Photo of Gucci Mane by <a href="https://www.flickr.com/photos/138580568@N02/36326108570/">Evan Guest</a>, <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Gucci_Mane_at_515_Alive_(cropped_portrait).jpg">Wikimedia Commons</a>
+  <ul class="footer-links">
+    <li><a class="footer-discord" href="https://discord.gg/m95NUPdbpJ">Discord</a></li>
+    <li><a href="https://github.com/Nigelx1/GucciBot">GitHub</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+  <div class="footer-bottom">
+    <div class="footer-id">nigelx1.guccibot &nbsp;·&nbsp; GPL-3.0</div>
+    <div class="fine footer-credit">
+      Photo of Gucci Mane by <a href="https://www.flickr.com/photos/138580568@N02/36326108570/">Evan Guest</a>, <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Gucci_Mane_at_515_Alive_(cropped_portrait).jpg">Wikimedia Commons</a>
+    </div>
   </div>
 </footer>
 
