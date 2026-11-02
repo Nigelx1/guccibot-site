@@ -77,6 +77,9 @@
   }
 
   .nav-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.6rem;
     letter-spacing: 3px;
@@ -87,6 +90,15 @@
     flex-shrink: 0;
     line-height: 1;
     padding: 10px 0;
+  }
+
+  /* The logo beside the name. logo-96.png is scaled down from the 1080 px
+     master like the site's icons, enough for 30 px on a 3x screen. */
+  .nav-mark {
+    display: block;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
   }
 
   .nav-links {
@@ -218,7 +230,8 @@
 
   @media (max-width: 560px) {
     nav { padding: 0 1rem; gap: 0.6rem; }
-    .nav-logo { font-size: 1.3rem; letter-spacing: 2px; }
+    .nav-logo { font-size: 1.3rem; letter-spacing: 2px; gap: 8px; }
+    .nav-mark { width: 26px; height: 26px; }
     .nav-cta { padding: 0 12px; letter-spacing: 1.5px; }
     .nav-toggle { padding: 0 10px; gap: 8px; }
     .js .nav-links { grid-template-columns: 1fr; }
