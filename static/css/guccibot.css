@@ -774,7 +774,8 @@
     /* Sections -- 6rem top/bottom padding on every section (desktop
        value) is a lot of dead space on a phone's vertical scroll. */
     section { padding: 3.5rem 1.25rem; }
-    .btn-download { padding: 16px 32px; font-size: 1.1rem; }
+    /* (The Download button's phone size sits after its own rules, further
+       down: up here the base rule came later and won, so it never applied.) */
 
     /* Section titles -- real bug Nigel caught: "Simultaneously." (the
        Disciplines heading) was overflowing/clipping on phone widths.
@@ -899,20 +900,360 @@
     box-shadow: 0 12px 40px rgba(212,175,55,0.5), 0 0 0 1px rgba(212,175,55,0.3);
   }
 
-  .geode-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .dl-file {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem 0.9rem;
     margin-top: 1.5rem;
-    font-size: 0.65rem;
-    letter-spacing: 2px;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
     color: var(--muted);
   }
 
-  .geode-badge::before {
-    content: '◈';
+  .dl-file > span { white-space: nowrap; }
+  .nowrap { white-space: nowrap; }
+
+  .dl-file code { color: var(--white); }
+
+  .dl-lede {
+    max-width: 640px;
+    margin: 0.6rem auto 0;
+    font-size: 0.75rem;
+    color: #b5b5b5;
+    line-height: 1.8;
+  }
+
+  /* ── DOWNLOAD PICKER ──
+     A tab per platform: install steps, the menu's key, what doesn't run
+     there yet. guccibot.js opens it on the visitor's own platform. Without
+     JavaScript the tabs hide and all four panels show, one after another. */
+  .dl-picker {
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid rgba(212,175,55,0.2);
+    background: var(--black);
+  }
+
+  .dl-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid rgba(212,175,55,0.2);
+  }
+
+  .dl-tabs [role="tab"] {
+    position: relative;
+    min-height: 52px;
+    padding: 0 0.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    border-left: 1px solid rgba(212,175,55,0.12);
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .dl-tabs [role="tab"]:first-child { border-left: 0; }
+  .dl-tabs [role="tab"]:hover { color: var(--white); }
+  .dl-tabs [role="tab"][aria-selected="true"] { color: var(--gold); background: rgba(212,175,55,0.07); }
+  .dl-tabs [role="tab"][aria-selected="true"]::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  html:not(.js) .dl-tabs { display: none; }
+
+  .dl-panel { padding: 2rem 2.25rem 2.25rem; }
+  .dl-panel[hidden] { display: none; }
+  html:not(.js) .dl-panel + .dl-panel { border-top: 1px solid rgba(212,175,55,0.12); }
+
+  .dl-panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    letter-spacing: 3px;
     color: var(--gold);
-    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .js .dl-panel-title { display: none; }
+
+  .dl-need {
+    margin-bottom: 1.5rem;
+    padding-left: 0.9rem;
+    border-left: 2px solid rgba(212,175,55,0.5);
+    font-size: 0.75rem;
+    color: #c8c8c8;
+    line-height: 1.8;
+  }
+
+  .dl-steps {
+    list-style: none;
+    counter-reset: dl-step;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .dl-steps li {
+    counter-increment: dl-step;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: #c8c8c8;
+    line-height: 1.8;
+  }
+
+  .dl-steps li::before {
+    content: counter(dl-step, decimal-leading-zero);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem;
+    line-height: 1.15;
+    color: var(--gold);
+  }
+
+  .dl-steps strong, .dl-open strong { color: var(--white); }
+  .dl-picker a, .dl-help a, .dl-facts a, .dl-file-facts a { color: var(--gold); }
+
+  .dl-picker code, .dl-file-facts code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95em;
+    color: var(--white);
+    background: rgba(255,255,255,0.06);
+    padding: 1px 5px;
+    overflow-wrap: anywhere;
+  }
+
+  .dl-or {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .dl-open {
+    margin-top: 1.75rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid rgba(212,175,55,0.3);
+    background: rgba(212,175,55,0.05);
+    font-size: 0.8rem;
+    color: #ddd;
+    line-height: 1.9;
+  }
+
+  .dl-open-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.6875rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  kbd {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--black);
+    background: var(--gold);
+    padding: 2px 8px;
+    border-radius: 2px;
+    box-shadow: 0 2px 0 var(--gold-dim);
+  }
+
+  .dl-note {
+    margin-top: 1.1rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .dl-standdown {
+    padding: 1.1rem 2.25rem;
+    border-top: 1px solid rgba(212,175,55,0.12);
+    font-size: 0.75rem;
+    color: #b5b5b5;
+    line-height: 1.8;
+  }
+
+  .dl-standdown strong { color: var(--white); }
+
+  .dl-help {
+    max-width: 900px;
+    margin: 1.75rem auto 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #b5b5b5;
+    line-height: 1.8;
+  }
+
+  .dl-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1px;
+    max-width: 900px;
+    margin: 4rem auto 0;
+    background: rgba(212,175,55,0.08);
+    border: 1px solid rgba(212,175,55,0.08);
+  }
+
+  .dl-fact { padding: 1.75rem 2rem; background: var(--black); }
+
+  .dl-fact-label, .dl-file-facts dt {
+    font-size: 0.6875rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .dl-fact-label { margin-bottom: 0.75rem; }
+
+  .dl-fact-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .dl-fact-sub {
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .dl-file-facts {
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid rgba(212,175,55,0.08);
+    border-top: 0;
+    background: var(--black);
+  }
+
+  .dl-row {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr;
+    gap: 1rem 1.5rem;
+    padding: 1.4rem 2rem;
+    border-top: 1px solid rgba(212,175,55,0.08);
+  }
+
+  .dl-row:first-child { border-top: 0; }
+  .dl-file-facts dt { padding-top: 0.35rem; }
+
+  .dl-file-facts dd {
+    min-width: 0;
+    font-size: 0.75rem;
+    color: #b5b5b5;
+    line-height: 1.8;
+  }
+
+  /* Click to copy: the hash and the two commands. Buttons, so they never
+     start the click gag. */
+  .dl-copy {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: copy;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .dl-copy:hover { border-color: rgba(212,175,55,0.5); background: rgba(212,175,55,0.05); }
+
+  .dl-copy code {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    word-break: break-all;
+    -webkit-user-select: all;
+    user-select: all;
+  }
+
+  .dl-copy-hint {
+    flex-shrink: 0;
+    font-size: 0.6875rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 2;
+    color: var(--gold);
+  }
+
+  .dl-copy.is-copied { border-color: var(--gold); }
+
+  .dl-check { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .dl-check-label { color: var(--muted); }
+
+  .dl-check-row {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .dl-check-os {
+    font-size: 0.6875rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .dl-cmd code { font-size: 0.75rem; word-break: normal; overflow-wrap: anywhere; }
+
+  .dl-pending {
+    display: inline-block;
+    margin-right: 0.6rem;
+    padding: 1px 10px;
+    font-size: 0.6875rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px dashed rgba(212,175,55,0.6);
+  }
+
+  @media (max-width: 700px) {
+    /* The Download button wraps, if it must, between "Download" and the
+       version, never inside the version. */
+    .btn-download {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0 0.4em;
+      padding: 16px 20px;
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+    }
+    .dl-file { flex-direction: column; align-items: center; }
+    .dl-file .sep { display: none; }
+    .dl-panel { padding: 1.5rem 1.25rem 1.75rem; }
+    .dl-standdown { padding: 1rem 1.25rem; }
+    .dl-steps li { grid-template-columns: 1.6rem 1fr; gap: 0.6rem; }
+    .dl-row { grid-template-columns: 1fr; gap: 0.6rem; padding: 1.25rem; }
+    .dl-file-facts dt { padding-top: 0; }
+    .dl-fact { padding: 1.5rem 1.25rem; }
+    .dl-check-row { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+
+  @media (max-width: 420px) {
+    .dl-tabs [role="tab"] { font-size: 0.6875rem; letter-spacing: 1px; padding: 0 0.25rem; }
+    .dl-copy { flex-direction: column; gap: 0.25rem; }
   }
 
   /* ── CREDITS ── */

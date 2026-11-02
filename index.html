@@ -1041,7 +1041,12 @@
   </div>
 </div>
 
-<!-- DOWNLOAD -->
+<!-- DOWNLOAD
+     The button always fetches the newest release's file. The version, the
+     size and the SHA-256 below are 2.0.0-beta.5's own (gh release download,
+     then sha256sum, 2026-11-01): change all three with every release.
+     Every control here is a real <a> or <button>, so none of them starts the
+     click gag (guccibot.js). -->
 <section id="download" class="download-section">
   <div class="container">
     <div class="download-hero reveal">
@@ -1049,40 +1054,140 @@
       <div class="download-title">Get the Drip.</div>
       <p class="download-sub">Geode 5.10.1+ &nbsp;·&nbsp; GD 2.2081 &nbsp;·&nbsp; Windows, Mac, iOS, Android &nbsp;·&nbsp; Free &nbsp;·&nbsp; Brrr.</p>
       <div class="download-btn-wrap">
-        <a href="https://github.com/Nigelx1/GucciBot/releases/tag/v2.0.0-beta.5" class="btn-download">
-          ↓ &nbsp; Download 2.0.0-beta.5
+        <a href="https://github.com/Nigelx1/GucciBot/releases/latest/download/nigelx1.guccibot.geode" class="btn-download">
+          <span>↓ &nbsp; Download</span> <span class="nowrap">2.0.0-beta.5</span>
         </a>
       </div>
-      <div style="text-align:center; margin-top:1.5rem; display:flex; flex-direction:column; gap:.6rem; align-items:center">
-        <span class="geode-badge">Manual install &nbsp;·&nbsp; nigelx1.guccibot</span>
-        <p style="max-width:480px; font-size:0.7rem; color:#888; line-height:1.7; margin:0">
-          Not on the in-game Geode index. Grab the <code>.geode</code> file above, then either drop it straight into your Geode <code>mods</code> folder or use Geode&rsquo;s own &ldquo;Install from file&rdquo; option. New to Geode entirely? Get the mod loader itself first at <a href="https://geode-sdk.org" style="color:var(--gold)">geode-sdk.org</a> &mdash; GucciBot needs it installed to run.
-        </p>
+      <p class="dl-file"><span><code>nigelx1.guccibot.geode</code></span><span class="sep" aria-hidden="true">&middot;</span><span>235 MB</span><span class="sep" aria-hidden="true">&middot;</span><span>one file for all four platforms</span></p>
+      <p class="dl-lede">It isn&rsquo;t on Geode&rsquo;s in-game index, so it installs from the file. Pick your platform:</p>
+    </div>
+
+    <div class="dl-picker reveal" data-picker>
+      <div class="dl-tabs" role="tablist" aria-label="Your platform">
+        <button type="button" role="tab" id="dl-tab-windows" aria-controls="dl-windows" aria-selected="true">Windows</button>
+        <button type="button" role="tab" id="dl-tab-mac" aria-controls="dl-mac" aria-selected="false" tabindex="-1">Mac</button>
+        <button type="button" role="tab" id="dl-tab-iphone" aria-controls="dl-iphone" aria-selected="false" tabindex="-1">iPhone</button>
+        <button type="button" role="tab" id="dl-tab-android" aria-controls="dl-android" aria-selected="false" tabindex="-1">Android</button>
+      </div>
+
+      <div class="dl-panel" id="dl-windows" role="tabpanel" aria-labelledby="dl-tab-windows">
+        <h3 class="dl-panel-title">Windows</h3>
+        <ol class="dl-steps">
+          <li><span>Get <strong>Geode</strong> with its Windows installer from <a href="https://geode-sdk.org/install">geode-sdk.org</a>. Already have it? Skip this.</span></li>
+          <li><span>Download <code>nigelx1.guccibot.geode</code> with the button above.</span></li>
+          <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again.<span class="dl-or">Or put the file in Geode&rsquo;s mods folder yourself: <strong>Open Mods Folder</strong> is on the same screen.</span></span></li>
+          <li><span>Restart the game.</span></li>
+        </ol>
+        <div class="dl-open">
+          <span class="dl-open-label">Open GucciBot</span>
+          Press <kbd>Left Alt</kbd>, anywhere in the game. You can change the key in Settings &gt; Keybinds.
+        </div>
+        <p class="dl-note">Windows is home: everything runs here, the Pathfinder, rendering and Video Mode included, and it gets the most testing.</p>
+      </div>
+
+      <div class="dl-panel" id="dl-mac" role="tabpanel" aria-labelledby="dl-tab-mac">
+        <h3 class="dl-panel-title">Mac</h3>
+        <p class="dl-need">For Apple Silicon Macs (M1 and newer). The Mac build in 2.0.0-beta.5 is Apple Silicon only; Intel Macs come with the next release.</p>
+        <ol class="dl-steps">
+          <li><span>Get <strong>Geode</strong> with its macOS installer from <a href="https://geode-sdk.org/install">geode-sdk.org</a>. It works with the Steam version of Geometry Dash. Already have it? Skip this.</span></li>
+          <li><span>Download <code>nigelx1.guccibot.geode</code> with the button above.</span></li>
+          <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again.<span class="dl-or">Or put the file in Geode&rsquo;s mods folder yourself: <strong>Open Mods Folder</strong> is on the same screen.</span></span></li>
+          <li><span>Restart the game.</span></li>
+        </ol>
+        <div class="dl-open">
+          <span class="dl-open-label">Open GucciBot</span>
+          Press <kbd>Option</kbd>, or <strong>GucciBot</strong> at the bottom right of a level&rsquo;s pause menu.
+        </div>
+        <p class="dl-note">Experimental on a Mac. The Pathfinder, rendering, Video Mode and tick rates under 162 TPS (those run at 240) need Windows for now. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
+      </div>
+
+      <div class="dl-panel" id="dl-iphone" role="tabpanel" aria-labelledby="dl-tab-iphone">
+        <h3 class="dl-panel-title">iPhone and iPad</h3>
+        <p class="dl-need">For an iPhone or iPad on iOS 14 or later.</p>
+        <ol class="dl-steps">
+          <li><span>Get <strong>Geode</strong> with its iOS launcher. <a href="https://github.com/geode-sdk/ios-launcher/blob/main/INSTALL.md">Geode&rsquo;s iOS guide</a> walks you through the ways to install it.</span></li>
+          <li><span>On the iPhone itself, download <code>nigelx1.guccibot.geode</code> with the button above. It lands in the Files app.</span></li>
+          <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file from Files. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again.</span></li>
+          <li><span>Restart the game.</span></li>
+        </ol>
+        <div class="dl-open">
+          <span class="dl-open-label">Open GucciBot</span>
+          Pause a level and press <strong>GucciBot</strong> in the bottom-right corner of the pause menu. The menu fills the screen; drag it to scroll.
+        </div>
+        <p class="dl-note">Experimental, and the least tested so far. The Pathfinder, rendering, Video Mode and tick rates under 162 TPS (those run at 240) need Windows for now. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
+      </div>
+
+      <div class="dl-panel" id="dl-android" role="tabpanel" aria-labelledby="dl-tab-android">
+        <h3 class="dl-panel-title">Android</h3>
+        <p class="dl-need">For Android phones and tablets, 32- or 64-bit.</p>
+        <ol class="dl-steps">
+          <li><span>Get <strong>Geode</strong> with <a href="https://github.com/geode-sdk/android-launcher/releases/latest">its Android launcher</a>, and play Geometry Dash through it. Already have it? Skip this.</span></li>
+          <li><span>On the phone itself, download <code>nigelx1.guccibot.geode</code> with the button above.</span></li>
+          <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again.</span></li>
+          <li><span>Restart the game.</span></li>
+        </ol>
+        <div class="dl-open">
+          <span class="dl-open-label">Open GucciBot</span>
+          Pause a level and press <strong>GucciBot</strong> in the bottom-right corner of the pause menu. The menu fills the screen; drag it to scroll.
+        </div>
+        <p class="dl-note">Experimental, though the Android build has run on a phone. The Pathfinder, rendering, Video Mode and tick rates under 162 TPS (those run at 240) need Windows for now. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
+      </div>
+
+      <p class="dl-standdown"><strong>Running ToastyReplay Lite or Silicate?</strong> Turn it off first. GucciBot stands down while either one is enabled, and says why.</p>
+    </div>
+
+    <p class="dl-help reveal">Stuck, or got a question? Ask in <a href="https://discord.gg/m95NUPdbpJ">Nigel&rsquo;s Neighborhood</a>, the GucciBot Discord. Found a bug? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a> on GitHub.</p>
+
+    <div class="dl-facts reveal">
+      <div class="dl-fact">
+        <div class="dl-fact-label">Version</div>
+        <div class="dl-fact-value">2.0.0-beta.5</div>
+        <div class="dl-fact-sub">The newest release. <a href="/changelog/" style="white-space:nowrap">What&rsquo;s new</a></div>
+      </div>
+      <div class="dl-fact">
+        <div class="dl-fact-label">Size</div>
+        <div class="dl-fact-value">235 MB</div>
+        <div class="dl-fact-sub">246,091,052 bytes</div>
+      </div>
+      <div class="dl-fact">
+        <div class="dl-fact-label">Needs</div>
+        <div class="dl-fact-value">GD 2.2081</div>
+        <div class="dl-fact-sub">and Geode 5.10.1 or a later 5.x</div>
+      </div>
+      <div class="dl-fact">
+        <div class="dl-fact-label">Format</div>
+        <div class="dl-fact-value">GBR6</div>
+        <div class="dl-fact-sub">Hypercompressed</div>
       </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; background:rgba(212,175,55,0.08); margin-top:4rem; border:1px solid rgba(212,175,55,0.08)" class="reveal">
-      <div style="padding:2rem; background:var(--black)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.85">Version</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px">2.0.0-beta.5</div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Silicate Engine</div>
+    <dl class="dl-file-facts reveal">
+      <div class="dl-row">
+        <dt>SHA-256</dt>
+        <dd>
+          <button type="button" class="dl-copy dl-hash" data-copy="eec8a1e6e616a21ba76ce0d43f36c520ed0ca5b845b9402e220b967d54c88fa4" aria-label="Copy the SHA-256 of nigelx1.guccibot.geode"><code>eec8a1e6e616a21ba76ce0d43f36c520ed0ca5b845b9402e220b967d54c88fa4</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button>
+          <div class="dl-check">
+            <span class="dl-check-label">Check your copy against it</span>
+            <span class="dl-check-row"><span class="dl-check-os">Windows</span><button type="button" class="dl-copy dl-cmd" data-copy="certutil -hashfile nigelx1.guccibot.geode SHA256"><code>certutil -hashfile nigelx1.guccibot.geode SHA256</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button></span>
+            <span class="dl-check-row"><span class="dl-check-os">Mac</span><button type="button" class="dl-copy dl-cmd" data-copy="shasum -a 256 nigelx1.guccibot.geode"><code>shasum -a 256 nigelx1.guccibot.geode</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button></span>
+          </div>
+        </dd>
       </div>
-      <div style="padding:2rem; background:var(--black)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.85">Format</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px">GBR6</div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Hypercompressed</div>
+      <!-- VirusTotal slot. Nigel, 2026-11-01: the report comes when 2.0 is
+           released, not before. Link it here then. -->
+      <div class="dl-row">
+        <dt>VirusTotal</dt>
+        <dd><span class="dl-pending">Coming with 2.0</span> The scan report goes up here when 2.0 is released.</dd>
       </div>
-      <div style="padding:2rem; background:var(--black)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.85">GD Version</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px">2.2081</div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Win · Mac · iOS · Android</div>
+      <div class="dl-row">
+        <dt>Inside</dt>
+        <dd>The Windows, Mac, iPhone and Android (32- and 64-bit) builds, the renderer&rsquo;s FFmpeg for Windows, the music, and the JMF Trainer&rsquo;s video. That&rsquo;s where the size comes from.</dd>
       </div>
-      <div style="padding:2rem; background:var(--black)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;opacity:.85">Geode</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px">5.10.1+</div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:.25rem">Required</div>
+      <div class="dl-row">
+        <dt>Source</dt>
+        <dd>Open source under the GPL-3.0, on <a href="https://github.com/Nigelx1/GucciBot">GitHub</a>, with <a href="https://github.com/Nigelx1/GucciBot/releases">every release</a>.</dd>
       </div>
-    </div>
+    </dl>
   </div>
 </section>
 

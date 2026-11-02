@@ -41,6 +41,82 @@ const items = [
   else if (wide.addListener) wide.addListener(onWide);
 })();
 
+// Download picker: a tab per platform, opened on the visitor's own one (a
+// guess from the browser; every tab is one press away). Arrow keys, Home and
+// End move between tabs, as tabs do. The tabs are real buttons, so they
+// never start the click gag. Without JavaScript the CSS shows all four.
+(function () {
+  const picker = document.querySelector('[data-picker]');
+  if (!picker) return;
+  const tabs = [...picker.querySelectorAll('[role="tab"]')];
+  function select(tab, focus) {
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute('aria-controls'));
+      if (panel) panel.hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      let j = -1;
+      if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') j = 0;
+      else if (e.key === 'End') j = tabs.length - 1;
+      if (j < 0) return;
+      e.preventDefault();
+      select(tabs[j], true);
+    });
+  });
+  const ua = navigator.userAgent || '';
+  // iPadOS asks for the desktop site, so an iPad says it's a Mac with a touch screen.
+  const touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+  const guess = /Android/i.test(ua) ? 'android'
+    : (/iPhone|iPad|iPod/.test(ua) || touchMac) ? 'iphone'
+    : /Macintosh|Mac OS X/.test(ua) ? 'mac'
+    : 'windows';
+  select(document.getElementById('dl-tab-' + guess) || tabs[0]);
+})();
+
+// Click to copy (the release's SHA-256 and the commands that check it).
+document.querySelectorAll('[data-copy]').forEach(btn => {
+  const hint = btn.querySelector('.dl-copy-hint');
+  let timer = 0;
+  function fallback(text) {
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.setAttribute('readonly', '');
+    area.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+    document.body.appendChild(area);
+    area.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    area.remove();
+    return ok;
+  }
+  function show(ok) {
+    btn.classList.toggle('is-copied', ok);
+    if (hint) hint.textContent = ok ? 'Copied' : 'Not copied';
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      btn.classList.remove('is-copied');
+      if (hint) hint.textContent = 'Copy';
+    }, 2000);
+  }
+  btn.addEventListener('click', () => {
+    const text = btn.getAttribute('data-copy');
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(() => show(true), () => show(fallback(text)));
+    } else {
+      show(fallback(text));
+    }
+  });
+});
+
 // Shared across every page now that this is a real multi-page site
 // (site/, not one guccibot.html) -- guarded so pages without a
 // marquee (e.g. the changelog) don't error on the missing element.
