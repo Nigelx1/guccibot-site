@@ -194,7 +194,8 @@
         <li><span><span class="engine-highlight">Autosave at level end</span> — finish the level while recording and the macro saves under its name. On by default; a macro with no name isn&rsquo;t saved until you give it one. The kind of feature you forget about until you desperately need it.</span></li>
         <li><span><span class="engine-highlight">Autosave on timer</span> — saves the macro every few minutes while you record (you pick, from half a minute to 30), once it has a name. Runs in the background. Also the kind of feature you forget about until you desperately need it. Enable both.</span></li>
         <li><span><span class="engine-highlight">Block inputs during playback</span> — on by default, as in Silicate: while a macro plays, only the macro presses buttons, and your own clicks don&rsquo;t reach the game. Switch it off (Macro &gt; Recording and playback) to let them through.</span></li>
-        <li><span><span class="engine-highlight">Auto safe mode</span> — on by default. Cheat during an attempt (a macro playing, Calculate or the Pathfinder running, noclip, speedhack, a TPS other than 240, the autoclicker, Prevent Death, frame advance, Force Platformer, or anything that shows the way through the level: Click Indicators, the Survival Indicator, the path preview, the macro path, Practice range or a trainer&rsquo;s ghosts) and that attempt just doesn&rsquo;t count: no completion, no new best, no percentage, nothing sent to the servers. Turn it off and a small red dot sits in the corner while a cheat&rsquo;s on, right there in your recordings. Keep it honest. Brrr.</span></li>
+        <li><span><span class="engine-highlight">Auto safe mode</span> — on by default. Cheat during an attempt (a macro playing, Calculate or the Pathfinder running, noclip, speedhack, a TPS other than 240, the autoclicker, Prevent Death, frame advance, Force Platformer, or anything that shows the way through the level: Click Indicators, the Survival Indicator, the path preview, the macro path, Practice range or a trainer&rsquo;s ghosts) and that attempt just doesn&rsquo;t count: no completion, no new best, no percentage, nothing sent to the servers. Turn it off and a small red dot sits in the corner while a cheat&rsquo;s on, right there in your recordings. <span class="dl-pending">Coming with 2.0</span> Safe mode follows what the Demonlist allows, strictly, so nobody can fake a completion with GucciBot. Recording a macro, live hitboxes and hitborders (the only-on-death kind are still fine), the HUD&rsquo;s Touching orbs and Time warp, a trainer&rsquo;s click bar and the Pathfinder&rsquo;s planned route all count as cheats too. The cheat mark shows on the end screen, a run with a cheat or the bot on never verifies an editor level (even with auto safe mode off), and renders never show the cheat dot. Keep it honest. Brrr.</span></li>
+        <li><span><span class="engine-highlight">Legit only</span> &mdash; <span class="dl-pending">Coming with 2.0</span> One switch (Hacks &gt; Gameplay) turns off every cheat and keeps it off: no macro playing, recording or rendering, no Calculate, no Pathfinder, no frame advance, 240 TPS at 1.00x speed. Flip it back and your settings return exactly as they were. Pure skill. Brrr.</span></li>
         <li><span><span class="engine-highlight">Setup check</span> — the engine breaks with GD&rsquo;s Auto-Checkpoints, other mods&rsquo; practice fixes, Mega Hack&rsquo;s or QOLMod&rsquo;s Frame Extrapolation (not GucciBot&rsquo;s own) and a second bot running alongside. GucciBot checks for all of them and tells you, once per launch and again when you hit Record or Play. It never touches another mod&rsquo;s settings.</span></li>
         <li><span><span class="engine-highlight">Disable bot</span> — one switch takes GucciBot out of the game completely, no restart: every hook and patch comes out until you flip it back.</span></li>
         <li><span><span class="engine-highlight">RNG lock</span> — freezes the random seed so shake effects and randomized elements behave identically between attempts. Deterministic. Consistent. Locked.</span></li>
@@ -206,7 +207,7 @@
         <li><span><span class="engine-highlight">Other bots&rsquo; macros</span> — Saved macros lists GDR, Silicate, TcBot, ToastyReplay, yBot, xdBot, Mega Hack, Echo and more under From other bots, one click to convert: 27 formats read, 21 written (Export as, from any macro&rsquo;s &hellip; menu). Or Import a macro from anywhere.</span></li>
         <li><span><span class="engine-highlight">Frame Editor</span> — a timeline of a macro&rsquo;s inputs: drag, stretch or shorten any press, with undo and redo (Macro Tools &gt; Frame Editor). Check macro (Saved macros) lists anything that would desync playback.</span></li>
         <li><span><span class="engine-highlight">Editor tools</span> — Macro Buffing lays the path you played into the level as objects, spider snaps included; Replace All turns every object of one ID into another (Macro Tools &gt; Editor Tools).</span></li>
-        <li><span><span class="engine-highlight">Hitboxes</span> — collision boxes over the level in play, practice, recording and playback, optionally only once you die, with a trail and your own colors (Macro page).</span></li>
+        <li><span><span class="engine-highlight">Hitboxes</span> — collision boxes over the level in play, practice, recording and playback, optionally only once you die, with a trail and your own colors (Macro page). From 2.0, live hitboxes count as a cheat; only-on-death ones don&rsquo;t.</span></li>
         <li><span><span class="engine-highlight">Path preview</span> — lines ahead of the player, green if you hold, red if you let go (Hacks &gt; Prediction). Counts as a cheat.</span></li>
         <li><span><span class="engine-highlight">Click Indicators</span> — the macro&rsquo;s clicks coming at you over the level and down a rhythm lane, scored Perfect / OK / Miss, with every option of Bogdaner09&rsquo;s free mod (JMF Trainer and Trainer pages). Safe mode counts it as a cheat.</span></li>
         <li><span><span class="engine-highlight">Survival Indicator</span> — a live green or red readout of whether clicking right now survives what&rsquo;s coming, in four styles, with a click cue and an accuracy streak (trainer pages). Safe mode counts it as a cheat too.</span></li>
@@ -336,7 +337,8 @@
         <div class="theme-ext">.brrr</div>
         <div class="theme-name">GucciBot</div>
         <div class="theme-desc">
-          <span class="theme-dot" style="background:#D4AF37"></span>Gold &nbsp;
+          <span class="theme-dot" style="background:#D4AF37"></span>Gold<br>
+          The original. Gold on black, where the drip started
         </div>
       </div>
       <div class="theme-card t-toosii">
@@ -345,7 +347,8 @@
         <div class="theme-name">ToosiiBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#7c3aed"></span>LSU Purple
-          <span class="theme-dot" style="background:#D4AF37; margin-left:6px"></span>Gold
+          <span class="theme-dot" style="background:#D4AF37; margin-left:6px"></span>Gold<br>
+          Running routes in purple and gold. Never covered
         </div>
       </div>
       <div class="theme-card t-toosii2">
@@ -354,7 +357,8 @@
         <div class="theme-name">ToosiiBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#ea580c"></span>Syracuse Orange
-          <span class="theme-dot" style="background:#1e3a8a; margin-left:6px"></span>Navy
+          <span class="theme-dot" style="background:#1e3a8a; margin-left:6px"></span>Navy<br>
+          Orange on navy. Wide open, every snap
         </div>
       </div>
       <div class="theme-card t-toosii3">
@@ -363,7 +367,8 @@
         <div class="theme-name">ToosiiBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#15803d"></span>Sac State Green
-          <span class="theme-dot" style="background:#D4AF37; margin-left:6px"></span>Gold
+          <span class="theme-dot" style="background:#D4AF37; margin-left:6px"></span>Gold<br>
+          Sac State green. Third jersey, still never covered
         </div>
       </div>
       <div class="theme-card t-ja">
@@ -372,7 +377,8 @@
         <div class="theme-name">JaBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#1d4ed8"></span>Grizzlies Navy
-          <span class="theme-dot" style="background:#93c5fd; margin-left:6px"></span>Light Blue
+          <span class="theme-dot" style="background:#93c5fd; margin-left:6px"></span>Light Blue<br>
+          High flyer in Memphis blue. Ball don&rsquo;t lie
         </div>
       </div>
       <div class="theme-card t-giddey">
@@ -381,7 +387,8 @@
         <div class="theme-name">GiddeyBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#020c1a; border:1px solid #444"></span>Thunder Blue
-          <span class="theme-dot" style="background:#ff4f1b; margin-left:6px"></span>Orange
+          <span class="theme-dot" style="background:#ff4f1b; margin-left:6px"></span>Orange<br>
+          Thunder blue with an orange streak. G&rsquo;day, mate
         </div>
       </div>
       <div class="theme-card t-bam">
@@ -390,7 +397,8 @@
         <div class="theme-name">BamBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#1a1a1a; border:1px solid #444"></span>Heat Black
-          <span class="theme-dot" style="background:#dc2626; margin-left:6px"></span>Red
+          <span class="theme-dot" style="background:#dc2626; margin-left:6px"></span>Red<br>
+          Heat black and red, good for 83 a night
         </div>
       </div>
       <div class="theme-card t-sexyy">
@@ -399,7 +407,8 @@
         <div class="theme-name">SexyyBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#db2777"></span>Hot Pink
-          <span class="theme-dot" style="background:#7c3aed; margin-left:6px"></span>Purple
+          <span class="theme-dot" style="background:#7c3aed; margin-left:6px"></span>Purple<br>
+          Hot pink and purple, straight out the STL. Skee yee
         </div>
       </div>
       <div class="theme-card t-juice">
@@ -408,7 +417,8 @@
         <div class="theme-name">JuiceBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#f58453"></span>Coral
-          <span class="theme-dot" style="background:#4a9b93; margin-left:6px"></span>Teal
+          <span class="theme-dot" style="background:#4a9b93; margin-left:6px"></span>Teal<br>
+          Named for our own bug hunter. That&rsquo;s tuff
         </div>
       </div>
       <div class="theme-card t-butler">
@@ -417,7 +427,8 @@
         <div class="theme-name">ButlerBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#ce1141"></span>Bulls Red
-          <span class="theme-dot" style="background:#0a0a0a; margin-left:6px"></span>Black
+          <span class="theme-dot" style="background:#0a0a0a; margin-left:6px"></span>Black<br>
+          Bulls red on black. Playoff mode, always on
         </div>
       </div>
       <div class="theme-card t-saweetie">
@@ -426,7 +437,8 @@
         <div class="theme-name">SaweetieBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#ff2e85"></span>Hot Pink
-          <span class="theme-dot" style="background:#4a0e33; margin-left:6px"></span>Plum
+          <span class="theme-dot" style="background:#4a0e33; margin-left:6px"></span>Plum<br>
+          Hot pink on plum. Stay icy, tap in
         </div>
       </div>
       <div class="theme-card t-maybach">
@@ -435,7 +447,8 @@
         <div class="theme-name">MaybachBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#c7c7cc"></span>Platinum
-          <span class="theme-dot" style="background:#0a0a0a; margin-left:6px"></span>Black
+          <span class="theme-dot" style="background:#0a0a0a; margin-left:6px"></span>Black<br>
+          Platinum on black. Every frame a boss move. Huh
         </div>
       </div>
       <div class="theme-card t-romo">
@@ -444,7 +457,8 @@
         <div class="theme-name">RomoBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#c2ccd9"></span>Silver
-          <span class="theme-dot" style="background:#050e1c; margin-left:6px; border:1px solid #444"></span>Navy
+          <span class="theme-dot" style="background:#050e1c; margin-left:6px; border:1px solid #444"></span>Navy<br>
+          Silver and navy. Calls every frame before it happens
         </div>
       </div>
       <div class="theme-card t-grizzley">
@@ -453,7 +467,8 @@
         <div class="theme-name">GrizzleyBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#de1712"></span>Flare Red
-          <span class="theme-dot" style="background:#0a0908; margin-left:6px; border:1px solid #444"></span>Steel Black
+          <span class="theme-dot" style="background:#0a0908; margin-left:6px; border:1px solid #444"></span>Steel Black<br>
+          Detroit red on steel black. First day out, activated
         </div>
       </div>
       <div class="theme-card t-redkingdom">
@@ -462,7 +477,8 @@
         <div class="theme-name">Red Kingdom</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#d10909"></span>Pulsing Red
-          <span class="theme-dot" style="background:#070202; margin-left:6px; border:1px solid #444"></span>Black
+          <span class="theme-dot" style="background:#070202; margin-left:6px; border:1px solid #444"></span>Black<br>
+          Square corners and a red that pulses like a heartbeat
         </div>
       </div>
       <div class="theme-card t-lemonade">
@@ -471,7 +487,8 @@
         <div class="theme-name">LemonadeBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#fad925"></span>Lemonade Yellow
-          <span class="theme-dot" style="background:#171307; margin-left:6px; border:1px solid #444"></span>Black
+          <span class="theme-dot" style="background:#171307; margin-left:6px; border:1px solid #444"></span>Black<br>
+          Lemonade yellow, squeezed till every frame is sweet
         </div>
       </div>
       <div class="theme-card t-brrr">
@@ -490,7 +507,8 @@
         <div class="theme-name">WakaBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#34c74d"></span>Grove Green
-          <span class="theme-dot" style="background:#050d07; margin-left:6px; border:1px solid #444"></span>Black
+          <span class="theme-dot" style="background:#050d07; margin-left:6px; border:1px solid #444"></span>Black<br>
+          Grove green on black. Hard in the paint. OW!
         </div>
       </div>
       <div class="theme-card t-youngsta">
@@ -499,7 +517,8 @@
         <div class="theme-name">YoungstaBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#000000; border:1px solid #444"></span>Black
-          <span class="theme-dot" style="background:#ff0000; margin-left:6px"></span>Red (223)
+          <span class="theme-dot" style="background:#ff0000; margin-left:6px"></span>Red (223)<br>
+          Pure black, 223 red, and a birthday every day
         </div>
       </div>
       <div class="theme-card t-knockerz">
@@ -508,7 +527,8 @@
         <div class="theme-name">KnockerzBot</div>
         <div class="theme-desc">
           <span class="theme-dot" style="background:#12c7b8"></span>Teal
-          <span class="theme-dot" style="background:#040f0e; margin-left:6px; border:1px solid #444"></span>Black
+          <span class="theme-dot" style="background:#040f0e; margin-left:6px; border:1px solid #444"></span>Black<br>
+          Teal on black. Two step in, frame perfect out
         </div>
       </div>
       <div class="theme-card t-rondo">
