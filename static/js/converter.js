@@ -1378,7 +1378,7 @@
     },
 
     silicate1: {
-      name: 'Silicate v1 (.slc)', ext: '.slc', group: 'Current', confidence: 'src',
+      name: 'Silicate v1 (.slc)', ext: '.slc', group: 'Current', confidence: 'src', frameShift: 1,
       note: 'Ported from nat-converter. v2 and v3 are different containers and aren\'t supported yet.',
       detect: function (n, t, buf) {
         if (!n || !/\.slc$/i.test(n) || !buf || buf.length < 12) return false;
@@ -1425,7 +1425,7 @@
     // checksum over everything before it. Offsets carry through to GucciBot's
     // own format; every other format here lands clicks on the tick.
     scbf1: {
-      name: 'Silicate CBF (.scbf1)', ext: '.scbf1', group: 'Current', confidence: 'src',
+      name: 'Silicate CBF (.scbf1)', ext: '.scbf1', group: 'Current', confidence: 'src', frameShift: 1,
       note: 'anticroom\'s Silicate fork, with sub-tick clicks. The sub-tick timing carries over to GucciBot (.gbr6); other formats put each click on its tick.',
       detect: function (n, t, buf) {
         return hasMagic(buf, [0x53, 0x43, 0x42, 0x46]) && buf.length >= 44;
@@ -1676,8 +1676,9 @@
     },
 
     ybot2: {
-      name: 'yBot 2', ext: '.ybot', group: 'Current', confidence: 'src',
-      note: 'Layout from the ybot_fmt crate vendored in nat-converter.',
+      name: 'yBot 2', ext: '.ybot', group: 'Current', confidence: 'ok', frameShift: 1,
+      note: 'Layout from the ybot_fmt crate vendored in nat-converter. Counts frames one lower than ' +
+            'GucciBot (checked on real yBot macros played in the game, 2026-11-18).',
       detect: function (n, t, buf) {
         // yBot 1 shares this magic; it puts an f32 fps where v2 puts a small
         // version number, so the two separate cleanly on that field.
@@ -1741,8 +1742,9 @@
     },
 
     ybot1: {
-      name: 'yBot 1', ext: '.ybot', group: 'Legacy (2.1)', confidence: 'src',
-      note: 'Ported from nat-converter. Shares yBot 2\'s magic but is a flat record list.',
+      name: 'yBot 1', ext: '.ybot', group: 'Legacy (2.1)', confidence: 'src', frameShift: 1,
+      note: 'Ported from nat-converter. Shares yBot 2\'s magic but is a flat record list. ' +
+            'Shifted like yBot 2; no real yBot 1 file has been checked.',
       detect: function (n, t, buf) {
         return hasMagic(buf, [0x79, 0x62, 0x6F, 0x74]) && buf.length >= 12 &&
                dvOf(buf).getUint32(4, true) > 16;
@@ -1797,6 +1799,25 @@
     var c = { tps: rep.tps, inputs: rep.inputs.map(function (i) { return Object.assign({}, i); }) };
     if (rep.tpsChanges) c.tpsChanges = rep.tpsChanges.slice();
     return c;
+  }
+
+  /* Frames on this page are GucciBot's numbering, as in the game's own
+   * converter (src/tools/macro_convert). Silicate and yBot count one frame
+   * lower than GucciBot (GucciBot records an input at the frame after the
+   * one it's on), so their formats carry frameShift: 1, added to every frame
+   * read and taken off every frame written, TPS changes included. Between
+   * two such formats nothing moves; to or from GucciBot's .brrr a click
+   * lands on the same tick. Returns how many inputs fell before frame 0 and
+   * were left out. */
+  function shiftFrames(rep, by) {
+    if (!by) return 0;
+    rep.inputs.forEach(function (i) { i.frame += by; });
+    if (rep.tpsChanges)
+      rep.tpsChanges = rep.tpsChanges.map(function (c) { return Object.assign({}, c, { frame: c.frame + by }); })
+        .filter(function (c) { return c.frame >= 0; });
+    var before = rep.inputs.length;
+    rep.inputs = rep.inputs.filter(function (i) { return i.frame >= 0; });
+    return before - rep.inputs.length;
   }
 
   /* A macro whose TPS changes partway (GucciBot's .brrr, TcBot, yBot) can't
@@ -1895,6 +1916,7 @@
       });
 
     function finishLoad(rep) {
+      shiftFrames(rep, FORMATS[key].frameShift || 0);
       original = rep;
       // Formats that store a frame delta rather than a rate come back as
       // 239.99998... from float32 rounding. The intent is obviously 240.
@@ -2080,6 +2102,7 @@
       var f = FORMATS[key];
       var out = clone(current);
       out.tps = parseFloat($('outtps').value) || current.tps;
+      var droppedFirst = shiftFrames(out, -(f.frameShift || 0));
       var writing;
       try {
         writing = Promise.resolve(f.write(out));
@@ -2100,8 +2123,10 @@
       setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
       var droppedP2 = f.p1only && out.inputs.some(function (i) { return i.player2; });
       var droppedTps = !!(out.tpsChanges && out.tpsChanges.length);
-      show(droppedP2 ? 'err' : (f.timeBased || droppedTps) ? 'warn' : 'good',
-        'Saved as ' + f.name + '.' + (droppedP2 ?
+      show(droppedP2 ? 'err' : (f.timeBased || droppedTps || droppedFirst) ? 'warn' : 'good',
+        'Saved as ' + f.name + '.' + (droppedFirst ?
+          ' <strong>' + droppedFirst + ' input(s) on the level\'s first frame were left out:</strong> ' +
+          f.name + ' counts frames one lower than GucciBot and has no frame before that one.' : '') + (droppedP2 ?
           ' <strong>Player 2 inputs were dropped.</strong> ' + f.name + ' has no ' +
           'player field at all, so only player 1 survives the conversion.' : '') +
         (f.timeBased ?
