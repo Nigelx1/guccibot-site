@@ -85,7 +85,7 @@
   // 2026-11-23: nothing plays for a visitor who hasn't turned it on, and the
   // visit goes to the home page.
   var VIDEO_ON = !!(window.GUCCI_SITE && window.GUCCI_SITE.droppedVideo);
-  // A visitor's own choice (the "Dropped video" button on the other pages) wins.
+  // A visitor's own choice (the "Surprise video" button on the other pages) wins.
   try {
     var mine = localStorage.getItem('gucci.droppedVideo');
     if (mine === '1') VIDEO_ON = true;

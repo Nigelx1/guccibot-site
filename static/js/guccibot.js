@@ -188,7 +188,7 @@ document.querySelectorAll('.feature-grid.reveal, .themes-grid.reveal, .credits-g
 const DROPPED_VIDEO_URL = 'https://github.com/Nigelx1/guccibot-site/releases/download/site-video/0901.1.mp4';
 // The switch (Nigel, 2026-11-23). static/js/site-config.js sets the default for
 // everyone (off; off too if that file didn't load). Each visitor can turn it on
-// or off for themselves with the "Dropped video" button at the bottom of the
+// or off for themselves with the "Surprise video" button at the bottom of the
 // page: their choice is saved in their browser (localStorage) and stays until they
 // change it or clear the site's data. It changes nothing for anyone else.
 const DROPPED_KEY = 'gucci.droppedVideo';
@@ -241,20 +241,12 @@ function addDroppedSwitch() {
     'border:1px solid rgba(255,255,255,.15);color:inherit;font:inherit;cursor:pointer;opacity:.75;';
   const label = () => {
     const on = droppedOn();
-    btn.textContent = 'Dropped video: ' + (on ? 'On' : 'Off');
+    btn.textContent = 'Surprise video: ' + (on ? 'On' : 'Off');
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
   };
   label();
   btn.addEventListener('click', () => { setDroppedOn(!droppedOn()); label(); });
-  // The warning, always shown under the switch (Nigel's call, 2026-11-23).
-  const note = document.createElement('div');
-  note.className = 'fine';
-  note.style.cssText = 'max-width:520px;margin:.4rem auto 0;opacity:.6;';
-  note.textContent = 'On, clicking anything that isn\'t a button plays a loud, full-screen video ' +
-    'you can only get out of by reloading the page. Some people find it uncomfortable. ' +
-    'This only changes it for you, saved in this browser.';
   host.appendChild(btn);
-  host.appendChild(note);
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addDroppedSwitch);
 else addDroppedSwitch();
