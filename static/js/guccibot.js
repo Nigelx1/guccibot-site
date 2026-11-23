@@ -186,9 +186,24 @@ document.querySelectorAll('.feature-grid.reveal, .themes-grid.reveal, .credits-g
 // links) and keeps its own fallback for that case, since a direct
 // visit genuinely has no prior gesture to reuse.
 const DROPPED_VIDEO_URL = 'https://github.com/Nigelx1/guccibot-site/releases/download/site-video/0901.1.mp4';
-// The switch is in static/js/site-config.js (off since 2026-11-23). If that file
-// didn't load, the video stays off.
-const DROPPED_VIDEO_ON = !!(window.GUCCI_SITE && window.GUCCI_SITE.droppedVideo);
+// The switch (Nigel, 2026-11-23). static/js/site-config.js sets the default for
+// everyone (off; off too if that file didn't load). Each visitor can turn it on
+// or off for themselves with the "Dropped video" button at the bottom of the
+// page: their choice is saved in their browser (localStorage) and stays until they
+// change it or clear the site's data. It changes nothing for anyone else.
+const DROPPED_KEY = 'gucci.droppedVideo';
+const DROPPED_DEFAULT = !!(window.GUCCI_SITE && window.GUCCI_SITE.droppedVideo);
+function droppedOn() {
+  try {
+    const v = localStorage.getItem(DROPPED_KEY);
+    if (v === '1') return true;
+    if (v === '0') return false;
+  } catch (e) {}
+  return DROPPED_DEFAULT;
+}
+function setDroppedOn(on) {
+  try { localStorage.setItem(DROPPED_KEY, on ? '1' : '0'); } catch (e) {}
+}
 
 function showDropped() {
   if (document.getElementById('dropped-overlay')) return; // already showing
@@ -211,9 +226,40 @@ function showDropped() {
 
 // Exposed so the converter page can reuse the same video for its own,
 // more targeted gag (converting a .brrr away from GucciBot).
-window.GucciDropped = { url: DROPPED_VIDEO_URL, show: showDropped, on: DROPPED_VIDEO_ON };
+window.GucciDropped = { url: DROPPED_VIDEO_URL, show: showDropped };
+Object.defineProperty(window.GucciDropped, 'on', { get: droppedOn });
 
-if (DROPPED_VIDEO_ON && !location.pathname.startsWith('/dropped')) {
+// The visitor's switch: a real <button>, so pressing it never sets off the gag.
+function addDroppedSwitch() {
+  const host = document.querySelector('footer .footer-bottom') || document.querySelector('footer');
+  if (!host || document.getElementById('dropped-switch')) return;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.id = 'dropped-switch';
+  btn.className = 'fine';
+  btn.style.cssText = 'display:block;margin:.6rem auto 0;padding:.3rem .6rem;background:none;' +
+    'border:1px solid rgba(255,255,255,.15);color:inherit;font:inherit;cursor:pointer;opacity:.75;';
+  const label = () => {
+    const on = droppedOn();
+    btn.textContent = 'Dropped video: ' + (on ? 'On' : 'Off');
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  };
+  label();
+  btn.addEventListener('click', () => { setDroppedOn(!droppedOn()); label(); });
+  // The warning, always shown under the switch (Nigel's call, 2026-11-23).
+  const note = document.createElement('div');
+  note.className = 'fine';
+  note.style.cssText = 'max-width:520px;margin:.4rem auto 0;opacity:.6;';
+  note.textContent = 'On, clicking anything that isn\'t a button plays a loud, full-screen video ' +
+    'you can only get out of by reloading the page. Some people find it uncomfortable. ' +
+    'This only changes it for you, saved in this browser.';
+  host.appendChild(btn);
+  host.appendChild(note);
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addDroppedSwitch);
+else addDroppedSwitch();
+
+if (!location.pathname.startsWith('/dropped')) {
   document.addEventListener('click', (e) => {
     // The converter is a tool, not marketing -- a fullscreen video
     // hijacking the page while someone is mid-conversion is just
@@ -222,6 +268,7 @@ if (DROPPED_VIDEO_ON && !location.pathname.startsWith('/dropped')) {
     // (see converter.js). Page chrome outside the tool still triggers
     // this one normally.
     if (e.target.closest('.conv-wrap')) return;
+    if (!droppedOn()) return; // the switch is off for this visitor
     const real = e.target.closest('a, button, input, textarea, select, label, [role="button"], [onclick]');
     if (!real) {
       showDropped();

@@ -23,7 +23,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261102">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#111110">
-<script src="/static/js/site-config.js?v=20261123h"></script>
+<script src="/static/js/site-config.js?v=20261123b"></script>
 <style>
   html, body {
     margin: 0;
@@ -82,8 +82,15 @@
   // way, try unmuted first and only fall back to muted if the browser
   // blocks it.
   // The dropped-video switch (static/js/site-config.js) is off since
-  // 2026-11-23: nothing plays, and the visit goes to the home page.
+  // 2026-11-23: nothing plays for a visitor who hasn't turned it on, and the
+  // visit goes to the home page.
   var VIDEO_ON = !!(window.GUCCI_SITE && window.GUCCI_SITE.droppedVideo);
+  // A visitor's own choice (the "Dropped video" button on the other pages) wins.
+  try {
+    var mine = localStorage.getItem('gucci.droppedVideo');
+    if (mine === '1') VIDEO_ON = true;
+    else if (mine === '0') VIDEO_ON = false;
+  } catch (e) {}
   if (!VIDEO_ON) location.replace('/');
   var v = document.getElementById('v');
   var hint = document.getElementById('sound-hint');
