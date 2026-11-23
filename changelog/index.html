@@ -27,7 +27,7 @@
 <meta name="theme-color" content="#111110">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/css/guccibot.css?v=20261123h">
+<link rel="stylesheet" href="/static/css/guccibot.css?v=20261123">
 <style>
   /* Changelog-page-only additions -- kept separate from the shared
      stylesheet since nothing else on the site needs these. */
@@ -72,6 +72,14 @@
     line-height: 1.9;
   }
   .changelog-body a { color: var(--gold); }
+  .changelog-body code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95em;
+    color: var(--white);
+    background: rgba(255,255,255,0.06);
+    padding: 1px 5px;
+    overflow-wrap: anywhere;
+  }
 
   @media (max-width: 700px) {
     .changelog-hero { padding: 6.5rem 1.25rem 2rem; }
@@ -112,7 +120,22 @@
   <div class="changelog-list reveal">
 
     <div class="changelog-entry">
-      <div class="changelog-version">2.0.0-beta.5 <span class="current-tag">Current</span></div>
+      <div class="changelog-version">2.0.0 <span class="current-tag">Current</span></div>
+      <div class="changelog-body">
+        <strong style="color:var(--gold)">Two files, one release.</strong> <code>nigelx1.guccibot2208.geode</code> is GucciBot 2.0 for GD 2.2081 with Geode 5, on Windows, Mac, iPhone, iPad and Android, and the Mac build now runs on Intel Macs too (nobody has run it on one yet). <code>nigelx1.guccibot2209.geode</code> is a preview for GD 2.2091 on Windows, with Geode 6.0.0-beta.1 or later: everything but the Pathfinder, tick rates under 162 TPS, TPS changes inside a macro and High TPS precision, which come in 2.0.1. Both are built from the same code. Keep only one GucciBot file in your mods folder.
+        <br><br>
+        <strong>Pathfinder.</strong> The page gets an <strong>Engine</strong> choice. <strong>Search</strong>, the default and by far the stronger engine, is beta.5&rsquo;s pathfinder made stronger, with a backup plan for a run that&rsquo;s stuck. In Claude&rsquo;s test runs it has beaten all 22 of RobTop&rsquo;s main levels from a cold start (Deadlocked on an online copy of it). Every search starts cold unless <strong>Remember solutions</strong> is on. <strong>AI</strong> is new and early: a small network that comes with the mod decides each click. It&rsquo;s weak and beats very few levels; <strong>Practice</strong>, on by default, keeps it trying one. Off Windows the Pathfinder runs now too, without the trigger model (not tried on a device yet).
+        <br><br>
+        <strong>Safe mode by the Demonlist&rsquo;s rules.</strong> Recording a macro, live hitboxes and hitborders, the HUD&rsquo;s Touching orbs and Time warp, a trainer&rsquo;s click bar and the Pathfinder&rsquo;s planned route count as cheats now, and the cheat mark shows on the end screen. <strong>Legit only</strong> turns off every cheat with one switch and gives it all back when you turn it off.
+        <br><br>
+        <strong>New to play with.</strong> <strong>Hitborders</strong>: every hitbox grown by yours, so the gaps drawn are the room your center really has, with <strong>Possible positions</strong> (off by default) on top. Hitborders and their possible-positions band were NaN GD&rsquo;s ideas too; he isn&rsquo;t involved. The Trainer&rsquo;s <strong>Lane</strong> style, Juice&rsquo;s osu!taiko-style design, and <strong>Delay</strong> for a screen that lags. <strong>Record from where a macro is</strong>, <strong>Search the menu</strong> (Ctrl+F), <strong>Share my windows</strong>, a <strong>Windows layout</strong> for the menu, the <strong>Icon hack</strong> (every icon, color, trail, death effect and ship fire while it&rsquo;s on; looks only, not a cheat), and four new themes: RondoBot, SolarBot, JupiterBot and GBot.
+        <br><br>
+        <strong>Also:</strong> <strong>Explicit content</strong> (Settings &gt; Look) is off by default: the themes&rsquo; songs don&rsquo;t play and their few suggestive lines read clean until you turn it on (it&rsquo;s suggestive lyrics and material, nothing graphic). Rendering and Video Mode come to the Mac (not tried on one yet); renders that start at the level&rsquo;s start open on 0.00%, with no black first frame and no Play-button whoosh; a <strong>Basic: 1080p60</strong> preset, Showcase saving as .mp4, and Bitrate 0 letting the encoder pick. GucciBot stands down for Antic&rsquo;s Counter too, as it does for ToastyReplay Lite and Silicate. Plus a long list of fixes, on <a href="https://github.com/Nigelx1/GucciBot/releases/tag/v2.0.0">the release page</a>.
+      </div>
+    </div>
+
+    <div class="changelog-entry">
+      <div class="changelog-version">2.0.0-beta.5</div>
       <div class="changelog-body">
         <strong style="color:var(--gold)">Other bots&rsquo; macros, in the game.</strong> Drop another bot&rsquo;s macro in the replays folder (or use <strong>Import a macro</strong>) and Saved macros lists it under <em>From other bots</em>, ready to convert in one press. 27 formats read: GDR and GDR2, Silicate, TcBot, ToastyReplay&rsquo;s .ttr3, yBot, xdBot, Mega Hack Replay, TASBot, GucciBot 1.x&rsquo;s old .brrr and more. Any macro exports to 21 of them. The original is always kept. Built on peony&rsquo;s nat-converter, the same one on this site.
         <br><br>

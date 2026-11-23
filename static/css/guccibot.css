@@ -1067,7 +1067,7 @@
   .dl-steps strong, .dl-open strong { color: var(--white); }
   .dl-picker a, .dl-help a, .dl-facts a, .dl-file-facts a { color: var(--gold); }
 
-  .dl-picker code, .dl-file-facts code {
+  .dl-picker code, .dl-file-facts code, .dl-which code {
     font-family: 'Space Mono', monospace;
     font-size: 0.95em;
     color: var(--white);
@@ -1273,6 +1273,47 @@
     border: 1px dashed rgba(212,175,55,0.6);
   }
 
+  /* Which file? (2.0: two files on one release, one per GD version), between
+     the hero and the picker. The picker's card look and colors; nothing new. */
+  .dl-which {
+    max-width: 900px;
+    margin: 0 auto 1.75rem;
+    padding: 1.75rem 2.25rem;
+    border: 1px solid rgba(212,175,55,0.2);
+    background: var(--black);
+    font-size: 0.8rem;
+    color: #c8c8c8;
+    line-height: 1.8;
+  }
+
+  .dl-which-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .dl-which-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-top: 1.1rem;
+  }
+
+  .dl-which-list li {
+    padding-left: 0.9rem;
+    border-left: 2px solid rgba(212,175,55,0.5);
+  }
+
+  .dl-which strong { color: var(--white); }
+
+  /* One SHA-256 per file, each under its file's name. */
+  .dl-hash-label { display: block; margin-bottom: 0.35rem; color: var(--muted); }
+  .dl-hash + .dl-hash-label { margin-top: 0.9rem; }
+
   @media (max-width: 700px) {
     /* The Download button wraps, if it must, between "Download" and the
        version, never inside the version. */
@@ -1287,6 +1328,7 @@
     .dl-file { flex-direction: column; align-items: center; }
     .dl-file .sep { display: none; }
     .dl-panel { padding: 1.5rem 1.25rem 1.75rem; }
+    .dl-which { padding: 1.5rem 1.25rem; }
     .dl-standdown { padding: 1rem 1.25rem; }
     .dl-steps li { grid-template-columns: 1.6rem 1fr; gap: 0.6rem; }
     .dl-row { grid-template-columns: 1fr; gap: 0.6rem; padding: 1.25rem; }

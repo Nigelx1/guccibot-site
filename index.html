@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>document.documentElement.classList.add('js');addEventListener('load',function(){if(!window.GucciBotReady)document.documentElement.classList.remove('js')})</script>
-<title>GucciBot 2.0.0-beta.5 — Frame Perfect. GBR6. Brrr.</title>
+<title>GucciBot 2.0 — Frame Perfect. GBR6. Brrr.</title>
 <meta name="description" content="A free Geometry Dash macro bot for Geode: frame-perfect record and playback, Calculate's frame windows, a Pathfinder that plays levels itself, and a macro converter. Windows, Mac, iOS and Android.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://guccibot.net/">
@@ -27,7 +27,7 @@
 <meta name="theme-color" content="#111110">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/css/guccibot.css?v=20261123h">
+<link rel="stylesheet" href="/static/css/guccibot.css?v=20261123">
 </head>
 <body>
 
@@ -186,7 +186,7 @@
         <li><span><span class="engine-highlight">Noclip accuracy</span> — the share of this attempt&rsquo;s ticks on which noclip didn&rsquo;t have to save you, shown at the top of the screen while noclip is on. A reset or a respawn starts it over. Optional. Pairs with Die below.</span></li>
         <li><span><span class="engine-highlight">Autoclicker</span> — fully independent Hold Ticks, Release Ticks, and Clicks Per Hold per player, matching Silicate's own model, with a one-shot Copy to Player 2. Only while holding clicks just while you hold jump yourself, for either player. Plain rhythms (hold and release of 1 to 15 ticks, one click per hold, no swift clicks) are stored as GBR6 Type C: 4 bytes per 65,535 clicks. The description of the pattern is stored, not the output. This is unique to GucciBot publicly.</span></li>
         <li><span><span class="engine-highlight">Frame advance and frame stepping</span> — pause the physics loop and step forward one frame at a time. Useful for precise input placement, for debugging, for watching a crash in slow motion with full composure.</span></li>
-        <li><span><span class="engine-highlight">Hotkeys</span> — 19 rebindable keys (Settings &gt; Keybinds): open the menu, frame advance and step back, start or stop playback, noclip, intentional death, safe mode, Prevent death, the autoclicker, hitboxes, Compact Mode and more. A toggle by key sticks after a restart, same as the menu switch. None of them conflict with GD unless you set them to. Not on iOS, where no key reaches the mod.</span></li>
+        <li><span><span class="engine-highlight">Hotkeys</span> — 20 rebindable keys (Settings &gt; Keybinds): open the menu, frame advance and step back, start or stop playback, noclip, intentional death, safe mode, Prevent death, the autoclicker, hitboxes, hitborders, Compact Mode and more. A toggle by key sticks after a restart, same as the menu switch. None of them conflict with GD unless you set them to. Not on iOS, where no key reaches the mod.</span></li>
         <li><span><span class="engine-highlight">Layout mode</span> — strips the visual layer. Background becomes flat. Ground becomes flat. Decorative objects become invisible. The physics still run. You see the geometry, nothing else. Pure.</span></li>
         <li><span><span class="engine-highlight">No mirror effect</span> — suppress the visual flip when the level mirrors. Physics unaffected. Optional: recording-only mode so it only suppresses during record, not playback.</span></li>
         <li><span><span class="engine-highlight">Bot settings presets</span> — save the engine settings under a name and load them back in one click: TPS, speed, lock delta, scroll speed fix, backwards stepping, frame extrapolation, Prevent death, auto flip, maintain gravity, mirror inputs, noclip and autosave (Hacks &gt; Presets). Render settings have presets of their own. Swap between setups instantly.</span></li>
@@ -194,12 +194,12 @@
         <li><span><span class="engine-highlight">Autosave at level end</span> — finish the level while recording and the macro saves under its name. On by default; a macro with no name isn&rsquo;t saved until you give it one. The kind of feature you forget about until you desperately need it.</span></li>
         <li><span><span class="engine-highlight">Autosave on timer</span> — saves the macro every few minutes while you record (you pick, from half a minute to 30), once it has a name. Runs in the background. Also the kind of feature you forget about until you desperately need it. Enable both.</span></li>
         <li><span><span class="engine-highlight">Block inputs during playback</span> — on by default, as in Silicate: while a macro plays, only the macro presses buttons, and your own clicks don&rsquo;t reach the game. Switch it off (Macro &gt; Recording and playback) to let them through.</span></li>
-        <li><span><span class="engine-highlight">Auto safe mode</span> — on by default. Cheat during an attempt (a macro playing, Calculate or the Pathfinder running, noclip, speedhack, a TPS other than 240, the autoclicker, Prevent Death, frame advance, Force Platformer, or anything that shows the way through the level: Click Indicators, the Survival Indicator, the path preview, the macro path, Practice range or a trainer&rsquo;s ghosts) and that attempt just doesn&rsquo;t count: no completion, no new best, no percentage, nothing sent to the servers. Turn it off and a small red dot sits in the corner while a cheat&rsquo;s on, right there in your recordings. <span class="dl-pending">Coming with 2.0</span> Safe mode follows what the Demonlist allows, strictly, so nobody can fake a completion with GucciBot. Recording a macro, live hitboxes and hitborders (the only-on-death kind are still fine), the HUD&rsquo;s Touching orbs and Time warp, a trainer&rsquo;s click bar and the Pathfinder&rsquo;s planned route all count as cheats too. The cheat mark shows on the end screen, a run with a cheat or the bot on never verifies an editor level (even with auto safe mode off), and renders never show the cheat dot. Keep it honest. Brrr.</span></li>
-        <li><span><span class="engine-highlight">Legit only</span> &mdash; <span class="dl-pending">Coming with 2.0</span> One switch (Hacks &gt; Gameplay) turns off every cheat and keeps it off: no macro playing, recording or rendering, no Calculate, no Pathfinder, no frame advance, 240 TPS at 1.00x speed. Flip it back and your settings return exactly as they were. Pure skill. Brrr.</span></li>
+        <li><span><span class="engine-highlight">Auto safe mode</span> — on by default. Cheat during an attempt (a macro playing, Calculate or the Pathfinder running, noclip, speedhack, a TPS other than 240, the autoclicker, Prevent Death, frame advance, Force Platformer, or anything that shows the way through the level: Click Indicators, the Survival Indicator, the path preview, the macro path, Practice range or a trainer&rsquo;s ghosts) and that attempt just doesn&rsquo;t count: no completion, no new best, no percentage, nothing sent to the servers. Turn it off and a small red dot sits in the corner while a cheat&rsquo;s on, right there in your recordings. Safe mode follows what the Demonlist allows, strictly, so nobody can fake a completion with GucciBot. Recording a macro, live hitboxes and hitborders (the only-on-death kind are still fine), the HUD&rsquo;s Touching orbs and Time warp, a trainer&rsquo;s click bar and the Pathfinder&rsquo;s planned route all count as cheats too. The cheat mark shows on the end screen, a run under safe mode never verifies an editor level (the end screen says so), and renders never show the cheat dot. Keep it honest. Brrr.</span></li>
+        <li><span><span class="engine-highlight">Legit only</span> &mdash; one switch (Hacks &gt; Gameplay) turns off every cheat and keeps it off: no macro playing, recording or rendering, no Calculate, no Pathfinder, no frame advance, 240 TPS at 1.00x speed. Flip it back and your settings return exactly as they were. Pure skill. Brrr.</span></li>
         <li><span><span class="engine-highlight">Setup check</span> — the engine breaks with GD&rsquo;s Auto-Checkpoints, other mods&rsquo; practice fixes, Mega Hack&rsquo;s or QOLMod&rsquo;s Frame Extrapolation (not GucciBot&rsquo;s own) and a second bot running alongside. GucciBot checks for all of them and tells you, once per launch and again when you hit Record or Play. It never touches another mod&rsquo;s settings.</span></li>
         <li><span><span class="engine-highlight">Disable bot</span> — one switch takes GucciBot out of the game completely, no restart: every hook and patch comes out until you flip it back.</span></li>
         <li><span><span class="engine-highlight">RNG lock</span> — freezes the random seed so shake effects and randomized elements behave identically between attempts. Deterministic. Consistent. Locked.</span></li>
-        <li><span><span class="engine-highlight">Render tab</span> — FFmpeg video. Type any encoder into Codec (blank picks one for your graphics card: h264_nvenc, h264_amf, h264_qsv or libx264, and falls back to libx264 if that one won&rsquo;t open) and into Audio codec (aac by default). A pixel format picker, an Extra FFmpeg options field, width, height, FPS, bitrate, file type, output folder and file name, render presets and anticroom&rsquo;s intro card, every line of it editable. Optional separate audio tracks put the full mix, the music, the sound effects and the frame-window cues on four tracks of their own. All saved. All yours. Windows only for now.</span></li>
+        <li><span><span class="engine-highlight">Render tab</span> — FFmpeg video. Type any encoder into Codec (blank picks one for your graphics card: h264_nvenc, h264_amf, h264_qsv or libx264, and falls back to libx264 if that one won&rsquo;t open) and into Audio codec (aac by default). A pixel format picker, an Extra FFmpeg options field, width, height, FPS, bitrate, file type, output folder and file name, render presets and anticroom&rsquo;s intro card, every line of it editable. Optional separate audio tracks put the full mix, the music, the sound effects and the frame-window cues on four tracks of their own. All saved. All yours. On Windows, and on a Mac since 2.0 (Apple&rsquo;s VideoToolbox by default there; not tried on a Mac yet). Not on phones yet.</span></li>
         <li><span><span class="engine-highlight">Click sounds</span> — a click on every jump press and a release sound when you let go, from the built-in Clickbot pack or your own. It clicks for a playing macro&rsquo;s inputs too, and in renders if you want. Soft clicks for quick re-presses, background noise, and a separate pack for player 2 in two-player levels.</span></li>
         <li><span><span class="engine-highlight">Audio pitch follows speed</span> — one switch (Hacks &gt; Engine), on by default: the music and sounds play faster or slower with the game speed, and at their normal pitch when it&rsquo;s off. 2x speed, 2x pitch. Sounds natural. Doesn&rsquo;t sound like a chipmunk. Actually sounds natural.</span></li>
         <li><span><span class="engine-highlight">Frame extrapolation</span> — visual position extrapolates between physics ticks. At 240 TPS the visuals update smoothly, not in discrete jumps. The game looks right. The physics are right. Everything is right.</span></li>
@@ -211,7 +211,7 @@
         <li><span><span class="engine-highlight">Path preview</span> — lines ahead of the player, green if you hold, red if you let go (Hacks &gt; Prediction). Counts as a cheat.</span></li>
         <li><span><span class="engine-highlight">Click Indicators</span> — the macro&rsquo;s clicks coming at you over the level and down a rhythm lane, scored Perfect / OK / Miss, with every option of Bogdaner09&rsquo;s free mod (JMF Trainer and Trainer pages). Safe mode counts it as a cheat.</span></li>
         <li><span><span class="engine-highlight">Survival Indicator</span> — a live green or red readout of whether clicking right now survives what&rsquo;s coming, in four styles, with a click cue and an accuracy streak (trainer pages). Safe mode counts it as a cheat too.</span></li>
-        <li><span><span class="engine-highlight">Video Mode</span> — a full-screen video on the click bar&rsquo;s clock, with an Alignment Tool; its opacity, sync offset and nudge sit in a small Video settings window over the video (trainer pages; Windows only).</span></li>
+        <li><span><span class="engine-highlight">Video Mode</span> — a full-screen video on the click bar&rsquo;s clock, with an Alignment Tool; its opacity, sync offset and nudge sit in a small Video settings window over the video (trainer pages; Windows, and Mac since 2.0, not tried on a Mac yet).</span></li>
         <li><span><span class="engine-highlight">Compact Mode</span> — a small window for while you actually play: Off / Rec / Play, a saved macro to load, the name, Save and Calculate, tick rate and game speed, and Pause and step buttons in a level (Settings &gt; Look, or a key you bind).</span></li>
         <li><span><span class="engine-highlight">24 themes with 22 file extensions</span> — GucciBot, ToosiiBot &times;3, JaBot, GiddeyBot, BamBot, SexyyBot, JuiceBot, ButlerBot, SaweetieBot, MaybachBot, RomoBot, GrizzleyBot, Red Kingdom, LemonadeBot, BrrrBot, WakaBot, YoungstaBot, KnockerzBot, RondoBot, SolarBot, JupiterBot, GBot. Each has its own color palette. Each saves macros with its own extension. The payload is always GBR6. The extension is the drip.</span></li>
       </ul>
@@ -222,7 +222,7 @@
         </div>
         <div style="border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02)">
           <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:.75rem">The Build Story</div>
-          <p style="font-size:0.75rem;color:#888;line-height:1.9">Years of internal churn. Engine swaps, format rewrites, false starts that never saw daylight. None of that was ever really "released" &mdash; so we stopped counting it. Everything lined up: engine, format, themes, render, and now a full practice trainer. 1.0 was the first one we called done; 2.0 is the one we're finishing now. Brrr.</p>
+          <p style="font-size:0.75rem;color:#888;line-height:1.9">Years of internal churn. Engine swaps, format rewrites, false starts that never saw daylight. None of that was ever really "released" &mdash; so we stopped counting it. Everything lined up: engine, format, themes, render, and now a full practice trainer. 1.0 was the first one we called done; 2.0 is the one we just finished. Brrr.</p>
         </div>
         <div style="border:1px solid rgba(212,175,55,0.12);padding:1.75rem;background:rgba(212,175,55,0.02)">
           <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:.75rem">Disciplines</div>
@@ -303,20 +303,20 @@
       <div class="feature-card" data-num="03">
         <div class="feature-icon">&#x21E2;</div>
         <div class="feature-name">It Plans A Route</div>
-        <div class="feature-desc"><strong style="color:#cfcfcf">Show the planned route</strong> draws the way it would take through the whole level, from where you are. Switch on <strong style="color:#cfcfcf">Follow the planned route (AI)</strong> and every decision first tries the way GD&rsquo;s own physics finds to the route&rsquo;s next gate. When that way dead-ends, it jumps back to where it left the route.</div>
-        <div class="feature-badge">The AI&rsquo;s first steps.</div>
+        <div class="feature-desc"><strong style="color:#cfcfcf">Show the planned route</strong> draws the way it would take through the whole level, from where you are. Set <strong style="color:#cfcfcf">Follow the planned route</strong> to Route ideas and every decision also tries the way GD&rsquo;s own physics finds to the route&rsquo;s next gate; Route drives aims every decision at that gate. When that way dead-ends, it jumps back to where it left the route.</div>
+        <div class="feature-badge">Planning. Still experimental.</div>
       </div>
       <div class="feature-card" data-num="04">
         <div class="feature-icon">&#x21B6;</div>
         <div class="feature-name">Real Backtracking</div>
-        <div class="feature-desc">Dead end? It goes back through the frames it kept and takes another way &mdash; and further back each time a spot keeps biting. What got it past a hard spot is remembered per level, so the next search of that level is quicker.</div>
-        <div class="feature-badge">Learns the level.</div>
+        <div class="feature-desc">Dead end? It goes back through the frames it kept and takes another way &mdash; and further back each time a spot keeps biting. Every search starts cold; switch on <strong style="color:#cfcfcf">Remember solutions</strong> and what got it past a hard spot is kept per level, so the next search of that level is quicker.</div>
+        <div class="feature-badge">Backs up. Tries again.</div>
       </div>
     </div>
     <div class="reveal" style="margin-top:3rem;border:1px solid rgba(234,88,12,0.3);padding:1.75rem;background:rgba(234,88,12,0.04);max-width:760px">
       <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:.75rem">Straight Up: Where It&rsquo;s At</div>
-      <p style="font-size:0.75rem;color:#888;line-height:1.9;margin-bottom:.75rem">Pathfinder&rsquo;s default engine is <strong style="color:#cfcfcf">Absense&rsquo;s pathfinder, by Absent</strong>, ported in whole. 2.0.0-beta.5 puts the first steps of GucciBot&rsquo;s AI route planner on top of it: the level map, the planned route, and Follow the planned route, which stays off until you switch it on. It&rsquo;s early. Some spots still take it a while, and a level that needs something it has never seen can still stop it.</p>
-      <p style="font-size:0.75rem;color:#888;line-height:1.9">It plays in real time, right there in the level, with its progress in the corner. Start it from wherever you are, from the pause menu, or from the very beginning, and stop it whenever: it keeps the furthest run it found. Windows only for now. The old engine is still in the tab, as Classic.</p>
+      <p style="font-size:0.75rem;color:#888;line-height:1.9;margin-bottom:.75rem">Pathfinder&rsquo;s default engine is <strong style="color:#cfcfcf">Absense&rsquo;s pathfinder, by Absent</strong>, ported in whole: a search, and by far the stronger engine. In Claude&rsquo;s test runs it has beaten all 22 of RobTop&rsquo;s main levels from a cold start (Deadlocked on an online copy of it), each in at least one run. Some spots still take it a while, and a level that needs something it has never seen can still stop it. The planning tools on top of it (the level map, the planned route, and Follow the planned route, off until you switch it on) are still experimental. <strong style="color:#cfcfcf">AI</strong>, the other engine, is new and early: a small network that comes with the mod, trained on human play and then on its own runs, decides each click. It&rsquo;s weak and beats very few levels.</p>
+      <p style="font-size:0.75rem;color:#888;line-height:1.9">It plays in real time, right there in the level, with its progress in the corner. Start it from wherever you are, from the pause menu, or from the very beginning, and stop it whenever: it keeps the furthest run it found. Since 2.0 it runs on Mac and phones too (not tried on a device yet), without the trigger model, so levels with move and rotate triggers fail more often there. The GD 2.2091 preview doesn&rsquo;t have it yet. The old engine is still in the tab, as Classic.</p>
     </div>
   </div>
 </section>
@@ -737,6 +737,7 @@
       <div style="border:1px solid rgba(252,245,80,0.25);padding:1.75rem;background:rgba(252,245,80,0.04)">
         <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:#FCF550;opacity:.7;margin-bottom:.75rem">Also In Settings &rarr; BIG BRRRR</div>
         <p style="font-size:0.75rem;color:#b6b0e8;line-height:1.9">BIG BRRRR. A toggle. It plays something. It makes the menu bounce. It mutes the game while it does. That&rsquo;s all you&rsquo;re getting. You&rsquo;ll know it when you see it. Brrr.</p>
+        <p style="font-size:0.7rem;color:#b6b0e8;line-height:1.8;margin-top:.75rem">The themes&rsquo; own songs play only with <strong>Explicit content</strong> on (Settings &gt; Look), which is off by default. A song you add to the BIG BRRRR folder or a custom theme plays either way.</p>
       </div>
     </div>
   </div>
@@ -1014,7 +1015,7 @@
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">Can I use GucciBot on a Mac?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">Yes, on Apple Silicon Macs (M1 and newer) since 2.0.0-beta.3, and on Intel Macs from the next release: the Mac build in 2.0.0-beta.5 is Apple Silicon only. GucciBot runs on macOS, iOS and Android as well as Windows, all from the same download &mdash; experimental on those three, so if something&rsquo;s off, open an issue. Pathfinder, rendering, Video Mode and tick rates under 162 TPS (those run at 240 there) still need Windows for now. On a phone, the menu opens from the GucciBot button in the pause menu, fills the screen and scrolls when you drag it. On a Mac, Option opens it. Nigelx1 got asked really nicely.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">Yes. Apple silicon Macs (M1 and newer) since 2.0.0-beta.3, and Intel Macs since 2.0, though nobody has run it on an Intel Mac yet, so tell us how it goes. GucciBot runs on macOS, iOS and Android as well as Windows, all from the same download &mdash; still lightly tested on those three, so if something&rsquo;s off, open an issue. Rendering and Video Mode work on Windows and Mac (not tried on a Mac yet); phones don&rsquo;t have them yet. The Pathfinder runs everywhere but is at its best on Windows, and tick rates under 162 TPS (those run at 240 elsewhere) still need Windows. On a phone, the menu opens from the GucciBot button in the pause menu, fills the screen and scrolls when you drag it. On a Mac, Option opens it. On GD 2.2091 there&rsquo;s a Windows preview; Mac, iOS and Android on 2.2091 come later. Nigelx1 got asked really nicely.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
@@ -1044,7 +1045,7 @@
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">What&rsquo;s actually new?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">Current version is <strong style="color:var(--gold)">2.0.0-beta.5</strong> — a beta, and labeled one on purpose. Full release history, every version, lives on the <a href="/changelog/" style="color:var(--gold)">Changelog</a> page now instead of one line here that gets overwritten every bump.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">Current version is <strong style="color:var(--gold)">2.0.0</strong>, the full release, with a Windows preview for GD 2.2091 on the same release. Full release history, every version, lives on the <a href="/changelog/" style="color:var(--gold)">Changelog</a> page now instead of one line here that gets overwritten every bump.</div>
       </div>
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
@@ -1054,7 +1055,7 @@
 
       <div style="background:var(--near-black);padding:1.75rem 2rem">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:.75rem">Will there be a GucciBot 2.0?</div>
-        <div style="font-size:0.75rem;color:#888;line-height:1.8">You&rsquo;re looking at it. 2.0 is in beta now (2.0.0-beta.5), and the full release is next. The <a href="/changelog/" style="color:var(--gold)">Changelog</a> has what each beta added. Clearly the answer to &ldquo;are we finished&rdquo; is never actually yes. That is growth. That is the drip mentality. Brrr.</div>
+        <div style="font-size:0.75rem;color:#888;line-height:1.8">You&rsquo;re looking at it. 2.0 is out (2.0.0), and 2.0.1 is next: the Pathfinder, tick rates under 162 TPS, TPS changes inside a macro and High TPS precision on GD 2.2091. The <a href="/changelog/" style="color:var(--gold)">Changelog</a> has what every version added. Clearly the answer to &ldquo;are we finished&rdquo; is never actually yes. That is growth. That is the drip mentality. Brrr.</div>
       </div>
     </div>
   </div>
@@ -1070,9 +1071,12 @@
 </div>
 
 <!-- DOWNLOAD
-     The button always fetches the newest release's file. The version, the
-     size and the SHA-256 below are 2.0.0-beta.5's own (gh release download,
-     then sha256sum, 2026-11-01): change all three with every release.
+     Two files on one release: nigelx1.guccibot2208.geode (GD 2.2081, Geode 5,
+     every platform) and nigelx1.guccibot2209.geode (the GD 2.2091 preview,
+     Geode 6.0.0-beta.1 or later, Windows only). The button opens the release
+     page, where both are. The version, both sizes and both SHA-256s below are
+     2.0.0's and must match the files on the release (gh release download, then
+     sha256sum): change all of them with every release, for both files.
      Every control here is a real <a> or <button>, so none of them starts the
      click gag (guccibot.js). -->
 <section id="download" class="download-section">
@@ -1080,14 +1084,25 @@
     <div class="download-hero reveal">
       <div class="section-label" style="justify-content:center">Download</div>
       <div class="download-title">Get the Drip.</div>
-      <p class="download-sub">Geode 5.10.1+ &nbsp;·&nbsp; GD 2.2081 &nbsp;·&nbsp; Windows, Mac, iOS, Android &nbsp;·&nbsp; Free &nbsp;·&nbsp; Brrr.</p>
+      <p class="download-sub">GD 2.2081 + Geode 5 &nbsp;·&nbsp; GD 2.2091 + Geode 6 (Windows preview) &nbsp;·&nbsp; Free &nbsp;·&nbsp; Brrr.</p>
       <div class="download-btn-wrap">
         <a href="https://github.com/Nigelx1/GucciBot/releases/latest" class="btn-download">
-          <span>↓ &nbsp; Download on GitHub</span> <span class="nowrap">2.0.0-beta.5</span>
+          <span>↓ &nbsp; Download on GitHub</span> <span class="nowrap">2.0.0</span>
         </a>
       </div>
-      <p class="dl-file"><span><code>nigelx1.guccibot.geode</code></span><span class="sep" aria-hidden="true">&middot;</span><span>235 MB</span><span class="sep" aria-hidden="true">&middot;</span><span>one file for all four platforms</span></p>
+      <p class="dl-file"><span><code>nigelx1.guccibot2208.geode</code></span><span class="sep" aria-hidden="true">&middot;</span><span>227 MB</span><span class="sep" aria-hidden="true">&middot;</span><span>GD 2.2081, every platform</span></p>
+      <p class="dl-file" style="margin-top:.75rem"><span><code>nigelx1.guccibot2209.geode</code></span><span class="sep" aria-hidden="true">&middot;</span><span>228 MB</span><span class="sep" aria-hidden="true">&middot;</span><span>GD 2.2091 preview, Windows</span></p>
       <p class="dl-lede">It isn&rsquo;t on Geode&rsquo;s in-game index, so it installs from the file. Pick your platform:</p>
+    </div>
+
+    <div class="dl-which reveal">
+      <h3 class="dl-which-title">Which file?</h3>
+      <p>Same GucciBot, built for two Geometry Dash versions. Take the one for your game, and keep <strong>only that one</strong> in your mods folder.</p>
+      <ul class="dl-which-list">
+        <li><strong>GD 2.2081</strong> with Geode 5.10.1 or a later 5.x: <code>nigelx1.guccibot2208.geode</code>. Windows, Mac, iPhone, iPad and Android.</li>
+        <li><strong>GD 2.2091</strong> with Geode 6.0.0-beta.1 or later: <code>nigelx1.guccibot2209.geode</code>, the preview. Windows only, with everything but the Pathfinder, tick rates under 162 TPS, TPS changes inside a macro and High TPS precision, which come in 2.0.1. 240 TPS and any rate from 162 TPS up work.</li>
+      </ul>
+      <p class="dl-note"><strong>Not sure?</strong> Geode&rsquo;s mod list shows Geode&rsquo;s own version: Geode 5 means GD 2.2081, Geode 6 means GD 2.2091. On a Geode 6 alpha the preview won&rsquo;t load: update Geode to the newest Geode 6 first. Picked the other GD&rsquo;s file? Geode first says the mod &ldquo;can not be installed&rdquo;: press <strong>OK</strong>, then <strong>Cancel</strong> on the next box. <strong>Replace</strong> there would delete your working GucciBot and put in one that won&rsquo;t load.</p>
     </div>
 
     <div class="dl-picker reveal" data-picker>
@@ -1101,24 +1116,24 @@
       <div class="dl-panel" id="dl-windows" role="tabpanel" aria-labelledby="dl-tab-windows">
         <h3 class="dl-panel-title">Windows</h3>
         <ol class="dl-steps">
-          <li><span>Get <strong>Geode</strong> with its Windows installer from <a href="https://geode-sdk.org/install">geode-sdk.org</a>. Already have it? Skip this.</span></li>
-          <li><span>Download <code>nigelx1.guccibot.geode</code> with the button above.</span></li>
-          <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again.<span class="dl-or">Or put the file in Geode&rsquo;s mods folder yourself: <strong>Open Mods Folder</strong> is on the same screen.</span></span></li>
+          <li><span>Get <strong>Geode</strong> with its Windows installer from <a href="https://geode-sdk.org/install">geode-sdk.org</a>. Already have it? Skip this. For the GD 2.2091 preview you need <strong>Geode 6.0.0-beta.1 or later</strong>: its Windows installer is on <a href="https://github.com/geode-sdk/geode/releases">Geode&rsquo;s release page</a>.</span></li>
+          <li><span>Download the file for your GD from the release page (the button above): <code>nigelx1.guccibot2208.geode</code> for GD 2.2081, or the <code>nigelx1.guccibot2209.geode</code> preview for GD 2.2091.</span></li>
+          <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again. Already have GucciBot? Press <strong>Replace</strong> when Geode asks.<span class="dl-or">Or put the file in Geode&rsquo;s mods folder yourself (delete the old GucciBot file there first): <strong>Open Mods Folder</strong> is on the same screen.</span></span></li>
           <li><span>Restart the game.</span></li>
         </ol>
         <div class="dl-open">
           <span class="dl-open-label">Open GucciBot</span>
           Press <kbd>Left Alt</kbd>, anywhere in the game. You can change the key in Settings &gt; Keybinds.
         </div>
-        <p class="dl-note">Windows is home: everything runs here, the Pathfinder, rendering and Video Mode included, and it gets the most testing.</p>
+        <p class="dl-note">Windows is home: the GD 2.2081 file runs everything here, the Pathfinder, rendering and Video Mode included, and gets the most testing. The GD 2.2091 preview has everything but the Pathfinder, tick rates under 162 TPS, TPS changes inside a macro and High TPS precision, which come in 2.0.1.</p>
       </div>
 
       <div class="dl-panel" id="dl-mac" role="tabpanel" aria-labelledby="dl-tab-mac">
         <h3 class="dl-panel-title">Mac</h3>
-        <p class="dl-need">For Apple Silicon Macs (M1 and newer). The Mac build in 2.0.0-beta.5 is Apple Silicon only; Intel Macs come with the next release.</p>
+        <p class="dl-need">For Macs with Apple silicon (M1 and newer) or Intel, on GD 2.2081. Intel Macs are new in 2.0 and nobody has run GucciBot on one yet.</p>
         <ol class="dl-steps">
           <li><span>Get <strong>Geode</strong> with its macOS installer from <a href="https://geode-sdk.org/install">geode-sdk.org</a>. It works with the Steam version of Geometry Dash. Already have it? Skip this.</span></li>
-          <li><span>Download <code>nigelx1.guccibot.geode</code> with the button above.</span></li>
+          <li><span>Download <code>nigelx1.guccibot2208.geode</code> with the button above.</span></li>
           <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again.<span class="dl-or">Or put the file in Geode&rsquo;s mods folder yourself: <strong>Open Mods Folder</strong> is on the same screen.</span></span></li>
           <li><span>Restart the game.</span></li>
         </ol>
@@ -1126,7 +1141,7 @@
           <span class="dl-open-label">Open GucciBot</span>
           Press <kbd>Option</kbd>, or <strong>GucciBot</strong> at the bottom right of a level&rsquo;s pause menu.
         </div>
-        <p class="dl-note">Experimental on a Mac. The Pathfinder, rendering, Video Mode and tick rates under 162 TPS (those run at 240) need Windows for now. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
+        <p class="dl-note">Experimental on a Mac. Rendering, Video Mode and the Pathfinder work here but haven&rsquo;t been tried on a Mac yet; the Pathfinder runs without the trigger model, so levels with move and rotate triggers fail more often. Tick rates under 162 TPS (those run at 240) need Windows. GucciBot here needs GD 2.2081; the GD 2.2091 version for this platform comes later. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
       </div>
 
       <div class="dl-panel" id="dl-iphone" role="tabpanel" aria-labelledby="dl-tab-iphone">
@@ -1134,7 +1149,7 @@
         <p class="dl-need">For an iPhone or iPad on iOS 14 or later.</p>
         <ol class="dl-steps">
           <li><span>Get <strong>Geode</strong> with its iOS launcher. <a href="https://github.com/geode-sdk/ios-launcher/blob/main/INSTALL.md">Geode&rsquo;s iOS guide</a> walks you through the ways to install it.</span></li>
-          <li><span>On the iPhone itself, download <code>nigelx1.guccibot.geode</code> with the button above. It lands in the Files app.</span></li>
+          <li><span>On the iPhone itself, download <code>nigelx1.guccibot2208.geode</code> with the button above. It lands in the Files app.</span></li>
           <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file from Files. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again.</span></li>
           <li><span>Restart the game.</span></li>
         </ol>
@@ -1142,7 +1157,7 @@
           <span class="dl-open-label">Open GucciBot</span>
           Pause a level and press <strong>GucciBot</strong> in the bottom-right corner of the pause menu. The menu fills the screen; drag it to scroll.
         </div>
-        <p class="dl-note">Experimental, and the least tested so far. The Pathfinder, rendering, Video Mode and tick rates under 162 TPS (those run at 240) need Windows for now. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
+        <p class="dl-note">Experimental, and the least tested so far. Rendering and Video Mode need Windows or a Mac for now. The Pathfinder runs without the trigger model (not tried on a device yet), so levels with move and rotate triggers fail more often; tick rates under 162 TPS (those run at 240) need Windows. GucciBot here needs GD 2.2081; the GD 2.2091 version for this platform comes later. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
       </div>
 
       <div class="dl-panel" id="dl-android" role="tabpanel" aria-labelledby="dl-tab-android">
@@ -1150,7 +1165,7 @@
         <p class="dl-need">For Android phones and tablets, 32- or 64-bit.</p>
         <ol class="dl-steps">
           <li><span>Get <strong>Geode</strong> with <a href="https://github.com/geode-sdk/android-launcher/releases/latest">its Android launcher</a>, and play Geometry Dash through it. Already have it? Skip this.</span></li>
-          <li><span>On the phone itself, download <code>nigelx1.guccibot.geode</code> with the button above.</span></li>
+          <li><span>On the phone itself, download <code>nigelx1.guccibot2208.geode</code> with the button above.</span></li>
           <li><span>In Geometry Dash, open Geode&rsquo;s mod list from its button on the main menu, press the <strong>gear</strong> for Geode&rsquo;s settings, then <strong>Install From File</strong>, and pick the file. The first time, Geode shows a note about installing mods by hand instead: press <strong>OK</strong>, then <strong>Install From File</strong> again.</span></li>
           <li><span>Restart the game.</span></li>
         </ol>
@@ -1158,10 +1173,10 @@
           <span class="dl-open-label">Open GucciBot</span>
           Pause a level and press <strong>GucciBot</strong> in the bottom-right corner of the pause menu. The menu fills the screen; drag it to scroll.
         </div>
-        <p class="dl-note">Experimental, though the Android build has run on a phone. The Pathfinder, rendering, Video Mode and tick rates under 162 TPS (those run at 240) need Windows for now. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
+        <p class="dl-note">Experimental, though the Android build has run on a phone. Rendering and Video Mode need Windows or a Mac for now. The Pathfinder runs without the trigger model (not tried on a device yet), so levels with move and rotate triggers fail more often; tick rates under 162 TPS (those run at 240) need Windows. GucciBot here needs GD 2.2081; the GD 2.2091 version for this platform comes later. Something off? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a>.</p>
       </div>
 
-      <p class="dl-standdown"><strong>Running ToastyReplay Lite or Silicate?</strong> Turn it off first. GucciBot stands down while either one is enabled, and says why.</p>
+      <p class="dl-standdown"><strong>Running ToastyReplay Lite, Silicate or Antic&rsquo;s Counter?</strong> Turn it off first. GucciBot stands down while any of them is enabled, and says why.</p>
     </div>
 
     <p class="dl-help reveal">Stuck, or got a question? Ask in <a href="https://discord.gg/m95NUPdbpJ">Nigel&rsquo;s Neighborhood</a>, the GucciBot Discord. Found a bug? <a href="https://github.com/Nigelx1/GucciBot/issues/new/choose">Open an issue</a> on GitHub.</p>
@@ -1169,18 +1184,18 @@
     <div class="dl-facts reveal">
       <div class="dl-fact">
         <div class="dl-fact-label">Version</div>
-        <div class="dl-fact-value">2.0.0-beta.5</div>
+        <div class="dl-fact-value">2.0.0</div>
         <div class="dl-fact-sub">The newest release. <a href="/changelog/" style="white-space:nowrap">What&rsquo;s new</a></div>
       </div>
       <div class="dl-fact">
         <div class="dl-fact-label">Size</div>
-        <div class="dl-fact-value">235 MB</div>
-        <div class="dl-fact-sub">246,091,052 bytes</div>
+        <div class="dl-fact-value">227 MB</div>
+        <div class="dl-fact-sub">The GD 2.2081 file. The 2.2091 preview is 228 MB.</div>
       </div>
       <div class="dl-fact">
         <div class="dl-fact-label">Needs</div>
-        <div class="dl-fact-value">GD 2.2081</div>
-        <div class="dl-fact-sub">and Geode 5.10.1 or a later 5.x</div>
+        <div class="dl-fact-value">GD 2.2081 or 2.2091</div>
+        <div class="dl-fact-sub">Geode 5.10.1 or a later 5.x, or Geode 6.0.0-beta.1 or later for the preview</div>
       </div>
       <div class="dl-fact">
         <div class="dl-fact-label">Format</div>
@@ -1193,23 +1208,28 @@
       <div class="dl-row">
         <dt>SHA-256</dt>
         <dd>
-          <button type="button" class="dl-copy dl-hash" data-copy="eec8a1e6e616a21ba76ce0d43f36c520ed0ca5b845b9402e220b967d54c88fa4" aria-label="Copy the SHA-256 of nigelx1.guccibot.geode"><code>eec8a1e6e616a21ba76ce0d43f36c520ed0ca5b845b9402e220b967d54c88fa4</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button>
+          <span class="dl-hash-label">GD 2.2081 file, 237,522,476 bytes</span>
+          <button type="button" class="dl-copy dl-hash" data-copy="acb0b0c145bde82f6d45068bad6cd1b702fed93b041666cfd3d42fb6f3d9a586" aria-label="Copy the SHA-256 of nigelx1.guccibot2208.geode"><code>acb0b0c145bde82f6d45068bad6cd1b702fed93b041666cfd3d42fb6f3d9a586</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button>
+          <span class="dl-hash-label">GD 2.2091 preview, 239,162,888 bytes</span>
+          <button type="button" class="dl-copy dl-hash" data-copy="3bd29a9afc4fd905ad6a6c31695154e3231bea0b9f65ea02c333001523aeed64" aria-label="Copy the SHA-256 of nigelx1.guccibot2209.geode"><code>3bd29a9afc4fd905ad6a6c31695154e3231bea0b9f65ea02c333001523aeed64</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button>
           <div class="dl-check">
             <span class="dl-check-label">Check your copy against it</span>
-            <span class="dl-check-row"><span class="dl-check-os">Windows</span><button type="button" class="dl-copy dl-cmd" data-copy="certutil -hashfile nigelx1.guccibot.geode SHA256"><code>certutil -hashfile nigelx1.guccibot.geode SHA256</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button></span>
-            <span class="dl-check-row"><span class="dl-check-os">Mac</span><button type="button" class="dl-copy dl-cmd" data-copy="shasum -a 256 nigelx1.guccibot.geode"><code>shasum -a 256 nigelx1.guccibot.geode</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button></span>
+            <span class="dl-check-row"><span class="dl-check-os">Windows</span><button type="button" class="dl-copy dl-cmd" data-copy="certutil -hashfile nigelx1.guccibot2208.geode SHA256"><code>certutil -hashfile nigelx1.guccibot2208.geode SHA256</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button></span>
+            <span class="dl-check-row"><span class="dl-check-os">Mac</span><button type="button" class="dl-copy dl-cmd" data-copy="shasum -a 256 nigelx1.guccibot2208.geode"><code>shasum -a 256 nigelx1.guccibot2208.geode</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button></span>
+            <span class="dl-check-row"><span class="dl-check-os">Preview</span><button type="button" class="dl-copy dl-cmd" data-copy="certutil -hashfile nigelx1.guccibot2209.geode SHA256"><code>certutil -hashfile nigelx1.guccibot2209.geode SHA256</code><span class="dl-copy-hint" aria-live="polite">Copy</span></button></span>
           </div>
         </dd>
       </div>
       <!-- VirusTotal slot. Nigel, 2026-11-01: the report comes when 2.0 is
-           released, not before. Link it here then. -->
+           released, not before. Once both scans finish, this dd becomes one
+           link per file: GD 2.2081 file, then GD 2.2091 preview. -->
       <div class="dl-row">
         <dt>VirusTotal</dt>
-        <dd><span class="dl-pending">Coming with 2.0</span> The scan report goes up here when 2.0 is released.</dd>
+        <dd><span class="dl-pending">Soon</span> The scan reports for both files go up here shortly after the release.</dd>
       </div>
       <div class="dl-row">
         <dt>Inside</dt>
-        <dd>The Windows, Mac, iPhone and Android (32- and 64-bit) builds, the renderer&rsquo;s FFmpeg for Windows, the music, and the JMF Trainer&rsquo;s video. That&rsquo;s where the size comes from.</dd>
+        <dd>The GD 2.2081 file: the Windows, Mac, iPhone and Android (32- and 64-bit) builds, the renderer&rsquo;s FFmpeg for Windows and Mac, the music, and the JMF Trainer&rsquo;s video. The GD 2.2091 preview: the Windows build with the same Windows FFmpeg, music and video. That&rsquo;s where the size comes from.</dd>
       </div>
       <div class="dl-row">
         <dt>Source</dt>
