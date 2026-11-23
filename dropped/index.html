@@ -23,6 +23,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261102">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#111110">
+<script src="/static/js/site-config.js?v=20261123h"></script>
 <style>
   html, body {
     margin: 0;
@@ -70,9 +71,7 @@
 </style>
 </head>
 <body>
-<video id="v" autoplay loop playsinline>
-  <source src="https://github.com/Nigelx1/guccibot-site/releases/download/site-video/0901.1.mp4" type="video/mp4">
-</video>
+<video id="v" loop playsinline></video>
 <div id="sound-hint">🔊 tap for sound</div>
 <script>
   // No real controls at all -- on purpose, this page is the whole gag,
@@ -82,18 +81,26 @@
   // (static/js/guccibot.js) ever can't run for some reason. Either
   // way, try unmuted first and only fall back to muted if the browser
   // blocks it.
+  // The dropped-video switch (static/js/site-config.js) is off since
+  // 2026-11-23: nothing plays, and the visit goes to the home page.
+  var VIDEO_ON = !!(window.GUCCI_SITE && window.GUCCI_SITE.droppedVideo);
+  if (!VIDEO_ON) location.replace('/');
   var v = document.getElementById('v');
   var hint = document.getElementById('sound-hint');
-  v.play().catch(function () {
-    v.muted = true;
-    v.play();
-  });
+  if (VIDEO_ON) {
+    v.src = 'https://github.com/Nigelx1/guccibot-site/releases/download/site-video/0901.1.mp4';
+    v.play().catch(function () {
+      v.muted = true;
+      v.play();
+    });
+  }
 
   // The one thing mobile browsers DO honor is a genuine tap on the
   // page itself -- so the first tap/click anywhere unmutes and
   // retries with sound, and also removes the hint once it's served
   // its purpose.
   function unmuteOnFirstTouch() {
+    if (!VIDEO_ON) return;
     v.muted = false;
     v.play().catch(function () {});
     if (hint) hint.remove();

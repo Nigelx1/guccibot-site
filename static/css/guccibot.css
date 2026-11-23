@@ -26,7 +26,6 @@
     color: var(--white);
     font-family: 'Space Mono', monospace;
     overflow-x: hidden;
-    cursor: crosshair;
   }
 
   /* SCANLINES OVERLAY */

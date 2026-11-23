@@ -186,6 +186,9 @@ document.querySelectorAll('.feature-grid.reveal, .themes-grid.reveal, .credits-g
 // links) and keeps its own fallback for that case, since a direct
 // visit genuinely has no prior gesture to reuse.
 const DROPPED_VIDEO_URL = 'https://github.com/Nigelx1/guccibot-site/releases/download/site-video/0901.1.mp4';
+// The switch is in static/js/site-config.js (off since 2026-11-23). If that file
+// didn't load, the video stays off.
+const DROPPED_VIDEO_ON = !!(window.GUCCI_SITE && window.GUCCI_SITE.droppedVideo);
 
 function showDropped() {
   if (document.getElementById('dropped-overlay')) return; // already showing
@@ -208,9 +211,9 @@ function showDropped() {
 
 // Exposed so the converter page can reuse the same video for its own,
 // more targeted gag (converting a .brrr away from GucciBot).
-window.GucciDropped = { url: DROPPED_VIDEO_URL, show: showDropped };
+window.GucciDropped = { url: DROPPED_VIDEO_URL, show: showDropped, on: DROPPED_VIDEO_ON };
 
-if (!location.pathname.startsWith('/dropped')) {
+if (DROPPED_VIDEO_ON && !location.pathname.startsWith('/dropped')) {
   document.addEventListener('click', (e) => {
     // The converter is a tool, not marketing -- a fullscreen video
     // hijacking the page while someone is mid-conversion is just

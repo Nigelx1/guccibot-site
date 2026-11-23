@@ -2149,24 +2149,33 @@
   function gucciOverride(proceed) {
     if (document.getElementById('gucci-override')) return;
 
+    // The video only plays with the dropped-video switch on (static/js/
+    // site-config.js, off since 2026-11-23); off, the message and the two
+    // buttons show by themselves over the dimmed page.
+    var videoOn = !!(window.GucciDropped && window.GucciDropped.on);
+
     var overlay = document.createElement('div');
     overlay.id = 'gucci-override';
     overlay.style.cssText =
-      'position:fixed;inset:0;z-index:99999;background:#000;display:flex;' +
-      'align-items:center;justify-content:center;';
+      'position:fixed;inset:0;z-index:99999;display:flex;' +
+      'align-items:center;justify-content:center;background:' + (videoOn ? '#000' : 'rgba(0,0,0,.88)') + ';';
 
-    var video = document.createElement('video');
-    video.src = (window.GucciDropped && window.GucciDropped.url) || '';
-    video.loop = true;
-    video.playsInline = true;
-    video.style.cssText =
-      'position:fixed;inset:0;width:100vw;height:100vh;object-fit:contain;';
-    overlay.appendChild(video);
+    var video = null;
+    if (videoOn) {
+      video = document.createElement('video');
+      video.src = window.GucciDropped.url || '';
+      video.loop = true;
+      video.playsInline = true;
+      video.style.cssText =
+        'position:fixed;inset:0;width:100vw;height:100vh;object-fit:contain;';
+      overlay.appendChild(video);
+    }
 
     var bar = document.createElement('div');
-    bar.style.cssText =
-      'position:fixed;left:0;right:0;bottom:0;padding:2rem 1.5rem 2.5rem;text-align:center;' +
-      'background:linear-gradient(to top, rgba(0,0,0,.92), rgba(0,0,0,0));z-index:1;';
+    bar.style.cssText = videoOn
+      ? 'position:fixed;left:0;right:0;bottom:0;padding:2rem 1.5rem 2.5rem;text-align:center;' +
+        'background:linear-gradient(to top, rgba(0,0,0,.92), rgba(0,0,0,0));z-index:1;'
+      : 'position:relative;padding:2rem 1.5rem;text-align:center;';
 
     var line = document.createElement('div');
     line.textContent = 'That macro is already home.';
@@ -2199,10 +2208,10 @@
 
     // Same reason as the sitewide gag: play() has to run inside the click
     // gesture for unmuted audio, especially on iOS.
-    video.play().catch(function () { video.muted = true; video.play(); });
+    if (video) video.play().catch(function () { video.muted = true; video.play(); });
 
     function close() {
-      video.pause();
+      if (video) video.pause();
       overlay.remove();
       document.body.style.overflow = '';
     }
