@@ -18,7 +18,7 @@ const items = [
   'Frame Windows','Calculate','Custom Tiers','Pathfinder','No Recording Needed','27 Formats','Brrr.',
 ];
 
-// Nav: under 1,180 px wide the links fold into a panel behind the Menu
+// Nav: under 1,220 px wide the links fold into a panel behind the Menu
 // button (guccibot.css). Every control here is a real <a> or <button>, so
 // none of it sets off the click gag at the bottom of this file; the scrim
 // behind the open panel is a button too, so a tap outside the panel only
@@ -41,7 +41,7 @@ const items = [
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav.classList.contains('nav-open')) setOpen(false, true);
   });
-  const wide = window.matchMedia('(min-width: 1180px)');
+  const wide = window.matchMedia('(min-width: 1220px)');
   const onWide = () => { if (wide.matches) setOpen(false); };
   if (wide.addEventListener) wide.addEventListener('change', onWide);
   else if (wide.addListener) wide.addListener(onWide);

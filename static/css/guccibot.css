@@ -56,9 +56,11 @@
   }
 
   /* ── NAVIGATION ──
-     Nine links plus Download need about 1,150 px in one row. From 1,180 px
-     up they sit in the bar. Narrower, Download stays in the bar and the
-     rest open from the Menu button as a panel of big tap targets. Before
+     Nine links plus Download need about 1,195 px in one row (1,150 before
+     the page links got their arrows and the line before them). From
+     1,220 px up they sit in the bar (guccibot.js closes the panel there).
+     Narrower, Download stays in the bar and the rest open from the Menu
+     button as a panel of big tap targets. Before
      2026-11-01 the last links fell off the right edge at 701-1,100 px with
      no way to reach them, and phones got a 14 px tall sideways strip. */
   nav {
@@ -121,6 +123,36 @@
   }
 
   .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--gold); }
+
+  /* The last three links open another page (Changelog, Converter,
+     Contact); the first six move down this one. A thin gold line stands
+     between the two groups, and each page link ends in a small gold
+     arrow. In the Menu panel the page links are the last row (one under
+     another on a phone), under a gold line. */
+  .nav-links li:not(.nav-page) + .nav-page {
+    position: relative;
+    margin-left: 0.5rem;
+  }
+  .nav-links li:not(.nav-page) + .nav-page::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: calc(-1rem - 0.5px);
+    width: 1px;
+    height: 16px;
+    margin-top: -8px;
+    background: rgba(212,175,55,0.45);
+  }
+  .nav-page a::after {
+    content: '';
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin-left: 6px;
+    background: var(--gold);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 5h7M5 2l3 3-3 3' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 5h7M5 2l3 3-3 3' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
 
   .nav-cta {
     display: inline-flex;
@@ -188,7 +220,7 @@
     cursor: default;
   }
 
-  @media (max-width: 1179px) {
+  @media (max-width: 1219px) {
     .nav-toggle { display: inline-flex; }
 
     /* Without JavaScript the Menu button can't work, so the links stay
@@ -225,6 +257,9 @@
     }
     .js .nav-links li:nth-child(3n+2) a,
     .js .nav-links li:nth-child(3n+3) a { border-left: 1px solid rgba(255,255,255,0.06); }
+    .js .nav-links li.nav-page { margin-left: 0; }
+    .js .nav-links li.nav-page::before { content: none; }
+    .js .nav-links .nav-page a { border-top-color: rgba(212,175,55,0.45); }
   }
 
   @media (max-width: 560px) {
@@ -235,6 +270,7 @@
     .nav-toggle { padding: 0 10px; gap: 8px; }
     .js .nav-links { grid-template-columns: 1fr; }
     .js .nav-links li a { border-left: 0 !important; }
+    .js .nav-links .nav-page + .nav-page a { border-top-color: rgba(255,255,255,0.06); }
   }
 
   @media (max-width: 359px) {
