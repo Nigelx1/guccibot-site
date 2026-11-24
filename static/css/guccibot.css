@@ -795,11 +795,9 @@
 
   /* The game's notes, the accent down the left side; on the card's indigo
      and edge here, as they sit on the sky (the game's tint is the lower
-     sky's own blue). */
+     sky's own blue). One note, as wide as the site's other notes. */
   .jmf-notes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 14px;
+    max-width: 760px;
     margin-top: 14px;
   }
   .jmf-note {
