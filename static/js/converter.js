@@ -2154,6 +2154,17 @@
     // buttons show by themselves over the dimmed page.
     var videoOn = !!(window.GucciDropped && window.GucciDropped.on);
 
+    // Over the video the words get a black outline: its frames are bright,
+    // and its big white lettering sits right behind the message. The message
+    // gets hard black edges on all eight sides plus a soft dark glow; the
+    // small button labels get the glow only (hard edges smudge them). With
+    // the video off, nothing here changes.
+    var lineShadow = videoOn
+      ? '-2px -2px 0 #000,0 -2px 0 #000,2px -2px 0 #000,-2px 0 0 #000,2px 0 0 #000,' +
+        '-2px 2px 0 #000,0 2px 0 #000,2px 2px 0 #000,0 0 12px rgba(0,0,0,.9)'
+      : '';
+    var labelShadow = videoOn ? '0 0 3px #000,0 0 6px #000,0 0 10px rgba(0,0,0,.8)' : '';
+
     var overlay = document.createElement('div');
     overlay.id = 'gucci-override';
     overlay.style.cssText =
@@ -2181,7 +2192,8 @@
     line.textContent = 'That macro is already home.';
     line.style.cssText =
       "font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;" +
-      'color:#D4AF37;margin-bottom:1.1rem;';
+      'color:#D4AF37;margin-bottom:1.1rem;' +
+      (lineShadow ? 'text-shadow:' + lineShadow + ';' : '');
     bar.appendChild(line);
 
     var go = document.createElement('button');
@@ -2189,9 +2201,11 @@
     go.style.cssText =
       "font-family:'Space Mono',monospace;font-size:0.8rem;letter-spacing:3px;" +
       'background:transparent;border:1px solid #D4AF37;color:#D4AF37;' +
-      'padding:.85rem 2.2rem;cursor:pointer;margin:0 .4rem;';
-    go.onmouseenter = function () { go.style.background = '#D4AF37'; go.style.color = '#0a0a0a'; };
-    go.onmouseleave = function () { go.style.background = 'transparent'; go.style.color = '#D4AF37'; };
+      'padding:.85rem 2.2rem;cursor:pointer;margin:0 .4rem;' +
+      (labelShadow ? 'text-shadow:' + labelShadow + ';' : '');
+    // Filled gold on hover: its dark letters drop the glow, and get it back after.
+    go.onmouseenter = function () { go.style.background = '#D4AF37'; go.style.color = '#0a0a0a'; go.style.textShadow = ''; };
+    go.onmouseleave = function () { go.style.background = 'transparent'; go.style.color = '#D4AF37'; go.style.textShadow = labelShadow; };
     bar.appendChild(go);
 
     var nah = document.createElement('button');
@@ -2199,7 +2213,8 @@
     nah.style.cssText =
       "font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:2px;" +
       'background:transparent;border:1px solid #333;color:#888;' +
-      'padding:.85rem 1.5rem;cursor:pointer;margin:0 .4rem;';
+      'padding:.85rem 1.5rem;cursor:pointer;margin:0 .4rem;' +
+      (labelShadow ? 'text-shadow:' + labelShadow + ';' : '');
     bar.appendChild(nah);
 
     overlay.appendChild(bar);
