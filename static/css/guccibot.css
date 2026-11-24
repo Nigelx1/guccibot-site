@@ -533,33 +533,307 @@
     margin-top: 1rem;
   }
 
-  /* ── JMF SECTION: the level's own colors, not the site's ──
-     Nigel's own two colors from his in-app mockup: #100680 navy, #FCF550
-     gold -- same palette the mod itself switches to when the JMF tab is
-     open, instead of the site's usual black/champagne-gold. */
-  #trainer .section-label,
-  #trainer .section-label::before,
-  #trainer .feature-name,
-  #trainer .feature-badge { color: #FCF550; }
-  #trainer .section-label::before { background: #FCF550; }
-  #trainer .feature-grid {
-    background: rgba(252,245,80,0.15);
-    border-color: rgba(252,245,80,0.15);
+  /* ── JMF SECTION: the in-game JMF Trainer page's look (2.0) ──
+     The page as GucciBot 2.0.0 draws it (src/ui/pages/jupiter_backdrop.cpp,
+     and trainer_pages.cpp's jmfLook): a star chart at night behind indigo
+     cards, with the level's yellow and lavender text. The art is GucciBot's
+     own, made by its tools/jupiter_art.py: the sky, the moon dial and the
+     skyline are its pictures (resources/jupiter, as lossless WebP; the sky
+     without its chart lines, which are drawn here as SVG so they stay thin
+     at any size), and the stars, halos, specks and lit windows are the same
+     shapes as SVG. Each piece sits where the game puts it, in its units
+     (--u, one unit of the menu's 720 x 500 first size): the dial off the
+     top-right corner (smaller by --k when narrow, as the game's), the specks
+     spread over the top, the skyline and its yellow ground line along the
+     bottom. The stars keep their sizes and heights; across, the ones the
+     game keeps in its sidebar go in the margin left of the page, its page's
+     stars spread over the sky right of the heading (--p0, --pw), and the
+     right edge's stay on the right edge, so none sits on the words. On a
+     phone the heading moves down for a band of sky with the dial and the
+     upper stars, and the rest stay out. The rings turn,
+     the halos and twinkles pulse, the specks rise and a lit window goes
+     dark now and then, as with the game's Animations on; with reduced
+     motion it all holds still. */
+  #trainer {
+    --u: 1.5px;
+    --k: 1;
+    --gutter: 2rem;  /* the section's side padding */
+    --p0: 45%;
+    --pw: 55%;
+    --jmf-yellow: #FCF550;   /* the JMF page's accent */
+    --jmf-ink-line: #F9F558; /* the art's line yellow */
+    --jmf-ink: #F4F2FF;
+    --jmf-lavender: #B6B0E8;
+    --jmf-card: #0D0769;
+    --jmf-edge: #2F2699;
+    --jmf-tint: #1A0E86;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: calc(100 * var(--u));
+    background: #07043F linear-gradient(#050236, #0A055E 42%, #160A8C 74%, #1E0EA2 86%, #14097E);
   }
-  #trainer .feature-card { background: #0d0768; }
-  #trainer .feature-card:hover { background: #150b82; }
-  #trainer .feature-card::before { color: rgba(252,245,80,0.07); }
-  #trainer .feature-badge {
-    background: rgba(252,245,80,0.12);
-    border-color: rgba(252,245,80,0.35);
+  @media (max-width: 1199px) { #trainer { --p0: 50%; --pw: 50%; } }
+  @media (max-width: 1099px) { #trainer { --u: 1.25px; } }
+  @media (max-width: 900px) { #trainer { --k: 0.85; } }
+  @media (max-width: 700px) {
+    #trainer {
+      --u: 0.85px;
+      --k: 0.7;
+      --gutter: 1.25rem;
+      --p0: 5%;
+      --pw: 90%;
+      padding-top: calc(158 * var(--u));
+    }
   }
-  #trainer .feature-desc { color: #b6b0e8; }
-  .jmf-backdrop {
+
+  #trainer > .container { position: relative; z-index: 1; }
+
+  .jmf-art {
     position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .jmf-art > * { position: absolute; }
+  .jmf-art img { display: block; max-width: none; }
+
+  .jmf-sky {
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    object-fit: cover;
+    object-position: 50% 100%;
+  }
+
+  /* The sky's faint astrolabe, cover-fitted from the bottom as the sky is. */
+  .jmf-chart { inset: 0; width: 100%; height: 100%; }
+  .jmf-chart path {
+    fill: none;
+    stroke: #3A30A8;
+    stroke-opacity: 0.45;
+    stroke-width: 1.2px;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .jmf-dial {
+    top: calc(12 * var(--u) * var(--k));
+    right: calc(80 * var(--u) * var(--k));
+    width: 0;
+    height: 0;
+  }
+  .jmf-dial img { position: absolute; }
+  .jmf-dial-still {
+    left: calc(-142 * var(--u) * var(--k));
+    top: calc(-12 * var(--u) * var(--k));
+    width: calc(222 * var(--u) * var(--k));
+    height: calc(154 * var(--u) * var(--k));
+  }
+  .jmf-dial-ccw {
+    left: calc(-153 * var(--u) * var(--k));
+    top: calc(-153 * var(--u) * var(--k));
+    width: calc(306 * var(--u) * var(--k));
+    height: calc(306 * var(--u) * var(--k));
+    animation: jmf-turn 180s linear infinite reverse;  /* 2 degrees a second, the other way */
+  }
+  .jmf-dial-cw {
+    left: calc(-121 * var(--u) * var(--k));
+    top: calc(-121 * var(--u) * var(--k));
+    width: calc(242 * var(--u) * var(--k));
+    height: calc(242 * var(--u) * var(--k));
+    animation: jmf-turn 120s linear infinite;          /* 3 degrees a second, clockwise */
+  }
+
+  /* A star: centered on its place, --d units square. From the left edge,
+     the right edge, or across the page in proportion. */
+  .jmf-star {
+    top: calc(var(--y) * var(--u));
+    width: calc(var(--d) * var(--u));
+    height: calc(var(--d) * var(--u));
+    margin: calc(var(--d) * var(--u) / -2) 0 0 calc(var(--d) * var(--u) / -2);
+    overflow: visible;
+  }
+  .jmf-l { left: calc(max(var(--gutter), (100% - 1100px) / 2) - (172 - var(--x)) * var(--u)); }
+  .jmf-r { left: calc(100% - (720 - var(--x)) * var(--u)); }
+  .jmf-p { left: calc(var(--p0) + (var(--x) - 172) / 548 * var(--pw)); }
+  @media (max-width: 1299px) { .jmf-l { display: none; } }
+  @media (max-width: 700px) { .jmf-low { display: none; } }
+  .jmf-ink {
+    fill: none;
+    stroke: var(--jmf-ink-line);
+    stroke-width: 1.55;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .jmf-fill { fill: var(--jmf-ink-line); }
+  /* Each star's own beat (the game's 0.75 + 0.25 sin(1.9 t + 1.7 i)). */
+  .jmf-halo {
+    opacity: 0.75;
+    animation: jmf-beat 3.31s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -0.895s);
+  }
+  .jmf-twinkle {
+    animation: jmf-twinkle 3.31s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -0.895s - 2.68s);
+  }
+
+  /* The specks, spread over the top three quarters and rising; the track
+     holds them twice, a span apart, so the loop has no seam. */
+  .jmf-specks { left: 0; right: 0; top: 0; height: 76%; overflow: hidden; }
+  .jmf-specks-track {
+    position: absolute;
+    inset: 0;
+    animation: jmf-rise 150s linear infinite;
+  }
+  .jmf-specks i {
+    position: absolute;
+    left: calc(var(--x) / 720 * 100%);
+    top: calc(var(--y) / 380 * 100%);
+    width: calc(var(--z) * var(--u));
+    height: calc(var(--z) * var(--u));
+    background: #1CA3C6;
+    opacity: 0.75;
+  }
+  .jmf-specks i:nth-child(even) { background: #0EA5F9; opacity: 0.85; }
+
+  /* The skyline: the strip repeating along the bottom, then the left piece
+     and the tower on the right over it, then the lit windows, then the
+     ground: a thin yellow line over near-black. */
+  .jmf-city-strip {
+    left: calc(172 * var(--u));
+    right: calc(36 * var(--u));
+    bottom: 0;
+    height: calc(78 * var(--u));
+    display: flex;
+    overflow: hidden;
+  }
+  .jmf-city-strip img { flex: none; width: calc(512 * var(--u)); height: 100%; }
+  .jmf-city-left { left: 0; bottom: 0; width: calc(176 * var(--u)); height: calc(176 * var(--u)); }
+  .jmf-city-right { right: 0; bottom: 0; width: calc(40 * var(--u)); height: calc(142 * var(--u)); }
+  .jmf-windows { bottom: 0; overflow: visible; }
+  .jmf-windows-l { left: 0; width: calc(180 * var(--u)); height: calc(180 * var(--u)); }
+  .jmf-windows-r { right: 0; width: calc(50 * var(--u)); height: calc(150 * var(--u)); }
+  .jmf-lit rect { fill: #FCF378; }
+  /* Window i goes dark for one beat in seven (--f is its place in the
+     game's count). */
+  .jmf-lit {
+    animation: jmf-flicker 10s step-end infinite;
+    animation-delay: calc(var(--f) * -1.4286s);
+  }
+  .jmf-ground {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(6.8 * var(--u));
+    background: linear-gradient(to top, #020114 calc(5.4 * var(--u)), var(--jmf-ink-line) 0);
+  }
+
+  @keyframes jmf-turn { to { transform: rotate(360deg); } }
+  @keyframes jmf-beat { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+  @keyframes jmf-twinkle { 0%, 100% { transform: scale(0.975); } 50% { transform: scale(1.1); } }
+  @keyframes jmf-rise { to { transform: translateY(-100%); } }
+  @keyframes jmf-flicker { 0% { opacity: 1; } 85.714% { opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jmf-dial img, .jmf-halo, .jmf-twinkle, .jmf-specks-track, .jmf-lit { animation: none !important; }
+  }
+
+  /* The words and cards, in the page's colors. The label is lit like the
+     page's own row in the game's sidebar: solid yellow, dark words, its
+     light round it. */
+  #trainer .section-label {
+    display: inline-flex;
+    padding: 5px 12px;
+    margin-bottom: 1.4rem;
+    font-weight: 700;
+    color: #0F0840;
+    background: var(--jmf-yellow);
+    border-radius: 4px;
+    box-shadow: 0 0 0 1.5px rgba(252,245,80,0.07), 0 0 0 3px rgba(252,245,80,0.07), 0 0 0 4.5px rgba(252,245,80,0.07);
+  }
+  #trainer .section-label::before { display: none; }
+  #trainer .section-title { color: var(--jmf-ink); }
+  .jmf-lede {
+    max-width: 560px;
+    font-size: 0.8rem;
+    line-height: 1.9;
+    color: var(--jmf-lavender);
+  }
+
+  /* The game's cards: indigo, a blue-violet edge, round corners, a light
+     title over lavender words, and chips as yellow-on-indigo pills. */
+  #trainer .feature-grid {
+    gap: 14px;
+    margin-top: 2.5rem;
+    background: none;
+    border: 0;
+  }
+  #trainer .feature-card,
+  #trainer .feature-card:hover {
+    background: var(--jmf-card);
+    border: 1px solid var(--jmf-edge);
+    border-radius: 8px;
+    padding: 1.6rem 1.75rem 1.75rem;
+  }
+  #trainer .feature-card::before { content: none; }
+  #trainer .feature-name {
+    color: var(--jmf-ink);
+    letter-spacing: 0.5px;
+    margin-bottom: 0.6rem;
+  }
+  #trainer .feature-desc { color: var(--jmf-lavender); }
+  #trainer .feature-badge {
+    padding: 3px 11px;
+    margin-top: 1.1rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    color: var(--jmf-yellow);
+    background: var(--jmf-tint);
+    border: 0;
+    border-radius: 999px;
+  }
+
+  /* The game's notes, the accent down the left side; on the card's indigo
+     and edge here, as they sit on the sky (the game's tint is the lower
+     sky's own blue). */
+  .jmf-notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .jmf-note {
+    position: relative;
+    padding: 1.4rem 1.6rem 1.5rem calc(1.6rem + 3px);
+    background: var(--jmf-card);
+    border: 1px solid var(--jmf-edge);
+    border-radius: 8px;
+  }
+  .jmf-note::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: -1px;
+    width: 3px;
+    background: var(--jmf-yellow);
+    border-radius: 8px 0 0 8px;
+  }
+  .jmf-note-label {
+    margin-bottom: 0.7rem;
+    font-size: 0.6875rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--jmf-yellow);
+  }
+  .jmf-note p { font-size: 0.75rem; line-height: 1.9; color: var(--jmf-lavender); }
+  .jmf-note p + p { margin-top: 0.75rem; font-size: 0.7rem; line-height: 1.8; }
+  .jmf-note strong { color: var(--jmf-ink); }
+
+  @media (max-width: 700px) {
+    #trainer .feature-card,
+    #trainer .feature-card:hover { padding: 1.3rem 1.25rem 1.4rem; }
+    .jmf-note { padding: 1.2rem 1.25rem 1.3rem calc(1.25rem + 3px); }
   }
 
   /* ── DISCIPLINES TABLE ── */

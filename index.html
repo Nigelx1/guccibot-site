@@ -27,7 +27,7 @@
 <meta name="theme-color" content="#111110">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/css/guccibot.css?v=20261123b">
+<link rel="stylesheet" href="/static/css/guccibot.css?v=20261123j">
 </head>
 <body>
 
@@ -631,113 +631,114 @@
   </div>
 </section>
 
-<!-- JUPITER MY FAVOURITE TRAINER -->
-<section id="trainer" style="background:#100680;position:relative;overflow:hidden">
-  <svg class="jmf-backdrop" viewBox="0 0 400 500" preserveAspectRatio="none" aria-hidden="true">
-    <defs>
-      <!-- true pentagram -- 5 straight lines connecting every other point of a
-           pentagon, self-crossing, NOT a filled 10-point star silhouette.
-           This is the actual repeated motif in the level (per reference
-           captures in C:\Users\goofy\Videos\Captures), replacing the earlier
-           guessed "ribbon" motif, which doesn't appear in the level at all. -->
-      <polygon id="jmfPent" points="0,-10 5.88,8.09 -9.51,-3.09 9.51,-3.09 -5.88,8.09"/>
-      <!-- small 4-point sparkle/twinkle, matches the tiny accent stars scattered through the level's sky sections -->
-      <path id="jmfSparkle" d="M0,-6 Q1,-1 6,0 Q1,1 0,6 Q-1,1 -6,0 Q-1,-1 0,-6 Z"/>
-    </defs>
-    <!-- pentagram scatter -- varying size/rotation/opacity, spread across the
-         whole section rather than one corner cluster, since the level's own
-         sky sections scatter them generously rather than clumping them -->
-    <g stroke="#FCF550" fill="none" stroke-width="1.6" opacity="0.35">
-      <use href="#jmfPent" transform="translate(70,70) scale(1.5) rotate(-8)"/>
-      <use href="#jmfPent" transform="translate(330,60) scale(1.9) rotate(14)"/>
-      <use href="#jmfPent" transform="translate(250,150) scale(1.1) rotate(30)"/>
-      <use href="#jmfPent" transform="translate(40,220) scale(1.3) rotate(-20)"/>
-      <use href="#jmfPent" transform="translate(360,250) scale(1.6) rotate(6)"/>
-      <use href="#jmfPent" transform="translate(150,320) scale(1.0) rotate(-12)"/>
-      <use href="#jmfPent" transform="translate(300,380) scale(1.4) rotate(22)"/>
-      <use href="#jmfPent" transform="translate(60,420) scale(0.9) rotate(10)"/>
-      <use href="#jmfPent" transform="translate(200,60) scale(0.8) rotate(-16)"/>
-    </g>
-    <!-- filled sparkle accents -->
-    <g fill="#FCF550" opacity="0.4">
-      <use href="#jmfSparkle" transform="translate(120,110) scale(1.3)"/>
-      <use href="#jmfSparkle" transform="translate(290,220) scale(1.0)"/>
-      <use href="#jmfSparkle" transform="translate(200,300) scale(1.6)"/>
-      <use href="#jmfSparkle" transform="translate(380,400) scale(1.1)"/>
-      <use href="#jmfSparkle" transform="translate(30,340) scale(0.9)"/>
-      <use href="#jmfSparkle" transform="translate(340,140) scale(1.2)"/>
-    </g>
-    <!-- tiny pixel-dots, cyan -- the small square specks scattered through the level's sky -->
-    <g fill="#4dd9e8" opacity="0.5">
-      <rect x="95" y="180" width="3" height="3"/>
-      <rect x="270" y="90" width="3" height="3"/>
-      <rect x="180" y="230" width="3" height="3"/>
-      <rect x="350" y="180" width="3" height="3"/>
-      <rect x="20" y="150" width="3" height="3"/>
-      <rect x="240" y="340" width="3" height="3"/>
-      <rect x="130" y="400" width="3" height="3"/>
-      <rect x="390" y="320" width="3" height="3"/>
-    </g>
-    <!-- half-dome sun ornament, mirrors drawJupiterOrnament -- clipped by
-         the section's own bottom edge (overflow:hidden) so only the top
-         half shows, same trick as the in-app "Wheel Thing" tucked into the
-         corner. Verified against the reference captures -- concentric rings
-         (one dashed), tick marks, star at center -- this one was already a
-         close match. -->
-    <g opacity="0.32">
-      <circle cx="376" cy="500" r="70" fill="none" stroke="#FCF550" stroke-width="3"/>
-      <circle cx="376" cy="500" r="54" fill="none" stroke="#FCF550" stroke-width="1.5" stroke-dasharray="4 5"/>
-      <use href="#jmfPent" transform="translate(376,480) scale(1.4)" stroke="#FCF550" stroke-width="1.6"/>
-      <line x1="376" y1="500" x2="376" y2="420" stroke="#FCF550" stroke-width="2"/>
-      <line x1="376" y1="500" x2="320" y2="440" stroke="#FCF550" stroke-width="2"/>
-      <line x1="376" y1="500" x2="432" y2="440" stroke="#FCF550" stroke-width="2"/>
-      <line x1="376" y1="500" x2="300" y2="470" stroke="#FCF550" stroke-width="2"/>
-      <line x1="376" y1="500" x2="452" y2="470" stroke="#FCF550" stroke-width="2"/>
-    </g>
-  </svg>
-  <div class="container" style="position:relative;z-index:1">
+<!-- JUPITER MY FAVOURITE TRAINER
+     The in-game JMF Trainer page's look, from GucciBot 2.0.0 (the art and
+     how it's placed are in guccibot.css, under JMF SECTION). The art layer
+     is decoration only: hidden from screen readers, no clicks. -->
+<section id="trainer">
+  <div class="jmf-art" aria-hidden="true">
+    <img class="jmf-sky" src="/static/images/jmf/sky.webp" width="360" height="250" alt="" loading="lazy" decoding="async">
+    <svg class="jmf-chart" viewBox="0 0 720 500" preserveAspectRatio="xMidYMax slice" focusable="false"><path d="M-50 640A300 300 0 0 1 550 640M-160 640A410 410 0 0 1 660 640M-270 640A520 520 0 0 1 770 640M-380 640A630 630 0 0 1 880 640M-48.4 608.6L-376.5 574.1M-31.9 537.4L-342 424.5M1.3 472.2L-272.3 287.7M49.3 417.1L-171.6 171.8M109.2 375.1L-45.8 83.7M177.4 348.9L97.6 28.7M250 340L250 10M322.6 348.9L402.4 28.7M390.8 375.1L545.8 83.7M450.7 417.1L671.6 171.8M498.7 472.2L772.3 287.7M531.9 537.4L842 424.5M548.4 608.6L876.5 574.1"/></svg>
+    <div class="jmf-dial">
+      <img class="jmf-dial-still" src="/static/images/jmf/dial.webp" width="444" height="308" alt="" loading="lazy" decoding="async">
+      <img class="jmf-dial-ccw" src="/static/images/jmf/dial-ccw.webp" width="612" height="612" alt="" loading="lazy" decoding="async">
+      <img class="jmf-dial-cw" src="/static/images/jmf/dial-cw.webp" width="484" height="484" alt="" loading="lazy" decoding="async">
+    </div>
+    <svg class="jmf-defs" width="0" height="0" focusable="false"><defs>
+    <radialGradient id="jmf-halo"><stop offset="0" stop-color="#4A41B8" stop-opacity="0.4"/><stop offset="0.13" stop-color="#4A41B8" stop-opacity="0.4"/><stop offset="0.3" stop-color="#4A41B8" stop-opacity="0.293"/><stop offset="0.48" stop-color="#4A41B8" stop-opacity="0.196"/><stop offset="0.65" stop-color="#4A41B8" stop-opacity="0.111"/><stop offset="0.83" stop-color="#4A41B8" stop-opacity="0.042"/><stop offset="1" stop-color="#4A41B8" stop-opacity="0"/></radialGradient>
+    <radialGradient id="jmf-glow"><stop offset="0" stop-color="#FCF378" stop-opacity="0.3"/><stop offset="0.11" stop-color="#FCF378" stop-opacity="0.3"/><stop offset="0.29" stop-color="#FCF378" stop-opacity="0.201"/><stop offset="0.47" stop-color="#FCF378" stop-opacity="0.12"/><stop offset="0.64" stop-color="#FCF378" stop-opacity="0.058"/><stop offset="0.82" stop-color="#FCF378" stop-opacity="0.017"/><stop offset="1" stop-color="#FCF378" stop-opacity="0"/></radialGradient>
+    <path id="jmf-sc0" d="M5.3 -28L5.6 -25.2Q7 -1.5 10 22Q-5.7 4.9 -23 -10.4Q1.2 -8.9 25.3 -6.2Q4 6.1 -17.5 18.1Q-5.7 -3.4 5.6 -25.2L9.3 -32.1"/>
+    <path id="jmf-sc1" d="M-4.6 -19L-3.4 -17.3Q6.3 -3.2 15.5 11.3Q-0.7 4.6 -17.7 -0.1Q-0.7 -4.1 16.2 -8.7Q3.6 3.6 -7.8 17Q-5.7 -0.2 -3.4 -17.3L-2.8 -22.8"/>
+    <path id="jmf-sc2" d="M4.4 -12.5L4.4 -11.1Q3.1 0.4 3.2 11.9Q-2.9 1.7 -10.2 -7.7Q1.8 -4.6 13.6 -0.7Q1.6 3.3 -10.6 6.5Q-3.2 -2.4 4.4 -11.1L6.8 -13.9"/>
+    <path id="jmf-sc3" d="M-0.4 -13.8L0 -12.4Q3.2 -0.4 7.9 11.1Q-2.2 3 -12 -5.3Q0.6 -3.6 13.4 -3.6Q2.5 2.6 -7.5 10.1Q-3.4 -1 0 -12.4L1.3 -16"/>
+    <path id="jmf-sc4" d="M-2.1 -16.4L-1.4 -14.9Q4.3 -1.5 10.4 11.6Q-2 3.7 -15 -2.9Q-0.2 -3.8 14.5 -5.7Q3.1 3.4 -8.2 12.7Q-3.9 -0.9 -1.4 -14.9L-0.3 -19.3"/>
+    <path id="jmf-sc5" d="M2.8 -13L2.9 -11.6Q3.1 -0.2 4.4 11.2Q-3.7 2.4 -11.8 -6.3Q0.5 -3.8 12.9 -2.3Q1.9 4.1 -9.9 9.1Q-3.1 -1.1 2.9 -11.6L5 -15"/>
+    <path id="jmf-fi0" d="M1.2 -7.9L2.3 -2.4L7.7 -1.4L3.1 1.8L3.3 6.7L-0.8 3.6L-5.3 4.7L-3.4 0.2L-6.4 -3.3L-1.6 -3.3Z"/>
+    <path id="jmf-fi1" d="M-0.7 -5.6L1 -2.3L5.1 -2.1L2.5 0.3L3.4 4L0.4 2.7L-2.2 4.7L-2.4 1.3L-5.4 -0.9L-1.9 -1.8Z"/>
+    <path id="jmf-fi2" d="M1.3 -4L1.7 -1.1L4.2 0L1.8 1.3L1.5 4.6L-0.5 1.9L-3.7 2.7L-2 0L-3.9 -2.8L-0.6 -1.8Z"/>
+    <path id="jmf-fi3" d="M2.5 -5.8L2.1 -1.6L6 0.4L2.1 1.9L1.5 5.4L-1 2.5L-4.5 3.2L-2.6 -0.3L-4.8 -3.8L-0.9 -2.8Z"/>
+    <path id="jmf-fi4" d="M-1 -3.6L0.8 -1.6L3.1 -1.9L1.7 0.1L2.8 2.4L0.3 1.5L-1.3 3.6L-1.6 0.8L-3.5 -0.2L-1.2 -1.1Z"/>
+    <path id="jmf-tw0" d="M0 -5.2Q0.4 -0.4 5.2 0Q0.4 0.4 0 5.2Q-0.4 0.4 -5.2 0Q-0.4 -0.4 0 -5.2Z"/>
+    <path id="jmf-tw1" d="M0.5 -4.4Q0.4 -0.3 4.4 0.5Q0.3 0.4 -0.5 4.4Q-0.4 0.3 -4.4 -0.5Q-0.3 -0.4 0.5 -4.4Z"/>
+    <path id="jmf-tw2" d="M1.4 -5.6Q0.6 -0.3 5.6 1.4Q0.3 0.6 -1.4 5.6Q-0.6 0.3 -5.6 -1.4Q-0.3 -0.6 1.4 -5.6Z"/>
+    <path id="jmf-tw3" d="M1.3 -3.4Q0.4 -0.2 3.4 1.3Q0.2 0.4 -1.3 3.4Q-0.4 0.2 -3.4 -1.3Q-0.2 -0.4 1.3 -3.4Z"/>
+    <path id="jmf-tw4" d="M1.5 -2.8Q0.3 -0.1 2.8 1.5Q0.1 0.3 -1.5 2.8Q-0.3 0.1 -2.8 -1.5Q-0.1 -0.3 1.5 -2.8Z"/>
+    <path id="jmf-tw5" d="M2 -2.8Q0.4 -0.1 2.8 2Q0.1 0.4 -2 2.8Q-0.4 0.1 -2.8 -2Q-0.1 -0.4 2 -2.8Z"/>
+    <path id="jmf-tw6" d="M3.3 -3.7Q0.6 0 3.7 3.3Q0 0.6 -3.3 3.7Q-0.6 0 -3.7 -3.3Q0 -0.6 3.3 -3.7Z"/>
+    </defs></svg>
+    <svg class="jmf-star jmf-l" style="--x:132;--y:150;--d:78" viewBox="-39 -39 78 78"><circle class="jmf-halo" style="--i:0" r="38.8" fill="url(#jmf-halo)"/><use href="#jmf-sc0" class="jmf-ink"/></svg>
+    <svg class="jmf-star jmf-p" style="--x:500;--y:128;--d:56" viewBox="-28 -28 56 56"><circle class="jmf-halo" style="--i:1" r="27.9" fill="url(#jmf-halo)"/><use href="#jmf-sc1" class="jmf-ink"/></svg>
+    <svg class="jmf-star jmf-l jmf-low" style="--x:116;--y:270;--d:42" viewBox="-21 -21 42 42"><circle class="jmf-halo" style="--i:2" r="20.2" fill="url(#jmf-halo)"/><use href="#jmf-sc2" class="jmf-ink"/></svg>
+    <svg class="jmf-star jmf-r jmf-low" style="--x:707;--y:252;--d:42" viewBox="-21 -21 42 42"><circle class="jmf-halo" style="--i:3" r="20.2" fill="url(#jmf-halo)"/><use href="#jmf-sc3" class="jmf-ink"/></svg>
+    <svg class="jmf-star jmf-p" style="--x:372;--y:26;--d:48" viewBox="-24 -24 48 48"><circle class="jmf-halo" style="--i:4" r="23.2" fill="url(#jmf-halo)"/><use href="#jmf-sc4" class="jmf-ink"/></svg>
+    <svg class="jmf-star jmf-p" style="--x:332;--y:128;--d:42" viewBox="-21 -21 42 42"><circle class="jmf-halo" style="--i:5" r="20.2" fill="url(#jmf-halo)"/><use href="#jmf-sc5" class="jmf-ink"/></svg>
+    <svg class="jmf-star jmf-l jmf-low" style="--x:154;--y:237;--d:20" viewBox="-10 -10 20 20"><use href="#jmf-fi0" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-p" style="--x:468;--y:22;--d:16" viewBox="-8 -8 16 16"><use href="#jmf-fi1" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-p" style="--x:560;--y:140;--d:14" viewBox="-7 -7 14 14"><use href="#jmf-fi2" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-r jmf-low" style="--x:690;--y:200;--d:12" viewBox="-6 -6 12 12"><use href="#jmf-fi4" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-twinkle jmf-l" style="--x:152;--y:66;--d:14;--i:0" viewBox="-7 -7 14 14"><use href="#jmf-tw0" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-twinkle jmf-p" style="--x:442;--y:90;--d:12;--i:1" viewBox="-6 -6 12 12"><use href="#jmf-tw1" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-twinkle jmf-r jmf-low" style="--x:706;--y:330;--d:16;--i:2" viewBox="-8 -8 16 16"><use href="#jmf-tw2" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-twinkle jmf-p" style="--x:588;--y:118;--d:12;--i:3" viewBox="-6 -6 12 12"><use href="#jmf-tw3" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-twinkle jmf-l jmf-low" style="--x:112;--y:214;--d:10;--i:4" viewBox="-5 -5 10 10"><use href="#jmf-tw4" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-twinkle jmf-r" style="--x:706;--y:140;--d:10;--i:5" viewBox="-5 -5 10 10"><use href="#jmf-tw5" class="jmf-fill"/></svg>
+    <svg class="jmf-star jmf-twinkle jmf-p jmf-low" style="--x:440;--y:339.5;--d:14;--i:6" viewBox="-7 -7 14 14"><use href="#jmf-tw6" class="jmf-fill"/></svg>
+    <div class="jmf-specks"><div class="jmf-specks-track">
+    <i style="--x:634.8;--y:111.8;--z:2.4"></i><i style="--x:576.7;--y:273.2;--z:2.9"></i><i style="--x:628.6;--y:349.3;--z:1.4"></i><i style="--x:363.7;--y:186.3;--z:1.5"></i><i style="--x:93.5;--y:316.3;--z:3"></i><i style="--x:581.2;--y:122.7;--z:2.5"></i><i style="--x:277.3;--y:282.5;--z:1.8"></i><i style="--x:579.9;--y:375.4;--z:3"></i><i style="--x:642.7;--y:347.2;--z:2.5"></i><i style="--x:437.1;--y:351.1;--z:1.5"></i><i style="--x:321.7;--y:231.8;--z:2.2"></i><i style="--x:586.3;--y:77.4;--z:1.5"></i><i style="--x:169.2;--y:366;--z:1.6"></i><i style="--x:231.5;--y:145.8;--z:2.4"></i><i style="--x:579.6;--y:33.6;--z:2.9"></i><i style="--x:567.5;--y:124.7;--z:1.7"></i><i style="--x:463.1;--y:227.6;--z:1.8"></i><i style="--x:196;--y:292.2;--z:2.5"></i><i style="--x:591;--y:86.6;--z:2.6"></i><i style="--x:136.7;--y:6.8;--z:1.7"></i><i style="--x:579.6;--y:207.1;--z:2.4"></i><i style="--x:460.9;--y:243.1;--z:1.9"></i><i style="--x:541.1;--y:9.5;--z:2"></i><i style="--x:124.2;--y:51.3;--z:2.8"></i><i style="--x:467.2;--y:301.4;--z:2.4"></i><i style="--x:448;--y:302.9;--z:2.4"></i><i style="--x:409.5;--y:213.3;--z:2.3"></i><i style="--x:304.1;--y:255.1;--z:2.1"></i><i style="--x:499.7;--y:186.3;--z:2.6"></i><i style="--x:523.9;--y:18.8;--z:2.7"></i>
+    <i style="--x:634.8;--y:491.8;--z:2.4"></i><i style="--x:576.7;--y:653.2;--z:2.9"></i><i style="--x:628.6;--y:729.3;--z:1.4"></i><i style="--x:363.7;--y:566.3;--z:1.5"></i><i style="--x:93.5;--y:696.3;--z:3"></i><i style="--x:581.2;--y:502.7;--z:2.5"></i><i style="--x:277.3;--y:662.5;--z:1.8"></i><i style="--x:579.9;--y:755.4;--z:3"></i><i style="--x:642.7;--y:727.2;--z:2.5"></i><i style="--x:437.1;--y:731.1;--z:1.5"></i><i style="--x:321.7;--y:611.8;--z:2.2"></i><i style="--x:586.3;--y:457.4;--z:1.5"></i><i style="--x:169.2;--y:746;--z:1.6"></i><i style="--x:231.5;--y:525.8;--z:2.4"></i><i style="--x:579.6;--y:413.6;--z:2.9"></i><i style="--x:567.5;--y:504.7;--z:1.7"></i><i style="--x:463.1;--y:607.6;--z:1.8"></i><i style="--x:196;--y:672.2;--z:2.5"></i><i style="--x:591;--y:466.6;--z:2.6"></i><i style="--x:136.7;--y:386.8;--z:1.7"></i><i style="--x:579.6;--y:587.1;--z:2.4"></i><i style="--x:460.9;--y:623.1;--z:1.9"></i><i style="--x:541.1;--y:389.5;--z:2"></i><i style="--x:124.2;--y:431.3;--z:2.8"></i><i style="--x:467.2;--y:681.4;--z:2.4"></i><i style="--x:448;--y:682.9;--z:2.4"></i><i style="--x:409.5;--y:593.3;--z:2.3"></i><i style="--x:304.1;--y:635.1;--z:2.1"></i><i style="--x:499.7;--y:566.3;--z:2.6"></i><i style="--x:523.9;--y:398.8;--z:2.7"></i>
+    </div></div>
+    <div class="jmf-city-strip">
+      <img src="/static/images/jmf/city-strip.webp" width="1024" height="156" alt="" loading="lazy" decoding="async">
+      <img src="/static/images/jmf/city-strip.webp" width="1024" height="156" alt="" loading="lazy" decoding="async">
+      <img src="/static/images/jmf/city-strip.webp" width="1024" height="156" alt="" loading="lazy" decoding="async">
+      <img src="/static/images/jmf/city-strip.webp" width="1024" height="156" alt="" loading="lazy" decoding="async">
+      <img src="/static/images/jmf/city-strip.webp" width="1024" height="156" alt="" loading="lazy" decoding="async">
+    </div>
+    <img class="jmf-city-left" src="/static/images/jmf/city-left.webp" width="352" height="352" alt="" loading="lazy" decoding="async">
+    <img class="jmf-city-right" src="/static/images/jmf/city-right.webp" width="80" height="284" alt="" loading="lazy" decoding="async">
+    <svg class="jmf-windows jmf-windows-l" viewBox="0 -180 180 180" focusable="false"><g class="jmf-lit" style="--f:3" transform="translate(129.6 -90)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:4" transform="translate(129.6 -54)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:5" transform="translate(129.6 -42)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:6" transform="translate(137.6 -42)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:0" transform="translate(145.6 -126)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:1" transform="translate(145.6 -54)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:2" transform="translate(145.6 -30)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:3" transform="translate(161.6 -90)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:4" transform="translate(161.6 -66)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:5" transform="translate(109.6 -18)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g></svg>
+    <svg class="jmf-windows jmf-windows-r" viewBox="-50 -150 50 150" focusable="false"><g class="jmf-lit" style="--f:6" transform="translate(-26.4 -104)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:0" transform="translate(-18.4 -68)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:1" transform="translate(-10.4 -68)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:2" transform="translate(-10.4 -20)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g><g class="jmf-lit" style="--f:3" transform="translate(-2.4 -104)"><circle r="9" fill="url(#jmf-glow)"/><rect x="-1.6" y="-3" width="3.2" height="6"/></g></svg>
+    <div class="jmf-ground"></div>
+  </div>
+  <div class="container">
     <div class="reveal">
       <div class="section-label">Since 1.0</div>
       <h2 class="section-title">Nigel&rsquo;s Jupiter<br>My Favourite<br>Trainer.</h2>
-      <p style="max-width:560px; font-size:0.8rem; color:#b6b0e8; line-height:1.9;">
+      <p class="jmf-lede">
         A whole practice tab built around one level. Loads itself &mdash; the macro, the click data, all of it &mdash; the moment you open the mod. No setup, apart from one bot run for the macro ghost. Brrr.
       </p>
     </div>
     <div class="feature-grid reveal">
-      <div class="feature-card" data-num="01">
-        <div class="feature-icon">▌▐</div>
+      <div class="feature-card">
         <div class="feature-name">Click Trainer</div>
         <div class="feature-desc">The macro&rsquo;s clicks scroll toward a fixed line at constant real-time speed. Left edge is the press, right edge is the release. Your own real clicks &mdash; mouse, spacebar, up arrow, W &mdash; show up live as their own white marks, press and release, right next to the macro&rsquo;s. Pause, resume, reset, skim by dragging. Loop it or run it once. You watch your own rhythm land against the reference in real time.</div>
         <div class="feature-badge">Works with no level loaded.</div>
       </div>
-      <div class="feature-card" data-num="02">
-        <div class="feature-icon">◐</div>
+      <div class="feature-card">
         <div class="feature-name">Ghosts</div>
         <div class="feature-desc">The macro&rsquo;s ghost runs live in the level next to you. Your own best attempt this session gets tracked and drawn too &mdash; a second ghost, your own, lined up with your run. Both show up in Jupiter My Favourite itself, nowhere else. Scrub freezes both at one point in the level so you can study a section without touching your actual run. On the JMF tab the macro ghost needs one bot run first: play a JMF macro with the bot to the end, then press Use it under Ghosts.</div>
         <div class="feature-badge">Two ghosts. Zero teleporting.</div>
       </div>
-      <div class="feature-card" data-num="03">
-        <div class="feature-icon">⟲</div>
+      <div class="feature-card">
         <div class="feature-name">Segments &amp; Looping</div>
         <div class="feature-desc">Mark and name the hard parts, with a personal note on each. Auto-suggestions flag dense-click spots for you. Segment Looping auto-places a real practice checkpoint the first time you reach the start &mdash; die anywhere after and you respawn right back there. Export a layout as a code, import someone else&rsquo;s.</div>
         <div class="feature-badge">A real checkpoint. Not a fake one.</div>
       </div>
-      <div class="feature-card" data-num="04">
-        <div class="feature-icon">♪</div>
+      <div class="feature-card">
         <div class="feature-name">Synced Everything</div>
         <div class="feature-desc">The level&rsquo;s actual track, seeked to your current frame, no offset, resyncing itself after every respawn &mdash; with the game&rsquo;s own audio ducked out of the way automatically. Attempts, session-best percent, and a death-position heatmap, tracked without you doing anything.</div>
         <div class="feature-badge">Frame zero is song zero.</div>
       </div>
     </div>
-    <div class="reveal" style="margin-top:2.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem">
-      <div style="border:1px solid rgba(252,245,80,0.25);padding:1.75rem;background:rgba(252,245,80,0.04)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:#FCF550;opacity:.7;margin-bottom:.75rem">Also &rarr; Trainer Tab</div>
-        <p style="font-size:0.75rem;color:#b6b0e8;line-height:1.9">This one&rsquo;s built around Jupiter My Favourite specifically. Want the exact same toolset for a macro of your own? That&rsquo;s the tab right next to it.</p>
+    <div class="jmf-notes reveal">
+      <div class="jmf-note">
+        <div class="jmf-note-label">Also &rarr; Trainer Tab</div>
+        <p>This one&rsquo;s built around Jupiter My Favourite specifically. Want the exact same toolset for a macro of your own? That&rsquo;s the tab right next to it.</p>
       </div>
-      <div style="border:1px solid rgba(252,245,80,0.25);padding:1.75rem;background:rgba(252,245,80,0.04)">
-        <div style="font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:#FCF550;opacity:.7;margin-bottom:.75rem">Also In Settings &rarr; BIG BRRRR</div>
-        <p style="font-size:0.75rem;color:#b6b0e8;line-height:1.9">BIG BRRRR. A toggle. It plays something. It makes the menu bounce. It mutes the game while it does. That&rsquo;s all you&rsquo;re getting. You&rsquo;ll know it when you see it. Brrr.</p>
-        <p style="font-size:0.7rem;color:#b6b0e8;line-height:1.8;margin-top:.75rem">The themes&rsquo; own songs play only with <strong>Explicit content</strong> on (Settings &gt; Look), which is off by default. A song you add to the BIG BRRRR folder or a custom theme plays either way.</p>
+      <div class="jmf-note">
+        <div class="jmf-note-label">Also In Settings &rarr; BIG BRRRR</div>
+        <p>BIG BRRRR. A toggle. It plays something. It makes the menu bounce. It mutes the game while it does. That&rsquo;s all you&rsquo;re getting. You&rsquo;ll know it when you see it. Brrr.</p>
+        <p>The themes&rsquo; own songs play only with <strong>Explicit content</strong> on (Settings &gt; Look), which is off by default. A song you add to the BIG BRRRR folder or a custom theme plays either way.</p>
       </div>
     </div>
   </div>
