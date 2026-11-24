@@ -1465,7 +1465,7 @@
         [0x53, 0x43, 0x42, 0x46].forEach(function (b, k) { buf[k] = b; });
         dv.setUint16(4, 1, true);                 // version
         dv.setUint16(6, 0, true);
-        dv.setUint32(8, 81, true);                // build, as his writer stamps it
+        dv.setUint32(8, 81, true);                // build, as anticroom's writer stamps it
         dv.setFloat64(12, rep.tps, true);
         dv.setBigUint64(20, BigInt(0), true);     // seed
         dv.setUint32(28, list.length, true);
